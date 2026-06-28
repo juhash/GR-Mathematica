@@ -1,0 +1,3650 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 15.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[    178581,       3642]
+NotebookOptionsPosition[    174333,       3573]
+NotebookOutlinePosition[    175153,       3597]
+CellTagsIndexPosition[    175052,       3592]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Mathematica Notebook", "Title",
+ CellChangeTimes->{{3.9911105866902313`*^9, 
+  3.9911105875834084`*^9}},ExpressionUUID->"7997bdc4-4013-6242-87ae-\
+f057a8407874"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"::", "Title", "::"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"Generic", " ", "Metric", " ", 
+    RowBox[{"Workflow", ":", " ", 
+     RowBox[{"Schwarzschild", " ", "Example"}]}]}], "*)"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"ClearAll", "[", 
+     RowBox[{
+     "coordinates", ",", "metricMatrix", ",", "metricName", ",", 
+      "inverseMetricMatrix", ",", "christoffel", ",", "riemann", ",", "ricci",
+       ",", "ricciMatrix", ",", "ricciScalar", ",", "einsteinMatrix", ",", 
+      "kretschmannScalar", ",", "lowerMetric", ",", "raiseFirstIndex", ",", 
+      "flattenRiemann", ",", "printMatrix"}], "]"}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", 
+     RowBox[{"=", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"CONFIGURATION", " ", "SECTION"}], " ", "==="}], "="}]}]}], 
+    " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"coordinates", "=", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", "r", ",", "theta", ",", "phi"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"metricName", "=", "\"\<Schwarzschild\>\""}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"metricMatrix", "=", 
+     RowBox[{"{", "\[IndentingNewLine]", "  ", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", 
+          RowBox[{"(", 
+           RowBox[{"1", "-", 
+            RowBox[{"2", " ", 
+             RowBox[{"M", "/", "r"}]}]}], ")"}]}], ",", "0", ",", "0", ",", 
+         "0"}], "}"}], ",", "\[IndentingNewLine]", "  ", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"1", "-", 
+            RowBox[{"2", " ", 
+             RowBox[{"M", "/", "r"}]}]}], ")"}], "^", 
+          RowBox[{"(", 
+           RowBox[{"-", "1"}], ")"}]}], ",", "0", ",", "0"}], "}"}], ",", 
+       "\[IndentingNewLine]", "  ", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", 
+         RowBox[{"r", "^", "2"}], ",", "0"}], "}"}], ",", 
+       "\[IndentingNewLine]", "  ", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "0", ",", 
+         RowBox[{
+          RowBox[{"r", "^", "2"}], " ", 
+          RowBox[{
+           RowBox[{"Sin", "[", "theta", "]"}], "^", "2"}]}]}], "}"}]}], 
+      "\[IndentingNewLine]", "}"}]}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"printMatrix", "[", 
+      RowBox[{"label_", ",", "mat_"}], "]"}], ":=", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Print", "[", "label", "]"}], ";", " ", 
+       RowBox[{"Print", "[", 
+        RowBox[{"MatrixForm", "[", "mat", "]"}], "]"}]}], ")"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", 
+     RowBox[{"=", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"BASIC", " ", "TENSORS"}], " ", "==="}], "="}]}]}], " ", 
+    "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<===== \>\"", ",", "metricName", 
+      ",", "\"\< Metric Workflow =====\\n\>\""}], "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"printMatrix", "[", 
+     RowBox[{"\"\<Metric Tensor:\>\"", ",", "metricMatrix"}], "]"}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"inverseMetricMatrix", "=", 
+     RowBox[{"Simplify", "[", 
+      RowBox[{"Inverse", "[", "metricMatrix", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"printMatrix", "[", 
+     RowBox[{"\"\<Inverse Metric Tensor:\>\"", ",", "inverseMetricMatrix"}], 
+     "]"}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Christoffel", " ", 
+     RowBox[{"symbols", ":", " ", 
+      RowBox[{
+       RowBox[{"\[CapitalGamma]", "^", "\[Lambda]_"}], 
+       RowBox[{"{", "\[Mu]\[Nu]", "}"}]}]}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"christoffel", "[", 
+      RowBox[{"lambda_", ",", "mu_", ",", "nu_"}], "]"}], ":=", 
+     RowBox[{"Simplify", "[", "\[IndentingNewLine]", "  ", 
+      RowBox[{
+       RowBox[{"1", "/", "2"}], " ", 
+       RowBox[{"Sum", "[", "\[IndentingNewLine]", "    ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"inverseMetricMatrix", "[", 
+           RowBox[{"[", 
+            RowBox[{"lambda", ",", "sigma"}], "]"}], "]"}], "*", 
+          RowBox[{"(", "\[IndentingNewLine]", "      ", 
+           RowBox[{
+            RowBox[{"D", "[", 
+             RowBox[{
+              RowBox[{"metricMatrix", "[", 
+               RowBox[{"[", 
+                RowBox[{"sigma", ",", "nu"}], "]"}], "]"}], ",", 
+              RowBox[{"coordinates", "[", 
+               RowBox[{"[", "mu", "]"}], "]"}]}], "]"}], "+", 
+            "\[IndentingNewLine]", "      ", 
+            RowBox[{"D", "[", 
+             RowBox[{
+              RowBox[{"metricMatrix", "[", 
+               RowBox[{"[", 
+                RowBox[{"mu", ",", "sigma"}], "]"}], "]"}], ",", 
+              RowBox[{"coordinates", "[", 
+               RowBox[{"[", "nu", "]"}], "]"}]}], "]"}], "-", 
+            "\[IndentingNewLine]", "      ", 
+            RowBox[{"D", "[", 
+             RowBox[{
+              RowBox[{"metricMatrix", "[", 
+               RowBox[{"[", 
+                RowBox[{"mu", ",", "nu"}], "]"}], "]"}], ",", 
+              RowBox[{"coordinates", "[", 
+               RowBox[{"[", "sigma", "]"}], "]"}]}], "]"}]}], 
+           "\[IndentingNewLine]", "    ", ")"}]}], ",", "\[IndentingNewLine]",
+          "    ", 
+         RowBox[{"{", 
+          RowBox[{"sigma", ",", "1", ",", "4"}], "}"}]}], 
+        "\[IndentingNewLine]", "  ", "]"}]}], "\[IndentingNewLine]", "]"}]}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+    "Print", "[", "\"\<\\nChristoffel Symbols (non-zero components):\>\"", 
+     "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Do", "[", "\[IndentingNewLine]", "  ", 
+     RowBox[{
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"value", "=", 
+          RowBox[{"christoffel", "[", 
+           RowBox[{"i", ",", "j", ",", "k"}], "]"}]}], "}"}], ",", 
+        "\[IndentingNewLine]", "    ", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"!", 
+           RowBox[{"TrueQ", "[", 
+            RowBox[{"Simplify", "[", 
+             RowBox[{"value", "==", "0"}], "]"}], "]"}]}], ",", 
+          "\[IndentingNewLine]", "      ", 
+          RowBox[{"Print", "[", 
+           RowBox[{
+            RowBox[{"Subscript", "[", 
+             RowBox[{
+              RowBox[{"Superscript", "[", 
+               RowBox[{"\"\<\[CapitalGamma]\>\"", ",", "i"}], "]"}], ",", 
+              RowBox[{"Row", "[", 
+               RowBox[{"{", 
+                RowBox[{"j", ",", "k"}], "}"}], "]"}]}], "]"}], 
+            ",", "\"\< = \>\"", ",", "value"}], "]"}]}], 
+         "\[IndentingNewLine]", "    ", "]"}]}], "\[IndentingNewLine]", "  ", 
+       "]"}], ",", "\[IndentingNewLine]", "  ", 
+      RowBox[{"{", 
+       RowBox[{"i", ",", "1", ",", "4"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"j", ",", "1", ",", "4"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"k", ",", "1", ",", "4"}], "}"}]}], "\[IndentingNewLine]", 
+     "]"}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Riemann", " ", 
+     RowBox[{"tensor", ":", " ", 
+      RowBox[{
+       RowBox[{"R", "^", "\[Rho]_"}], 
+       RowBox[{"{", "\[Sigma]\[Mu]\[Nu]", "}"}]}]}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"riemann", "[", 
+      RowBox[{"rho_", ",", "sigma_", ",", "mu_", ",", "nu_"}], "]"}], ":=", 
+     RowBox[{"Simplify", "[", "\[IndentingNewLine]", "  ", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"christoffel", "[", 
+          RowBox[{"rho", ",", "nu", ",", "sigma"}], "]"}], ",", 
+         RowBox[{"coordinates", "[", 
+          RowBox[{"[", "mu", "]"}], "]"}]}], "]"}], "-", 
+       "\[IndentingNewLine]", "  ", 
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"christoffel", "[", 
+          RowBox[{"rho", ",", "mu", ",", "sigma"}], "]"}], ",", 
+         RowBox[{"coordinates", "[", 
+          RowBox[{"[", "nu", "]"}], "]"}]}], "]"}], "+", 
+       "\[IndentingNewLine]", "  ", 
+       RowBox[{"Sum", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"christoffel", "[", 
+           RowBox[{"rho", ",", "mu", ",", "lambda"}], "]"}], " ", 
+          RowBox[{"christoffel", "[", 
+           RowBox[{"lambda", ",", "nu", ",", "sigma"}], "]"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"lambda", ",", "1", ",", "4"}], "}"}]}], "]"}], "-", 
+       "\[IndentingNewLine]", "  ", 
+       RowBox[{"Sum", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"christoffel", "[", 
+           RowBox[{"rho", ",", "nu", ",", "lambda"}], "]"}], " ", 
+          RowBox[{"christoffel", "[", 
+           RowBox[{"lambda", ",", "mu", ",", "sigma"}], "]"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"lambda", ",", "1", ",", "4"}], "}"}]}], "]"}]}], 
+      "\[IndentingNewLine]", "]"}]}], ";"}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"the", " ", "tensor", " ", "itself"}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"g", "=", 
+     RowBox[{
+      InterpretationBox[
+       FrameBox[
+        TagBox[
+         TooltipBox[
+          PaneBox[GridBox[{
+             {
+              GraphicsBox[
+               {Thickness[0.0025], 
+                {FaceForm[{RGBColor[
+                 0.9607843137254902, 0.5058823529411764, 
+                  0.19607843137254902`], Opacity[1.]}], 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                   0}, {0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                   0}, {0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                   0}, {0, 1, 0}, {0, 1, 0}}, {{0, 2, 0}, {1, 3, 3}, {0, 1, 
+                   0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 
+                   3}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 
+                   3}}}, {{{205., 22.863691329956055`}, {205., 
+                   212.31669425964355`}, {246.01799774169922`, 
+                   235.99870109558105`}, {369.0710144042969, 
+                   307.0436840057373}, {369.0710144042969, 
+                   117.59068870544434`}, {205., 22.863691329956055`}}, {{
+                   30.928985595703125`, 307.0436840057373}, {
+                   153.98200225830078`, 235.99870109558105`}, {195., 
+                   212.31669425964355`}, {195., 22.863691329956055`}, {
+                   30.928985595703125`, 117.59068870544434`}, {
+                   30.928985595703125`, 307.0436840057373}}, {{200., 
+                   410.42970085144043`}, {364.0710144042969, 
+                   315.7036876678467}, {241.01799774169922`, 
+                   244.65868949890137`}, {200., 220.97669792175293`}, {
+                   158.98200225830078`, 244.65868949890137`}, {
+                   35.928985595703125`, 315.7036876678467}, {200., 
+                   410.42970085144043`}}, CompressedData["
+1:eJxTTMoPSmViYGCQAWIQDQQPlDrLHYA0XxdDiQNYJCATwveoAtG/6uTA/HWX
+w8B8tsaHGch8BoYNGcjqGS7lmqOYd/qhKYj2c/hUDJF/awKiz129jsL3c9qN
+wo/gXBuDzK/YbRWDbF6F4MVoZPtmvJoejeyehpD9yiA6e88JMD+h/JYS2J6k
+J2C+gleGEkQ9QyYyf9NcaWR+w1Rn80xk/bDwgZkPCz+Y/QGPF5Yju++B0sZy
+ZPfD+DD/wfgw/8P4sPCBmQcLP5T4AgBuZHHc
+                   "]}]}, 
+                {FaceForm[{RGBColor[
+                 0.5529411764705883, 0.6745098039215687, 0.8117647058823529], 
+                 Opacity[1.]}], 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{44.92900085449219, 282.59088134765625`}, {
+                  181.00001525878906`, 204.0298843383789}, {
+                  181.00001525878906`, 46.90887451171875}, {44.92900085449219,
+                   125.46986389160156`}, {44.92900085449219, 
+                  282.59088134765625`}}}]}, 
+                {FaceForm[{RGBColor[
+                 0.6627450980392157, 0.803921568627451, 0.5686274509803921], 
+                 Opacity[1.]}], 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{355.0710144042969, 282.59088134765625`}, {
+                  355.0710144042969, 125.46986389160156`}, {219., 
+                  46.90887451171875}, {219., 204.0298843383789}, {
+                  355.0710144042969, 282.59088134765625`}}}]}, 
+                {FaceForm[{RGBColor[
+                 0.6901960784313725, 0.5882352941176471, 0.8117647058823529], 
+                 Opacity[1.]}], 
+                 FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                  0}}}, {{{200., 394.0606994628906}, {336.0710144042969, 
+                  315.4997024536133}, {200., 236.93968200683594`}, {
+                  63.928985595703125`, 315.4997024536133}, {200., 
+                  394.0606994628906}}}]}},
+               BaselinePosition->Scaled[0.15],
+               ImageSize->10], 
+              StyleBox[
+               RowBox[{"CreateTensor", " "}],
+               ShowAutoStyles->False,
+               ShowStringCharacters->False,
+               FontSize->0.9 Inherited,
+               FontColor->GrayLevel[0.1]]}
+            },
+            GridBoxSpacings->{"Columns" -> {{0.25}}}],
+           Alignment->{Left, Baseline},
+           BaseStyle->{LineSpacing -> {0, 0}, LineBreakWithin -> False},
+           BaselinePosition->Baseline,
+           FrameMargins->{{3, 0}, {0, 0}}],
+          RowBox[{"PacletSymbol", "[", 
+            
+            RowBox[{"\"BowenPing/STensor\"", ",", 
+              "\"BowenPing`STensor`CreateTensor\""}], "]"}],
+          
+          TooltipStyle->{
+           ShowAutoStyles -> True, ShowStringCharacters -> True}],
+         Annotation[#, 
+          Style[
+           Defer[
+            PacletSymbol[
+            "BowenPing/STensor", "BowenPing`STensor`CreateTensor"]], 
+           ShowStringCharacters -> True], "Tooltip"]& ],
+        Background->RGBColor[0.968, 0.976, 0.984],
+        BaselinePosition->Baseline,
+        DefaultBaseStyle->{},
+        FrameMargins->{{0, 0}, {1, 1}},
+        FrameStyle->RGBColor[0.831, 0.847, 0.85],
+        RoundingRadius->4],
+       PacletSymbol["BowenPing/STensor", "BowenPing`STensor`CreateTensor"],
+       TaggingRules -> {
+        "Paclet" -> "BowenPing/STensor", "Symbol" -> 
+         "BowenPing`STensor`CreateTensor"},
+       BoxID -> "PacletSymbolBox",
+       SelectWithContents->True,
+       Selectable->False], "[", "\[IndentingNewLine]", "  ", 
+      RowBox[{"\"\<g\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{"\[Theta]", ",", "\[Phi]"}], "}"}], ",", 
+       RowBox[{"DiagonalMatrix", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"R", "^", "2"}], ",", 
+          RowBox[{
+           RowBox[{"R", "^", "2"}], " ", 
+           RowBox[{
+            RowBox[{"Sin", "[", "\[Theta]", "]"}], "^", "2"}]}]}], "}"}], 
+        "]"}], ",", "\[IndentingNewLine]", "  ", 
+       RowBox[{
+        InterpretationBox[
+         FrameBox[
+          TagBox[
+           TooltipBox[
+            PaneBox[GridBox[{
+               {
+                GraphicsBox[
+                 {Thickness[0.0025], 
+                  {FaceForm[{RGBColor[
+                   0.9607843137254902, 0.5058823529411764, 
+                    0.19607843137254902`], Opacity[1.]}], 
+                   FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}, {0, 1, 0}}, {{0, 2, 0}, {1, 3, 3}, {0, 1, 
+                    0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 
+                    3}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 
+                    3}}}, {{{205., 22.863691329956055`}, {205., 
+                    212.31669425964355`}, {246.01799774169922`, 
+                    235.99870109558105`}, {369.0710144042969, 
+                    307.0436840057373}, {369.0710144042969, 
+                    117.59068870544434`}, {205., 22.863691329956055`}}, {{
+                    30.928985595703125`, 307.0436840057373}, {
+                    153.98200225830078`, 235.99870109558105`}, {195., 
+                    212.31669425964355`}, {195., 22.863691329956055`}, {
+                    30.928985595703125`, 117.59068870544434`}, {
+                    30.928985595703125`, 307.0436840057373}}, {{200., 
+                    410.42970085144043`}, {364.0710144042969, 
+                    315.7036876678467}, {241.01799774169922`, 
+                    244.65868949890137`}, {200., 220.97669792175293`}, {
+                    158.98200225830078`, 244.65868949890137`}, {
+                    35.928985595703125`, 315.7036876678467}, {200., 
+                    410.42970085144043`}}, CompressedData["
+1:eJxTTMoPSmViYGCQAWIQDQQPlDrLHYA0XxdDiQNYJCATwveoAtG/6uTA/HWX
+w8B8tsaHGch8BoYNGcjqGS7lmqOYd/qhKYj2c/hUDJF/awKiz129jsL3c9qN
+wo/gXBuDzK/YbRWDbF6F4MVoZPtmvJoejeyehpD9yiA6e88JMD+h/JYS2J6k
+J2C+gleGEkQ9QyYyf9NcaWR+w1Rn80xk/bDwgZkPCz+Y/QGPF5Yju++B0sZy
+ZPfD+DD/wfgw/8P4sPCBmQcLP5T4AgBuZHHc
+                    "]}]}, 
+                  {FaceForm[{RGBColor[
+                   0.5529411764705883, 0.6745098039215687, 
+                    0.8117647058823529], Opacity[1.]}], 
+                   FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}}}, {{{44.92900085449219, 282.59088134765625`}, {
+                    181.00001525878906`, 204.0298843383789}, {
+                    181.00001525878906`, 46.90887451171875}, {
+                    44.92900085449219, 125.46986389160156`}, {
+                    44.92900085449219, 282.59088134765625`}}}]}, 
+                  {FaceForm[{RGBColor[
+                   0.6627450980392157, 0.803921568627451, 0.5686274509803921],
+                    Opacity[1.]}], 
+                   FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}}}, {{{355.0710144042969, 282.59088134765625`}, {
+                    355.0710144042969, 125.46986389160156`}, {219., 
+                    46.90887451171875}, {219., 204.0298843383789}, {
+                    355.0710144042969, 282.59088134765625`}}}]}, 
+                  {FaceForm[{RGBColor[
+                   0.6901960784313725, 0.5882352941176471, 
+                    0.8117647058823529], Opacity[1.]}], 
+                   FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}}}, {{{200., 394.0606994628906}, {336.0710144042969, 
+                    315.4997024536133}, {200., 236.93968200683594`}, {
+                    63.928985595703125`, 315.4997024536133}, {200., 
+                    394.0606994628906}}}]}},
+                 BaselinePosition->Scaled[0.15],
+                 ImageSize->10], 
+                StyleBox[
+                 RowBox[{"IsMetric", " "}],
+                 ShowAutoStyles->False,
+                 ShowStringCharacters->False,
+                 FontSize->0.9 Inherited,
+                 FontColor->GrayLevel[0.1]]}
+              },
+              GridBoxSpacings->{"Columns" -> {{0.25}}}],
+             Alignment->{Left, Baseline},
+             BaseStyle->{LineSpacing -> {0, 0}, LineBreakWithin -> False},
+             BaselinePosition->Baseline,
+             FrameMargins->{{3, 0}, {0, 0}}],
+            RowBox[{"PacletSymbol", "[", 
+              
+              RowBox[{"\"BowenPing/STensor\"", ",", 
+                "\"BowenPing`STensor`IsMetric\""}], "]"}],
+            
+            TooltipStyle->{
+             ShowAutoStyles -> True, ShowStringCharacters -> True}],
+           Annotation[#, 
+            Style[
+             Defer[
+              PacletSymbol[
+              "BowenPing/STensor", "BowenPing`STensor`IsMetric"]], 
+             ShowStringCharacters -> True], "Tooltip"]& ],
+          Background->RGBColor[0.968, 0.976, 0.984],
+          BaselinePosition->Baseline,
+          DefaultBaseStyle->{},
+          FrameMargins->{{0, 0}, {1, 1}},
+          FrameStyle->RGBColor[0.831, 0.847, 0.85],
+          RoundingRadius->4],
+         PacletSymbol["BowenPing/STensor", "BowenPing`STensor`IsMetric"],
+         TaggingRules -> {
+          "Paclet" -> "BowenPing/STensor", "Symbol" -> 
+           "BowenPing`STensor`IsMetric"},
+         BoxID -> "PacletSymbolBox",
+         SelectWithContents->True,
+         Selectable->False], "->", "True"}]}], "\[IndentingNewLine]", "]"}]}],
+     ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    InterpretationBox[
+     FrameBox[
+      TagBox[
+       TooltipBox[
+        PaneBox[GridBox[{
+           {
+            GraphicsBox[
+             {Thickness[0.0025], 
+              {FaceForm[{RGBColor[
+               0.9607843137254902, 0.5058823529411764, 0.19607843137254902`], 
+               Opacity[1.]}], 
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {
+                 0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 
+                 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}, {0, 1, 0}}, {{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 
+                 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {
+                 0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}}}, {{{205., 
+                 22.863691329956055`}, {205., 212.31669425964355`}, {
+                 246.01799774169922`, 235.99870109558105`}, {
+                 369.0710144042969, 307.0436840057373}, {369.0710144042969, 
+                 117.59068870544434`}, {205., 22.863691329956055`}}, {{
+                 30.928985595703125`, 307.0436840057373}, {
+                 153.98200225830078`, 235.99870109558105`}, {195., 
+                 212.31669425964355`}, {195., 22.863691329956055`}, {
+                 30.928985595703125`, 117.59068870544434`}, {
+                 30.928985595703125`, 307.0436840057373}}, {{200., 
+                 410.42970085144043`}, {364.0710144042969, 
+                 315.7036876678467}, {241.01799774169922`, 
+                 244.65868949890137`}, {200., 220.97669792175293`}, {
+                 158.98200225830078`, 244.65868949890137`}, {
+                 35.928985595703125`, 315.7036876678467}, {200., 
+                 410.42970085144043`}}, CompressedData["
+1:eJxTTMoPSmViYGCQAWIQDQQPlDrLHYA0XxdDiQNYJCATwveoAtG/6uTA/HWX
+w8B8tsaHGch8BoYNGcjqGS7lmqOYd/qhKYj2c/hUDJF/awKiz129jsL3c9qN
+wo/gXBuDzK/YbRWDbF6F4MVoZPtmvJoejeyehpD9yiA6e88JMD+h/JYS2J6k
+J2C+gleGEkQ9QyYyf9NcaWR+w1Rn80xk/bDwgZkPCz+Y/QGPF5Yju++B0sZy
+ZPfD+DD/wfgw/8P4sPCBmQcLP5T4AgBuZHHc
+                 "]}]}, 
+              {FaceForm[{RGBColor[
+               0.5529411764705883, 0.6745098039215687, 0.8117647058823529], 
+               Opacity[1.]}], 
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                0}}}, {{{44.92900085449219, 282.59088134765625`}, {
+                181.00001525878906`, 204.0298843383789}, {181.00001525878906`,
+                 46.90887451171875}, {44.92900085449219, 
+                125.46986389160156`}, {44.92900085449219, 
+                282.59088134765625`}}}]}, 
+              {FaceForm[{RGBColor[
+               0.6627450980392157, 0.803921568627451, 0.5686274509803921], 
+               Opacity[1.]}], 
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                0}}}, {{{355.0710144042969, 282.59088134765625`}, {
+                355.0710144042969, 125.46986389160156`}, {219., 
+                46.90887451171875}, {219., 204.0298843383789}, {
+                355.0710144042969, 282.59088134765625`}}}]}, 
+              {FaceForm[{RGBColor[
+               0.6901960784313725, 0.5882352941176471, 0.8117647058823529], 
+               Opacity[1.]}], 
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                0}}}, {{{200., 394.0606994628906}, {336.0710144042969, 
+                315.4997024536133}, {200., 236.93968200683594`}, {
+                63.928985595703125`, 315.4997024536133}, {200., 
+                394.0606994628906}}}]}},
+             BaselinePosition->Scaled[0.15],
+             ImageSize->10], 
+            StyleBox[
+             RowBox[{"RiemannTensor", " "}],
+             ShowAutoStyles->False,
+             ShowStringCharacters->False,
+             FontSize->0.9 Inherited,
+             FontColor->GrayLevel[0.1]]}
+          },
+          GridBoxSpacings->{"Columns" -> {{0.25}}}],
+         Alignment->{Left, Baseline},
+         BaseStyle->{LineSpacing -> {0, 0}, LineBreakWithin -> False},
+         BaselinePosition->Baseline,
+         FrameMargins->{{3, 0}, {0, 0}}],
+        RowBox[{"PacletSymbol", "[", 
+          
+          RowBox[{"\"BowenPing/STensor\"", ",", 
+            "\"BowenPing`STensor`RiemannTensor\""}], "]"}],
+        TooltipStyle->{ShowAutoStyles -> True, ShowStringCharacters -> True}],
+       Annotation[#, 
+        Style[
+         Defer[
+          PacletSymbol[
+          "BowenPing/STensor", "BowenPing`STensor`RiemannTensor"]], 
+         ShowStringCharacters -> True], "Tooltip"]& ],
+      Background->RGBColor[0.968, 0.976, 0.984],
+      BaselinePosition->Baseline,
+      DefaultBaseStyle->{},
+      FrameMargins->{{0, 0}, {1, 1}},
+      FrameStyle->RGBColor[0.831, 0.847, 0.85],
+      RoundingRadius->4],
+     PacletSymbol["BowenPing/STensor", "BowenPing`STensor`RiemannTensor"],
+     TaggingRules -> {
+      "Paclet" -> "BowenPing/STensor", "Symbol" -> 
+       "BowenPing`STensor`RiemannTensor"},
+     BoxID -> "PacletSymbolBox",
+     SelectWithContents->True,
+     Selectable->False], "[", "g", "]"}], "\n", "\n", 
+   RowBox[{"(*", " ", "components", " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{
+     InterpretationBox[
+      FrameBox[
+       TagBox[
+        TooltipBox[
+         PaneBox[GridBox[{
+            {
+             GraphicsBox[
+              {Thickness[0.0025], 
+               {FaceForm[{RGBColor[
+                0.9607843137254902, 0.5058823529411764, 0.19607843137254902`],
+                 Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {
+                  0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 
+                  1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                  0}, {0, 1, 0}}, {{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 
+                  3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {
+                  0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}}}, {{{205., 
+                  22.863691329956055`}, {205., 212.31669425964355`}, {
+                  246.01799774169922`, 235.99870109558105`}, {
+                  369.0710144042969, 307.0436840057373}, {369.0710144042969, 
+                  117.59068870544434`}, {205., 22.863691329956055`}}, {{
+                  30.928985595703125`, 307.0436840057373}, {
+                  153.98200225830078`, 235.99870109558105`}, {195., 
+                  212.31669425964355`}, {195., 22.863691329956055`}, {
+                  30.928985595703125`, 117.59068870544434`}, {
+                  30.928985595703125`, 307.0436840057373}}, {{200., 
+                  410.42970085144043`}, {364.0710144042969, 
+                  315.7036876678467}, {241.01799774169922`, 
+                  244.65868949890137`}, {200., 220.97669792175293`}, {
+                  158.98200225830078`, 244.65868949890137`}, {
+                  35.928985595703125`, 315.7036876678467}, {200., 
+                  410.42970085144043`}}, CompressedData["
+1:eJxTTMoPSmViYGCQAWIQDQQPlDrLHYA0XxdDiQNYJCATwveoAtG/6uTA/HWX
+w8B8tsaHGch8BoYNGcjqGS7lmqOYd/qhKYj2c/hUDJF/awKiz129jsL3c9qN
+wo/gXBuDzK/YbRWDbF6F4MVoZPtmvJoejeyehpD9yiA6e88JMD+h/JYS2J6k
+J2C+gleGEkQ9QyYyf9NcaWR+w1Rn80xk/bDwgZkPCz+Y/QGPF5Yju++B0sZy
+ZPfD+DD/wfgw/8P4sPCBmQcLP5T4AgBuZHHc
+                  "]}]}, 
+               {FaceForm[{RGBColor[
+                0.5529411764705883, 0.6745098039215687, 0.8117647058823529], 
+                Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}}}, {{{44.92900085449219, 282.59088134765625`}, {
+                 181.00001525878906`, 204.0298843383789}, {
+                 181.00001525878906`, 46.90887451171875}, {44.92900085449219, 
+                 125.46986389160156`}, {44.92900085449219, 
+                 282.59088134765625`}}}]}, 
+               {FaceForm[{RGBColor[
+                0.6627450980392157, 0.803921568627451, 0.5686274509803921], 
+                Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}}}, {{{355.0710144042969, 282.59088134765625`}, {
+                 355.0710144042969, 125.46986389160156`}, {219., 
+                 46.90887451171875}, {219., 204.0298843383789}, {
+                 355.0710144042969, 282.59088134765625`}}}]}, 
+               {FaceForm[{RGBColor[
+                0.6901960784313725, 0.5882352941176471, 0.8117647058823529], 
+                Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}}}, {{{200., 394.0606994628906}, {336.0710144042969, 
+                 315.4997024536133}, {200., 236.93968200683594`}, {
+                 63.928985595703125`, 315.4997024536133}, {200., 
+                 394.0606994628906}}}]}},
+              BaselinePosition->Scaled[0.15],
+              ImageSize->10], 
+             StyleBox[
+              RowBox[{"RiemannTensor", " "}],
+              ShowAutoStyles->False,
+              ShowStringCharacters->False,
+              FontSize->0.9 Inherited,
+              FontColor->GrayLevel[0.1]]}
+           },
+           GridBoxSpacings->{"Columns" -> {{0.25}}}],
+          Alignment->{Left, Baseline},
+          BaseStyle->{LineSpacing -> {0, 0}, LineBreakWithin -> False},
+          BaselinePosition->Baseline,
+          FrameMargins->{{3, 0}, {0, 0}}],
+         RowBox[{"PacletSymbol", "[", 
+           
+           RowBox[{"\"BowenPing/STensor\"", ",", 
+             "\"BowenPing`STensor`RiemannTensor\""}], "]"}],
+         TooltipStyle->{ShowAutoStyles -> True, ShowStringCharacters -> True}],
+        Annotation[#, 
+         Style[
+          Defer[
+           PacletSymbol[
+           "BowenPing/STensor", "BowenPing`STensor`RiemannTensor"]], 
+          ShowStringCharacters -> True], "Tooltip"]& ],
+       Background->RGBColor[0.968, 0.976, 0.984],
+       BaselinePosition->Baseline,
+       DefaultBaseStyle->{},
+       FrameMargins->{{0, 0}, {1, 1}},
+       FrameStyle->RGBColor[0.831, 0.847, 0.85],
+       RoundingRadius->4],
+      PacletSymbol["BowenPing/STensor", "BowenPing`STensor`RiemannTensor"],
+      TaggingRules -> {
+       "Paclet" -> "BowenPing/STensor", "Symbol" -> 
+        "BowenPing`STensor`RiemannTensor"},
+      BoxID -> "PacletSymbolBox",
+      SelectWithContents->True,
+      Selectable->False], "[", "g", "]"}], "[", "\"\<Components\>\"", "]"}], 
+   "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"Ricci", " ", 
+      RowBox[{"tensor", ":", " ", 
+       RowBox[{"R_", 
+        RowBox[{"{", "\[Mu]\[Nu]", "}"}]}]}]}], " ", "=", " ", 
+     RowBox[{
+      RowBox[{"R", "^", "\[Lambda]_"}], 
+      RowBox[{"{", "\[Mu]\[Lambda]\[Nu]", "}"}]}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ricci", "[", 
+      RowBox[{"mu_", ",", "nu_"}], "]"}], ":=", 
+     RowBox[{"Simplify", "[", 
+      RowBox[{"Sum", "[", 
+       RowBox[{
+        RowBox[{"riemann", "[", 
+         RowBox[{"lambda", ",", "mu", ",", "lambda", ",", "nu"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"lambda", ",", "1", ",", "4"}], "}"}]}], "]"}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", "\"\<\\nRicci Tensor Components:\>\"", "]"}], ";"}],
+    "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ricciMatrix", "=", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"ricci", "[", 
+        RowBox[{"i", ",", "j"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", "4"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"j", ",", "1", ",", "4"}], "}"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"printMatrix", "[", 
+     RowBox[{"\"\<\>\"", ",", "ricciMatrix"}], "]"}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Ricci", " ", "scalar"}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ricciScalar", "=", 
+     RowBox[{"Simplify", "[", 
+      RowBox[{"Sum", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"inverseMetricMatrix", "[", 
+          RowBox[{"[", 
+           RowBox[{"i", ",", "j"}], "]"}], "]"}], " ", 
+         RowBox[{"ricciMatrix", "[", 
+          RowBox[{"[", 
+           RowBox[{"i", ",", "j"}], "]"}], "]"}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", "4"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"j", ",", "1", ",", "4"}], "}"}]}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", "\"\<\\nRicci Scalar:\>\"", "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", "ricciScalar", "]"}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"Einstein", " ", 
+      RowBox[{"tensor", ":", " ", 
+       RowBox[{"G_", 
+        RowBox[{"{", "\[Mu]\[Nu]", "}"}]}]}]}], " ", "=", " ", 
+     RowBox[{
+      RowBox[{"R_", 
+       RowBox[{"{", "\[Mu]\[Nu]", "}"}]}], " ", "-", " ", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", "/", "2"}], ")"}], " ", "g_", 
+       RowBox[{"{", "\[Mu]\[Nu]", "}"}], " ", "R"}]}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"einsteinMatrix", "=", 
+     RowBox[{"Simplify", "[", 
+      RowBox[{"ricciMatrix", "-", 
+       RowBox[{
+        RowBox[{"1", "/", "2"}], " ", "metricMatrix", " ", "ricciScalar"}]}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"printMatrix", "[", 
+     RowBox[{"\"\<\\nEinstein Tensor Components:\>\"", ",", 
+      "einsteinMatrix"}], "]"}], ";"}], "\[IndentingNewLine]"}]}]], "Code",
+ CellChangeTimes->{{3.991110619309044*^9, 3.991110667819689*^9}, {
+  3.9911108434952946`*^9, 3.991110844254534*^9}, {3.991111071264063*^9, 
+  3.9911111191432743`*^9}},
+ CellLabel->"In[57]:=",ExpressionUUID->"2e57838e-e7a7-0845-806c-e39286cd4151"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"===== \"\>", "\[InvisibleSpace]", "\<\"Schwarzschild\"\>", 
+   "\[InvisibleSpace]", "\<\" Metric Workflow =====\\n\"\>"}],
+  SequenceForm["===== ", "Schwarzschild", " Metric Workflow =====\n"],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692615643`*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"4607750f-65fb-ff43-8f66-69e05af2251c"],
+
+Cell[BoxData["\<\"Metric Tensor:\"\>"], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692635746`*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"12775f0b-5f40-924d-87b9-9445443aaaf3"],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      RowBox[{
+       RowBox[{"-", "1"}], "+", 
+       FractionBox[
+        RowBox[{"2", " ", "M"}], "r"]}], "0", "0", "0"},
+     {"0", 
+      FractionBox["1", 
+       RowBox[{"1", "-", 
+        FractionBox[
+         RowBox[{"2", " ", "M"}], "r"]}]], "0", "0"},
+     {"0", "0", 
+      SuperscriptBox["r", "2"], "0"},
+     {"0", "0", "0", 
+      RowBox[{
+       SuperscriptBox["r", "2"], " ", 
+       SuperscriptBox[
+        RowBox[{"Sin", "[", "theta", "]"}], "2"]}]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.991111169265583*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"949d7381-fde5-b145-ae3b-4d8baed2c45c"],
+
+Cell[BoxData["\<\"Inverse Metric Tensor:\"\>"], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692675915`*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"10eb7813-268c-f746-ad2c-0ed04009dba1"],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      FractionBox["r", 
+       RowBox[{
+        RowBox[{"2", " ", "M"}], "-", "r"}]], "0", "0", "0"},
+     {"0", 
+      RowBox[{"1", "-", 
+       FractionBox[
+        RowBox[{"2", " ", "M"}], "r"]}], "0", "0"},
+     {"0", "0", 
+      FractionBox["1", 
+       SuperscriptBox["r", "2"]], "0"},
+     {"0", "0", "0", 
+      FractionBox[
+       SuperscriptBox[
+        RowBox[{"Csc", "[", "theta", "]"}], "2"], 
+       SuperscriptBox["r", "2"]]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692696*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"35e558a1-b1eb-5647-824c-4a7da8e38e46"],
+
+Cell[BoxData["\<\"\\nChristoffel Symbols (non-zero components):\"\>"], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692696*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"188d9446-fa3f-ff45-ac52-e1a0dc83cc85"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   SubscriptBox[
+    TemplateBox[{"\"\[CapitalGamma]\"", "1"},
+     "Superscript"], 
+    TemplateBox[{"1", "2"},
+     "RowDefault"]], "\[InvisibleSpace]", "\<\" = \"\>", "\[InvisibleSpace]", 
+   RowBox[{"-", 
+    FractionBox["M", 
+     RowBox[{
+      RowBox[{"2", " ", "M", " ", "r"}], "-", 
+      SuperscriptBox["r", "2"]}]]}]}],
+  SequenceForm[
+   Subscript[
+    Superscript["\[CapitalGamma]", 1], 
+    Row[{1, 2}]], " = ", -$CellContext`M/(
+   2 $CellContext`M $CellContext`r - $CellContext`r^2)],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692696*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"8752eb80-5061-424e-ad6c-ab7153fcb0c8"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   SubscriptBox[
+    TemplateBox[{"\"\[CapitalGamma]\"", "1"},
+     "Superscript"], 
+    TemplateBox[{"2", "1"},
+     "RowDefault"]], "\[InvisibleSpace]", "\<\" = \"\>", "\[InvisibleSpace]", 
+   RowBox[{"-", 
+    FractionBox["M", 
+     RowBox[{
+      RowBox[{"2", " ", "M", " ", "r"}], "-", 
+      SuperscriptBox["r", "2"]}]]}]}],
+  SequenceForm[
+   Subscript[
+    Superscript["\[CapitalGamma]", 1], 
+    Row[{2, 1}]], " = ", -$CellContext`M/(
+   2 $CellContext`M $CellContext`r - $CellContext`r^2)],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692696*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"69f23dc6-a047-834f-b3da-b5c757a69f91"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   SubscriptBox[
+    TemplateBox[{"\"\[CapitalGamma]\"", "2"},
+     "Superscript"], 
+    TemplateBox[{"1", "1"},
+     "RowDefault"]], "\[InvisibleSpace]", "\<\" = \"\>", "\[InvisibleSpace]", 
+   FractionBox[
+    RowBox[{"M", " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "2"}], " ", "M"}], "+", "r"}], ")"}]}], 
+    SuperscriptBox["r", "3"]]}],
+  SequenceForm[
+   Subscript[
+    Superscript["\[CapitalGamma]", 2], 
+    Row[{1, 1}]], 
+   " = ", $CellContext`M $CellContext`r^(-3) ((-2) $CellContext`M + \
+$CellContext`r)],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692696*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"9d813ab2-9784-bf4d-aed0-3358e6cc310c"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   SubscriptBox[
+    TemplateBox[{"\"\[CapitalGamma]\"", "2"},
+     "Superscript"], 
+    TemplateBox[{"2", "2"},
+     "RowDefault"]], "\[InvisibleSpace]", "\<\" = \"\>", "\[InvisibleSpace]", 
+   FractionBox["M", 
+    RowBox[{
+     RowBox[{"2", " ", "M", " ", "r"}], "-", 
+     SuperscriptBox["r", "2"]}]]}],
+  SequenceForm[
+   Subscript[
+    Superscript["\[CapitalGamma]", 2], 
+    Row[{2, 2}]], " = ", $CellContext`M/(
+   2 $CellContext`M $CellContext`r - $CellContext`r^2)],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692696*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"d0d6f6e9-6e83-d242-9f7e-0d47cfd6ef53"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   SubscriptBox[
+    TemplateBox[{"\"\[CapitalGamma]\"", "2"},
+     "Superscript"], 
+    TemplateBox[{"3", "3"},
+     "RowDefault"]], "\[InvisibleSpace]", "\<\" = \"\>", "\[InvisibleSpace]", 
+   RowBox[{
+    RowBox[{"2", " ", "M"}], "-", "r"}]}],
+  SequenceForm[
+   Subscript[
+    Superscript["\[CapitalGamma]", 2], 
+    Row[{3, 3}]], " = ", 2 $CellContext`M - $CellContext`r],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692696*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"f3603fe0-de1e-1742-ace9-cab1518bdc48"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   SubscriptBox[
+    TemplateBox[{"\"\[CapitalGamma]\"", "2"},
+     "Superscript"], 
+    TemplateBox[{"4", "4"},
+     "RowDefault"]], "\[InvisibleSpace]", "\<\" = \"\>", "\[InvisibleSpace]", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"2", " ", "M"}], "-", "r"}], ")"}], " ", 
+    SuperscriptBox[
+     RowBox[{"Sin", "[", "theta", "]"}], "2"]}]}],
+  SequenceForm[
+   Subscript[
+    Superscript["\[CapitalGamma]", 2], 
+    Row[{4, 4}]], " = ", (2 $CellContext`M - $CellContext`r) 
+   Sin[$CellContext`theta]^2],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692696*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"329f231c-7e23-9a40-bf75-3c46a4b72594"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   SubscriptBox[
+    TemplateBox[{"\"\[CapitalGamma]\"", "3"},
+     "Superscript"], 
+    TemplateBox[{"2", "3"},
+     "RowDefault"]], "\[InvisibleSpace]", "\<\" = \"\>", "\[InvisibleSpace]", 
+   FractionBox["1", "r"]}],
+  SequenceForm[
+   Subscript[
+    Superscript["\[CapitalGamma]", 3], 
+    Row[{2, 3}]], " = ", $CellContext`r^(-1)],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692696*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"20216544-87eb-7349-a45d-74cf51cb5e16"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   SubscriptBox[
+    TemplateBox[{"\"\[CapitalGamma]\"", "3"},
+     "Superscript"], 
+    TemplateBox[{"3", "2"},
+     "RowDefault"]], "\[InvisibleSpace]", "\<\" = \"\>", "\[InvisibleSpace]", 
+   FractionBox["1", "r"]}],
+  SequenceForm[
+   Subscript[
+    Superscript["\[CapitalGamma]", 3], 
+    Row[{3, 2}]], " = ", $CellContext`r^(-1)],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692856293`*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"b8d20f97-7c07-104d-8d71-417cc8dfa6f3"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   SubscriptBox[
+    TemplateBox[{"\"\[CapitalGamma]\"", "3"},
+     "Superscript"], 
+    TemplateBox[{"4", "4"},
+     "RowDefault"]], "\[InvisibleSpace]", "\<\" = \"\>", "\[InvisibleSpace]", 
+   RowBox[{
+    RowBox[{"-", 
+     RowBox[{"Cos", "[", "theta", "]"}]}], " ", 
+    RowBox[{"Sin", "[", "theta", "]"}]}]}],
+  SequenceForm[
+   Subscript[
+    Superscript["\[CapitalGamma]", 3], 
+    Row[{4, 4}]], " = ", -Cos[$CellContext`theta] Sin[$CellContext`theta]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.991111169288826*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"3875ed4b-bfc5-ac44-b4bd-cd1e8be71664"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   SubscriptBox[
+    TemplateBox[{"\"\[CapitalGamma]\"", "4"},
+     "Superscript"], 
+    TemplateBox[{"2", "4"},
+     "RowDefault"]], "\[InvisibleSpace]", "\<\" = \"\>", "\[InvisibleSpace]", 
+   FractionBox["1", "r"]}],
+  SequenceForm[
+   Subscript[
+    Superscript["\[CapitalGamma]", 4], 
+    Row[{2, 4}]], " = ", $CellContext`r^(-1)],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692908344`*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"76b81617-f233-0248-abc3-fc2ed7b51d05"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   SubscriptBox[
+    TemplateBox[{"\"\[CapitalGamma]\"", "4"},
+     "Superscript"], 
+    TemplateBox[{"3", "4"},
+     "RowDefault"]], "\[InvisibleSpace]", "\<\" = \"\>", "\[InvisibleSpace]", 
+   RowBox[{"Cot", "[", "theta", "]"}]}],
+  SequenceForm[
+   Subscript[
+    Superscript["\[CapitalGamma]", 4], 
+    Row[{3, 4}]], " = ", 
+   Cot[$CellContext`theta]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111692908344`*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"a8768422-8918-4746-a68d-1c1ce1bd2b87"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   SubscriptBox[
+    TemplateBox[{"\"\[CapitalGamma]\"", "4"},
+     "Superscript"], 
+    TemplateBox[{"4", "2"},
+     "RowDefault"]], "\[InvisibleSpace]", "\<\" = \"\>", "\[InvisibleSpace]", 
+   FractionBox["1", "r"]}],
+  SequenceForm[
+   Subscript[
+    Superscript["\[CapitalGamma]", 4], 
+    Row[{4, 2}]], " = ", $CellContext`r^(-1)],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.991111169292845*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"c5ec60f5-df43-a94b-af09-5327a3934b7c"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   SubscriptBox[
+    TemplateBox[{"\"\[CapitalGamma]\"", "4"},
+     "Superscript"], 
+    TemplateBox[{"4", "3"},
+     "RowDefault"]], "\[InvisibleSpace]", "\<\" = \"\>", "\[InvisibleSpace]", 
+   RowBox[{"Cot", "[", "theta", "]"}]}],
+  SequenceForm[
+   Subscript[
+    Superscript["\[CapitalGamma]", 4], 
+    Row[{4, 3}]], " = ", 
+   Cot[$CellContext`theta]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.991111169294853*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"c50e7728-c941-474b-aa70-3d0acc55de37"]
+}, Open  ]],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   TagBox["BowenPing`STensor`STensor",
+    "SummaryHead"], "[", 
+   DynamicModuleBox[{Typeset`open$$ = True, Typeset`embedState$$ = "Ready"}, 
+    TemplateBox[{
+      PaneSelectorBox[{False -> GridBox[{{
+            PaneBox[
+             ButtonBox[
+              DynamicBox[
+               FEPrivate`FrontEndResource["FEBitmaps", "SummaryBoxOpener"], 
+               ImageSizeCache -> {
+                10.869015226326882`, {0., 10.869015226326882`}}], Appearance -> 
+              None, BaseStyle -> {}, 
+              ButtonFunction :> (Typeset`open$$ = True), Evaluator -> 
+              Automatic, Method -> "Preemptive"], 
+             Alignment -> {Center, Center}, ImageSize -> 
+             Dynamic[{
+               Automatic, 
+                3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                 Magnification])}]], 
+            GraphicsBox[
+             
+             RasterBox[{{{1., 0., 0.}, {0.5, 1., 0.}}, {{1., 0., 0.}, {
+              0.8000000000000007, 0., 1.}}}, {{0, 0}, {2, 2}}, {0, 1}], Frame -> 
+             Automatic, FrameLabel -> {None, None}, 
+             FrameTicks -> {{None, None}, {None, None}}, GridLinesStyle -> 
+             Directive[
+               GrayLevel[0.5, 0.4]], 
+             Method -> {
+              "GridLinesInFront" -> True, "DefaultBoundaryStyle" -> Automatic,
+                "DefaultGraphicsInteraction" -> {
+                "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+                 "Effects" -> {
+                  "Highlight" -> {"ratio" -> 2}, 
+                   "HighlightPoint" -> {"ratio" -> 2}, 
+                   "Droplines" -> {
+                    "freeformCursorMode" -> True, 
+                    "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+               "DefaultPlotStyle" -> Automatic}], 
+            GridBox[{{
+               RowBox[{
+                 TagBox["\"Symbol: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox["\"Riemann(g)\"", "SummaryItem"], "\[InvisibleSpace]", 
+                 TagBox["\[SpanFromLeft]", "SummaryItemAnnotation"]}]}, {
+               RowBox[{
+                 TagBox["\"Rank: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox[
+                  RowBox[{"{", 
+                    RowBox[{"1", ",", "3"}], "}"}], "SummaryItem"]}]}}, 
+             AutoDelete -> False, 
+             BaseStyle -> {
+              ShowStringCharacters -> False, NumberMarks -> False, 
+               PrintPrecision -> 3, ShowSyntaxStyles -> False}, 
+             GridBoxAlignment -> {
+              "Columns" -> {{Left}}, "Rows" -> {{Automatic}}}, 
+             GridBoxItemSize -> {
+              "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+             GridBoxSpacings -> {
+              "Columns" -> {{2}}, "Rows" -> {{Automatic}}}]}}, AutoDelete -> 
+          False, BaselinePosition -> {1, 1}, 
+          GridBoxAlignment -> {"Columns" -> {{Left}}, "Rows" -> {{Top}}}, 
+          GridBoxItemSize -> {
+           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], True -> 
+        GridBox[{{
+            PaneBox[
+             ButtonBox[
+              DynamicBox[
+               FEPrivate`FrontEndResource["FEBitmaps", "SummaryBoxCloser"], 
+               ImageSizeCache -> {
+                10.869015226326882`, {0., 10.869015226326882`}}], Appearance -> 
+              None, BaseStyle -> {}, 
+              ButtonFunction :> (Typeset`open$$ = False), Evaluator -> 
+              Automatic, Method -> "Preemptive"], 
+             Alignment -> {Center, Center}, ImageSize -> 
+             Dynamic[{
+               Automatic, 
+                3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                 Magnification])}]], 
+            GraphicsBox[
+             
+             RasterBox[{{{1., 0., 0.}, {0.5, 1., 0.}}, {{1., 0., 0.}, {
+              0.8000000000000007, 0., 1.}}}, {{0, 0}, {2, 2}}, {0, 1}], Frame -> 
+             Automatic, FrameLabel -> {None, None}, 
+             FrameTicks -> {{None, None}, {None, None}}, GridLinesStyle -> 
+             Directive[
+               GrayLevel[0.5, 0.4]], 
+             Method -> {
+              "GridLinesInFront" -> True, "DefaultBoundaryStyle" -> Automatic,
+                "DefaultGraphicsInteraction" -> {
+                "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+                 "Effects" -> {
+                  "Highlight" -> {"ratio" -> 2}, 
+                   "HighlightPoint" -> {"ratio" -> 2}, 
+                   "Droplines" -> {
+                    "freeformCursorMode" -> True, 
+                    "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+               "DefaultPlotStyle" -> Automatic}], 
+            GridBox[{{
+               RowBox[{
+                 TagBox["\"Symbol: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox["\"Riemann(g)\"", "SummaryItem"], "\[InvisibleSpace]", 
+                 TagBox["\[SpanFromLeft]", "SummaryItemAnnotation"]}]}, {
+               RowBox[{
+                 TagBox["\"Rank: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox[
+                  RowBox[{"{", 
+                    RowBox[{"1", ",", "3"}], "}"}], "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox["\"Symmetry: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox[
+                  RowBox[{"{", 
+                    RowBox[{"Antisymmetric", "[", 
+                    RowBox[{"{", 
+                    RowBox[{"2", ",", "3"}], "}"}], "]"}], "}"}], 
+                  "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox["\"Coordinate System: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox[
+                  RowBox[{"{", 
+                    RowBox[{"\[Theta]", ",", "\[Phi]"}], "}"}], 
+                  "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox["\"Components: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox[
+                  RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", 
+                    RowBox[{"-", 
+                    SuperscriptBox[
+                    RowBox[{"Sin", "[", "\[Theta]", "]"}], "2"]}]}], "}"}]}], 
+                    "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", 
+                    SuperscriptBox[
+                    RowBox[{"Sin", "[", "\[Theta]", "]"}], "2"]}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}]}], "}"}]}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"1", ",", "0"}], "}"}]}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"-", "1"}], ",", "0"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}]}], "}"}]}], "}"}]}], "}"}],
+                   "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox["\"Metric: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox[
+                  InterpretationBox[
+                   RowBox[{
+                    TagBox["BowenPing`STensor`STensor", "SummaryHead"], "[", 
+                    
+                    DynamicModuleBox[{
+                    Typeset`open$$ = True, Typeset`embedState$$ = "Ready"}, 
+                    TemplateBox[{
+                    PaneSelectorBox[{False -> GridBox[{{
+                    PaneBox[
+                    ButtonBox[
+                    DynamicBox[
+                    FEPrivate`FrontEndResource[
+                    "FEBitmaps", "SummaryBoxOpener"], 
+                    ImageSizeCache -> {
+                    8.674310746211559, {0., 8.674310746211559}}], Appearance -> 
+                    None, BaseStyle -> {}, 
+                    ButtonFunction :> (Typeset`open$$ = True), Evaluator -> 
+                    Automatic, Method -> "Preemptive"], 
+                    Alignment -> {Center, Center}, ImageSize -> 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
+                    GraphicsBox[
+                    
+                    RasterBox[{{{1., 0., 0.}, {0., 1., 
+                    0.3333333333333335}}, {{1., 0., 1.}, {1., 0., 0.}}}, {{0, 
+                    0}, {2, 2}}, {0, 1}], Frame -> Automatic, 
+                    FrameLabel -> {None, None}, 
+                    FrameTicks -> {{None, None}, {None, None}}, 
+                    GridLinesStyle -> Directive[
+                    GrayLevel[0.5, 0.4]], 
+                    Method -> {"GridLinesInFront" -> True, 
+                    "DefaultBoundaryStyle" -> Automatic, 
+                    "DefaultGraphicsInteraction" -> {
+                    "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+                    "Effects" -> {"Highlight" -> {"ratio" -> 2}, 
+                    "HighlightPoint" -> {"ratio" -> 2}, 
+                    "Droplines" -> {"freeformCursorMode" -> True, 
+                    "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+                    "DefaultPlotStyle" -> Automatic}], 
+                    GridBox[{{
+                    RowBox[{
+                    TagBox["\"Symbol: \"", "SummaryItemAnnotation"], 
+                    "\[InvisibleSpace]", 
+                    TagBox["\"g\"", "SummaryItem"], "\[InvisibleSpace]", 
+                    TagBox["\[SpanFromLeft]", "SummaryItemAnnotation"]}]}, {
+                    RowBox[{
+                    TagBox["\"Rank: \"", "SummaryItemAnnotation"], 
+                    "\[InvisibleSpace]", 
+                    TagBox[
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "2"}], "}"}], "SummaryItem"]}]}}, 
+                    AutoDelete -> False, 
+                    BaseStyle -> {
+                    ShowStringCharacters -> False, NumberMarks -> False, 
+                    PrintPrecision -> 3, ShowSyntaxStyles -> False}, 
+                    GridBoxAlignment -> {
+                    "Columns" -> {{Left}}, "Rows" -> {{Automatic}}}, 
+                    GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+                    GridBoxSpacings -> {
+                    "Columns" -> {{2}}, "Rows" -> {{Automatic}}}]}}, 
+                    AutoDelete -> False, BaselinePosition -> {1, 1}, 
+                    GridBoxAlignment -> {
+                    "Columns" -> {{Left}}, "Rows" -> {{Top}}}, 
+                    GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+                    True -> GridBox[{{
+                    PaneBox[
+                    ButtonBox[
+                    DynamicBox[
+                    FEPrivate`FrontEndResource[
+                    "FEBitmaps", "SummaryBoxCloser"], 
+                    ImageSizeCache -> {
+                    8.674310746211559, {0., 8.674310746211559}}], Appearance -> 
+                    None, BaseStyle -> {}, 
+                    ButtonFunction :> (Typeset`open$$ = False), Evaluator -> 
+                    Automatic, Method -> "Preemptive"], 
+                    Alignment -> {Center, Center}, ImageSize -> 
+                    Dynamic[{Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}], ScrollPosition -> {0., 0.}], 
+                    GraphicsBox[
+                    
+                    RasterBox[{{{1., 0., 0.}, {0., 1., 
+                    0.3333333333333335}}, {{1., 0., 1.}, {1., 0., 0.}}}, {{0, 
+                    0}, {2, 2}}, {0, 1}], Frame -> Automatic, 
+                    FrameLabel -> {None, None}, 
+                    FrameTicks -> {{None, None}, {None, None}}, 
+                    GridLinesStyle -> Directive[
+                    GrayLevel[0.5, 0.4]], 
+                    Method -> {"GridLinesInFront" -> True, 
+                    "DefaultBoundaryStyle" -> Automatic, 
+                    "DefaultGraphicsInteraction" -> {
+                    "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+                    "Effects" -> {"Highlight" -> {"ratio" -> 2}, 
+                    "HighlightPoint" -> {"ratio" -> 2}, 
+                    "Droplines" -> {"freeformCursorMode" -> True, 
+                    "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
+                    "DefaultPlotStyle" -> Automatic}], 
+                    GridBox[{{
+                    RowBox[{
+                    TagBox["\"Symbol: \"", "SummaryItemAnnotation"], 
+                    "\[InvisibleSpace]", 
+                    TagBox["\"g\"", "SummaryItem"], "\[InvisibleSpace]", 
+                    TagBox["\[SpanFromLeft]", "SummaryItemAnnotation"]}]}, {
+                    RowBox[{
+                    TagBox["\"Rank: \"", "SummaryItemAnnotation"], 
+                    "\[InvisibleSpace]", 
+                    TagBox[
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "2"}], "}"}], "SummaryItem"]}]}, {
+                    RowBox[{
+                    TagBox["\"Symmetry: \"", "SummaryItemAnnotation"], 
+                    "\[InvisibleSpace]", 
+                    TagBox[
+                    RowBox[{"{", 
+                    RowBox[{"Symmetric", "[", 
+                    RowBox[{"{", 
+                    RowBox[{"1", ",", "2"}], "}"}], "]"}], "}"}], 
+                    "SummaryItem"]}]}, {
+                    RowBox[{
+                    TagBox[
+                    "\"Coordinate System: \"", "SummaryItemAnnotation"], 
+                    "\[InvisibleSpace]", 
+                    TagBox[
+                    RowBox[{"{", 
+                    RowBox[{"\[Theta]", ",", "\[Phi]"}], "}"}], 
+                    "SummaryItem"]}]}, {
+                    RowBox[{
+                    TagBox["\"Components: \"", "SummaryItemAnnotation"], 
+                    "\[InvisibleSpace]", 
+                    TagBox[
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    SuperscriptBox["R", "2"], ",", "0"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", 
+                    RowBox[{
+                    SuperscriptBox["R", "2"], " ", 
+                    SuperscriptBox[
+                    RowBox[{"Sin", "[", "\[Theta]", "]"}], "2"]}]}], "}"}]}], 
+                    "}"}], "SummaryItem"]}]}, {
+                    RowBox[{
+                    TagBox["\"Metric: \"", "SummaryItemAnnotation"], 
+                    "\[InvisibleSpace]", 
+                    TagBox["True", "SummaryItem"]}]}}, AutoDelete -> False, 
+                    BaseStyle -> {
+                    ShowStringCharacters -> False, NumberMarks -> False, 
+                    PrintPrecision -> 3, ShowSyntaxStyles -> False}, 
+                    GridBoxAlignment -> {
+                    "Columns" -> {{Left}}, "Rows" -> {{Automatic}}}, 
+                    GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+                    GridBoxSpacings -> {
+                    "Columns" -> {{2}}, "Rows" -> {{Automatic}}}]}}, 
+                    AutoDelete -> False, BaselinePosition -> {1, 1}, 
+                    GridBoxAlignment -> {
+                    "Columns" -> {{Left}}, "Rows" -> {{Top}}}, 
+                    GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}]}, 
+                    Dynamic[Typeset`open$$], ImageSize -> Automatic]}, 
+                    "SummaryPanel"], DynamicModuleValues :> {}], "]"}], 
+                   
+                   BowenPing`STensor`STensor[<|
+                    "Symbol" -> "g", "Rank" -> {0, 2}, "Symmetry" -> {
+                    Symmetric[{1, 2}]}, 
+                    "Coordinate System" -> {$CellContext`\[Theta], \
+$CellContext`\[Phi]}, 
+                    "Components" -> {{$CellContext`R^2, 0}, {
+                    0, $CellContext`R^2 Sin[$CellContext`\[Theta]]^2}}, 
+                    "Metric" -> True|>], Editable -> False, 
+                   SelectWithContents -> True, Selectable -> False], 
+                  "SummaryItem"]}]}}, AutoDelete -> False, 
+             BaseStyle -> {
+              ShowStringCharacters -> False, NumberMarks -> False, 
+               PrintPrecision -> 3, ShowSyntaxStyles -> False}, 
+             GridBoxAlignment -> {
+              "Columns" -> {{Left}}, "Rows" -> {{Automatic}}}, 
+             GridBoxItemSize -> {
+              "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+             GridBoxSpacings -> {
+              "Columns" -> {{2}}, "Rows" -> {{Automatic}}}]}}, AutoDelete -> 
+          False, BaselinePosition -> {1, 1}, 
+          GridBoxAlignment -> {"Columns" -> {{Left}}, "Rows" -> {{Top}}}, 
+          GridBoxItemSize -> {
+           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}]}, 
+       Dynamic[Typeset`open$$], ImageSize -> Automatic]},
+     "SummaryPanel"],
+    DynamicModuleValues:>{}], "]"}],
+  BowenPing`STensor`STensor[<|
+   "Rank" -> {1, 3}, "Symbol" -> "Riemann(g)", 
+    "Coordinate System" -> {$CellContext`\[Theta], $CellContext`\[Phi]}, 
+    "Components" -> {{{{0, 0}, {0, -Sin[$CellContext`\[Theta]]^2}}, {{
+        0, Sin[$CellContext`\[Theta]]^2}, {0, 0}}}, {{{0, 0}, {1, 0}}, {{-1, 
+      0}, {0, 0}}}}, "Metric" -> 
+    BowenPing`STensor`STensor[<|"Symbol" -> "g", "Rank" -> {0, 2}, "Symmetry" -> {
+         Symmetric[{1, 2}]}, 
+       "Coordinate System" -> {$CellContext`\[Theta], $CellContext`\[Phi]}, 
+       "Components" -> {{$CellContext`R^2, 0}, {
+         0, $CellContext`R^2 Sin[$CellContext`\[Theta]]^2}}, "Metric" -> 
+       True|>], "Symmetry" -> {
+      Antisymmetric[{2, 3}]}|>],
+  Editable->False,
+  SelectWithContents->True,
+  Selectable->False]], "Output",
+ CellChangeTimes->{3.991111169342987*^9},
+ CellLabel->"Out[71]=",ExpressionUUID->"b687cb3d-d225-f44a-96a2-00087dbcb457"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", 
+         RowBox[{"-", 
+          SuperscriptBox[
+           RowBox[{"Sin", "[", "\[Theta]", "]"}], "2"]}]}], "}"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", 
+         SuperscriptBox[
+          RowBox[{"Sin", "[", "\[Theta]", "]"}], "2"]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0"}], "}"}]}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", "0"}], "}"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "1"}], ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0"}], "}"}]}], "}"}]}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.9911111693510227`*^9},
+ CellLabel->"Out[72]=",ExpressionUUID->"fe082d1a-57a9-e84a-a337-31f5c8b082a3"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"\\nRicci Tensor Components:\"\>"], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.991111169353031*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"735fc305-962e-bf4b-814a-6d5a310ecf7b"],
+
+Cell[BoxData["\<\"\"\>"], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111693924484`*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"7011d283-6d0b-2f48-a9f4-5c51241f906f"],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {"0", "0", "0", "0"},
+     {"0", "0", "0", "0"},
+     {"0", "0", "0", "0"},
+     {"0", "0", "0", "0"}
+    },
+    GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111693924484`*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"69b08706-dd49-034c-9c14-0b4aca8b6023"],
+
+Cell[BoxData["\<\"\\nRicci Scalar:\"\>"], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.991111169396448*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"ba039659-b574-574f-ab5a-5095b35c3147"],
+
+Cell[BoxData["0"], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111693984566`*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"debe632c-8ad2-d844-b3da-55b0522c0d35"],
+
+Cell[BoxData["\<\"\\nEinstein Tensor Components:\"\>"], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.9911111693984566`*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"f4dabdc5-d91c-eb4b-9136-27c184e18a40"],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {"0", "0", "0", "0"},
+     {"0", "0", "0", "0"},
+     {"0", "0", "0", "0"},
+     {"0", "0", "0", "0"}
+    },
+    GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Print",
+ CellChangeTimes->{3.9911106484850616`*^9, 3.991110846023609*^9, 
+  3.991111169400463*^9},
+ CellLabel->
+  "During evaluation of \
+In[57]:=",ExpressionUUID->"64ed62bb-e31a-a345-bb3f-6b979d14d0c5"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+ok take this notebook as an example and create a new one thats this workflow \
+just for a generic metric. the coordinates should be indexxed and not named, \
+and there should be room to add new parameters (like the carter constant in a \
+kerr metric)\
+\>", "ChatInput",
+ CellTags->"861cd75e-e4c9-4946-85bf-f59a1c789756",
+ CellLabel->"In[83]:=",ExpressionUUID->"a7a13925-d26d-9843-a5a6-7a78495590f0"],
+
+Cell[TextData[{
+ Cell[BoxData[
+  DynamicModuleBox[{Typeset`var$$ = False}, 
+   StyleBox[
+    PaneSelectorBox[{False->
+     PaneSelectorBox[{False->
+      FrameBox[
+       TagBox[
+        TagBox[
+         TagBox[GridBox[{
+            {
+             PaneBox[
+              DynamicBox[ToBoxes[
+                (If[
+                 TrueQ[$CloudEvaluation], #, 
+                 
+                 Pane[#, ImageSize -> {16, 16}, ImageSizeAction -> 
+                  "ShrinkToFit"]]& )[
+                 RawBoxes[
+                  DynamicBox[
+                   FEPrivate`FrontEndResource["FEBitmaps", "NotebookIcon"][
+                    LightDarkSwitched[
+                    GrayLevel[0.651], 
+                    GrayLevel[0.6317181]], 
+                    LightDarkSwitched[
+                    RGBColor[0.86667, 0.066667, 0.], 
+                    RGBColor[1, 0.4537951, 0.3912115]]]]]], StandardForm],
+               ImageSizeCache->{16., {4.900390625, 11.099609375}},
+               SingleEvaluation->True,
+               TrackedSymbols:>{}],
+              BaselinePosition->Scaled[0.2],
+              ContentPadding->False,
+              FrameMargins->{{0, 0}, {0, 0}}], 
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource[
+                "ChatbookStrings", "FormattingToolUsed"], StandardForm],
+               
+               ImageSizeCache->{
+                30.095000505447388`, {0.15600000000000058`, 9.256}}],
+              StripOnInput->False,
+              FontColor->RGBColor[0.53214525, 0.6238195470000001, 0.67275]], 
+             StyleBox["\<\"Create Notebook\"\>",
+              StripOnInput->False,
+              FontWeight->"DemiBold",
+              FontColor->RGBColor[0.53214525, 0.6238195470000001, 0.67275]], 
+             PaneSelectorBox[{True->
+              TemplateBox[{
+                RGBColor[0.55893535, 0.7525889017999999, 0.85595]},
+               "DiscardedMaterialCloserIcon"], False->
+              TemplateBox[{
+                RGBColor[0.55893535, 0.7525889017999999, 0.85595]},
+               "DiscardedMaterialOpenerIcon"]}, Dynamic[Typeset`var$$],
+              BaselinePosition->Baseline,
+              ImageSize->Automatic]}
+           },
+           AutoDelete->False,
+           
+           BaseStyle->{
+            FontColor -> RGBColor[0.55893535, 0.7525889017999999, 0.85595], 
+             ShowStringCharacters -> False},
+           BaselinePosition->{1, 1},
+           GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+           
+           GridBoxItemSize->{
+            "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+           GridBoxSpacings->{"Columns" -> {{0.25}}}],
+          "Grid"],
+         EventHandlerTag[{"MouseDown" :> FEPrivate`Set[Typeset`var$$, 
+             Not[Typeset`var$$]], Method -> "Preemptive", PassEventsDown -> 
+           Automatic, PassEventsUp -> True}]],
+        MouseAppearanceTag["Arrow"]],
+       Background->RGBColor[0.709527, 0.831759396, 0.897, 0.08],
+       BaseStyle->{
+        "Text", "IconizedDefaultName", FontSize -> 13, LineBreakWithin -> 
+         False},
+       FrameMargins->{{4, 6}, {2, 2}},
+       FrameStyle->Directive[
+         AbsoluteThickness[1.5], 
+         RGBColor[0.709527, 0.831759396, 0.897, 0.5]],
+       ImageMargins->{{0, 0}, {8, 8}},
+       RoundingRadius->6,
+       StripOnInput->False], True->
+      FrameBox[
+       TagBox[
+        TagBox[
+         TagBox[GridBox[{
+            {
+             PaneBox[
+              DynamicBox[ToBoxes[
+                (If[
+                 TrueQ[$CloudEvaluation], #, 
+                 
+                 Pane[#, ImageSize -> {16, 16}, ImageSizeAction -> 
+                  "ShrinkToFit"]]& )[
+                 RawBoxes[
+                  DynamicBox[
+                   FEPrivate`FrontEndResource["FEBitmaps", "NotebookIcon"][
+                    LightDarkSwitched[
+                    GrayLevel[0.651], 
+                    GrayLevel[0.6317181]], 
+                    LightDarkSwitched[
+                    RGBColor[0.86667, 0.066667, 0.], 
+                    RGBColor[1, 0.4537951, 0.3912115]]]]]], StandardForm],
+               SingleEvaluation->True,
+               TrackedSymbols:>{}],
+              BaselinePosition->Scaled[0.2],
+              ContentPadding->False,
+              FrameMargins->{{0, 0}, {0, 0}}], 
+             StyleBox[
+              DynamicBox[ToBoxes[
+                FEPrivate`FrontEndResource[
+                "ChatbookStrings", "FormattingToolUsed"], StandardForm]],
+              StripOnInput->False,
+              FontColor->RGBColor[0.53214525, 0.6238195470000001, 0.67275]], 
+             StyleBox["\<\"Create Notebook\"\>",
+              StripOnInput->False,
+              FontWeight->"DemiBold",
+              FontColor->RGBColor[0.53214525, 0.6238195470000001, 0.67275]], 
+             PaneSelectorBox[{True->
+              TemplateBox[{
+                RGBColor[0.53214525, 0.6238195470000001, 0.67275]},
+               "DiscardedMaterialCloserIcon"], False->
+              TemplateBox[{
+                RGBColor[0.53214525, 0.6238195470000001, 0.67275]},
+               "DiscardedMaterialOpenerIcon"]}, Dynamic[Typeset`var$$],
+              BaselinePosition->Baseline,
+              ImageSize->Automatic]}
+           },
+           AutoDelete->False,
+           
+           BaseStyle->{
+            FontColor -> RGBColor[0.53214525, 0.6238195470000001, 0.67275], 
+             ShowStringCharacters -> False},
+           BaselinePosition->{1, 1},
+           GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+           
+           GridBoxItemSize->{
+            "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+           GridBoxSpacings->{"Columns" -> {{0.25}}}],
+          "Grid"],
+         EventHandlerTag[{"MouseDown" :> FEPrivate`Set[Typeset`var$$, 
+             Not[Typeset`var$$]], Method -> "Preemptive", PassEventsDown -> 
+           Automatic, PassEventsUp -> True}]],
+        MouseAppearanceTag["Arrow"]],
+       Background->RGBColor[0.588353, 0.792198844, 0.901, 0.08],
+       BaseStyle->{
+        "Text", "IconizedDefaultName", FontSize -> 13, LineBreakWithin -> 
+         False},
+       FrameMargins->{{4, 6}, {2, 2}},
+       FrameStyle->Directive[
+         AbsoluteThickness[1.5], 
+         RGBColor[0.588353, 0.792198844, 0.901, 0.5]],
+       ImageMargins->{{0, 0}, {8, 8}},
+       RoundingRadius->6,
+       StripOnInput->False]}, Dynamic[
+       CurrentValue["MouseOver"]],
+      FrameMargins->0,
+      ImageSize->Automatic], True->
+     FrameBox[
+      TagBox[GridBox[{
+         {
+          PaneSelectorBox[{False->
+           TagBox[
+            TagBox[
+             TagBox[GridBox[{
+                {
+                 PaneBox[
+                  DynamicBox[ToBoxes[
+                    (If[
+                    TrueQ[$CloudEvaluation], #, 
+                    
+                    Pane[#, ImageSize -> {16, 16}, ImageSizeAction -> 
+                    "ShrinkToFit"]]& )[
+                    RawBoxes[
+                    DynamicBox[
+                    FEPrivate`FrontEndResource["FEBitmaps", "NotebookIcon"][
+                    LightDarkSwitched[
+                    GrayLevel[0.651], 
+                    GrayLevel[0.6317181]], 
+                    LightDarkSwitched[
+                    RGBColor[0.86667, 0.066667, 0.], 
+                    RGBColor[1, 0.4537951, 0.3912115]]]]]], StandardForm],
+                   SingleEvaluation->True,
+                   TrackedSymbols:>{}],
+                  BaselinePosition->Scaled[0.2],
+                  ContentPadding->False,
+                  FrameMargins->{{0, 0}, {0, 0}}], 
+                 StyleBox[
+                  DynamicBox[ToBoxes[
+                    FEPrivate`FrontEndResource[
+                    "ChatbookStrings", "FormattingToolUsed"], StandardForm]],
+                  StripOnInput->False,
+                  
+                  FontColor->RGBColor[
+                   0.53214525, 0.6238195470000001, 0.67275]], 
+                 StyleBox["\<\"Create Notebook\"\>",
+                  StripOnInput->False,
+                  FontWeight->"DemiBold",
+                  
+                  FontColor->RGBColor[
+                   0.53214525, 0.6238195470000001, 0.67275]], 
+                 PaneSelectorBox[{True->
+                  TemplateBox[{
+                    RGBColor[0.55893535, 0.7525889017999999, 0.85595]},
+                   "DiscardedMaterialCloserIcon"], False->
+                  TemplateBox[{
+                    RGBColor[0.55893535, 0.7525889017999999, 0.85595]},
+                   "DiscardedMaterialOpenerIcon"]}, Dynamic[Typeset`var$$],
+                  BaselinePosition->Baseline,
+                  ImageSize->Automatic]}
+               },
+               AutoDelete->False,
+               
+               BaseStyle->{
+                FontColor -> 
+                 RGBColor[0.55893535, 0.7525889017999999, 0.85595], 
+                 ShowStringCharacters -> False},
+               BaselinePosition->{1, 1},
+               
+               GridBoxAlignment->{
+                "Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+               
+               GridBoxItemSize->{
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+               GridBoxSpacings->{"Columns" -> {{0.25}}}],
+              "Grid"],
+             EventHandlerTag[{"MouseDown" :> FEPrivate`Set[Typeset`var$$, 
+                 Not[Typeset`var$$]], Method -> "Preemptive", PassEventsDown -> 
+               Automatic, PassEventsUp -> True}]],
+            MouseAppearanceTag["Arrow"]], True->
+           TagBox[
+            TagBox[
+             TagBox[GridBox[{
+                {
+                 PaneBox[
+                  DynamicBox[ToBoxes[
+                    (If[
+                    TrueQ[$CloudEvaluation], #, 
+                    
+                    Pane[#, ImageSize -> {16, 16}, ImageSizeAction -> 
+                    "ShrinkToFit"]]& )[
+                    RawBoxes[
+                    DynamicBox[
+                    FEPrivate`FrontEndResource["FEBitmaps", "NotebookIcon"][
+                    LightDarkSwitched[
+                    GrayLevel[0.651], 
+                    GrayLevel[0.6317181]], 
+                    LightDarkSwitched[
+                    RGBColor[0.86667, 0.066667, 0.], 
+                    RGBColor[1, 0.4537951, 0.3912115]]]]]], StandardForm],
+                   SingleEvaluation->True,
+                   TrackedSymbols:>{}],
+                  BaselinePosition->Scaled[0.2],
+                  ContentPadding->False,
+                  FrameMargins->{{0, 0}, {0, 0}}], 
+                 StyleBox[
+                  DynamicBox[ToBoxes[
+                    FEPrivate`FrontEndResource[
+                    "ChatbookStrings", "FormattingToolUsed"], StandardForm]],
+                  StripOnInput->False,
+                  
+                  FontColor->RGBColor[
+                   0.53214525, 0.6238195470000001, 0.67275]], 
+                 StyleBox["\<\"Create Notebook\"\>",
+                  StripOnInput->False,
+                  FontWeight->"DemiBold",
+                  
+                  FontColor->RGBColor[
+                   0.53214525, 0.6238195470000001, 0.67275]], 
+                 PaneSelectorBox[{True->
+                  TemplateBox[{
+                    RGBColor[0.53214525, 0.6238195470000001, 0.67275]},
+                   "DiscardedMaterialCloserIcon"], False->
+                  TemplateBox[{
+                    RGBColor[0.53214525, 0.6238195470000001, 0.67275]},
+                   "DiscardedMaterialOpenerIcon"]}, Dynamic[Typeset`var$$],
+                  BaselinePosition->Baseline,
+                  ImageSize->Automatic]}
+               },
+               AutoDelete->False,
+               
+               BaseStyle->{
+                FontColor -> 
+                 RGBColor[0.53214525, 0.6238195470000001, 0.67275], 
+                 ShowStringCharacters -> False},
+               BaselinePosition->{1, 1},
+               
+               GridBoxAlignment->{
+                "Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+               
+               GridBoxItemSize->{
+                "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+               GridBoxSpacings->{"Columns" -> {{0.25}}}],
+              "Grid"],
+             EventHandlerTag[{"MouseDown" :> FEPrivate`Set[Typeset`var$$, 
+                 Not[Typeset`var$$]], Method -> "Preemptive", PassEventsDown -> 
+               Automatic, PassEventsUp -> True}]],
+            MouseAppearanceTag["Arrow"]]}, Dynamic[
+            CurrentValue["MouseOver"]],
+           FrameMargins->0,
+           ImageSize->Automatic]},
+         {
+          TabViewBox[{{1,"\<\"Raw\"\>"->
+           FrameBox[
+            FrameBox[Cell[BoxData[
+              PaneBox[
+               
+               PaneBox["\<\"/create_nb\\ncontent: # Generic Metric Workflow \
+Template\\n\\nThis notebook is a reusable template for symbolic tensor \
+computations with a generic metric. It uses indexed coordinates rather than \
+named ones, and leaves space for extra parameters such as a Carter constant, \
+mass, spin, or cosmological constant.\\n\\n---\\n\\n## 1. \
+Setup\\n\\n```wl\\nClearAll[\\n  coordinateCount, coordinateNames, \
+parameterNames, parameters, metricMatrix,\\n  inverseMetricMatrix, \
+christoffel, riemann, ricciMatrix, ricciScalar,\\n  einsteinMatrix, \
+printMatrix\\n];\\n\\n(* ==== CONFIGURATION SECTION ==== *)\\ncoordinateCount \
+= 4;\\ncoordinateNames = Array[Subscript[x, #] &, coordinateCount];\\n\\n(* \
+Add as many parameters as needed here *)\\nparameterNames = {Subscript[m, 1], \
+Subscript[m, 2], Subscript[a], Subscript[q], Subscript[\[CapitalLambda]], \
+Subscript[Q], Subscript[C, 1]};\\nparameters = \
+AssociationThread[parameterNames, parameterNames];\\n\\n(* Generic symmetric \
+metric matrix:\\n   Replace these entries with your desired metric \
+components.\\n   You can include any of the parameters above, or add more. *)\
+\\nmetricMatrix = {\\n  {g11[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\\n  {g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g22[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\\n  {g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g33[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\\n  {g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g44[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]}\\n};\\n\\nprintMatrix[label_, mat_] := (Print[label]; \
+Print[MatrixForm[mat]]);\\n```\\n\\n---\\n\\n## 2. Metric and inverse \
+metric\\n\\n```wl\\nPrint[\\\"===== Generic Metric Workflow \
+=====\\\\n\\\"];\\nPrint[\\\"Coordinates: \\\", \
+coordinateNames];\\nPrint[\\\"Parameters: \\\", \
+parameterNames];\\nprintMatrix[\\\"Metric Tensor:\\\", \
+metricMatrix];\\n\\ninverseMetricMatrix = \
+Simplify[Inverse[metricMatrix]];\\nprintMatrix[\\\"Inverse Metric \
+Tensor:\\\", inverseMetricMatrix];\\n```\\n\\n---\\n\\n## 3. Christoffel \
+symbols\\n\\n```wl\\n(* Christoffel symbols: \[CapitalGamma]^\[Lambda]_{\[Mu]\
+\[Nu]} *)\\nchristoffel[lambda_, mu_, nu_] := Simplify[\\n  1/2 Sum[\\n    \
+inverseMetricMatrix[[lambda, sigma]]*\\n      (D[metricMatrix[[sigma, nu]], \
+coordinateNames[[mu]]] +\\n       D[metricMatrix[[mu, sigma]], \
+coordinateNames[[nu]]] -\\n       D[metricMatrix[[mu, nu]], \
+coordinateNames[[sigma]]]),\\n    {sigma, 1, coordinateCount}\\n  \
+]\\n];\\n\\nPrint[\\\"\\\\nChristoffel Symbols (non-zero \
+components):\\\"];\\nDo[\\n  Module[{value = christoffel[i, j, k]},\\n    \
+If[!TrueQ[Simplify[value == 0]],\\n      Print[Subscript[Superscript[\\\"\
+\[CapitalGamma]\\\", i], Row[{j, k}]], \\\" = \\\", value]\\n    ]\\n  ],\\n  \
+{i, 1, coordinateCount}, {j, 1, coordinateCount}, {k, 1, \
+coordinateCount}\\n];\\n```\\n\\n---\\n\\n## 4. Riemann \
+tensor\\n\\n```wl\\n(* Riemann tensor: R^\[Rho]_{\[Sigma]\[Mu]\[Nu]} \
+*)\\nriemann[rho_, sigma_, mu_, nu_] := Simplify[\\n  D[christoffel[rho, nu, \
+sigma], coordinateNames[[mu]]] -\\n  D[christoffel[rho, mu, sigma], \
+coordinateNames[[nu]]] +\\n  Sum[christoffel[rho, mu, \
+lambda]*christoffel[lambda, nu, sigma], {lambda, 1, coordinateCount}] -\\n  \
+Sum[christoffel[rho, nu, lambda]*christoffel[lambda, mu, sigma], {lambda, 1, \
+coordinateCount}]\\n];\\n\\nPrint[\\\"\\\\nRiemann Tensor Components \
+(selected non-zero components):\\\"];\\nDo[\\n  Module[{value = riemann[i, j, \
+k, l]},\\n    If[!TrueQ[Simplify[value == 0]],\\n      \
+Print[Subsuperscript[\\\"R\\\", Row[{j, k, l}], i], \\\" = \\\", value]\\n    \
+]\\n  ],\\n  {i, 1, coordinateCount}, {j, 1, coordinateCount}, {k, 1, \
+coordinateCount}, {l, 1, coordinateCount}\\n];\\n```\\n\\n---\\n\\n## 5. \
+Ricci tensor, Ricci scalar, and Einstein tensor\\n\\n```wl\\n(* Ricci tensor: \
+R_{\[Mu]\[Nu]} = R^\[Lambda]_{\[Mu]\[Lambda]\[Nu]} *)\\nricciMatrix = \
+Table[\\n  Simplify[Sum[riemann[lambda, mu, lambda, nu], {lambda, 1, \
+coordinateCount}]],\\n  {mu, 1, coordinateCount}, {nu, 1, \
+coordinateCount}\\n];\\nprintMatrix[\\\"\\\\nRicci Tensor:\\\", ricciMatrix];\
+\\n\\nricciScalar = Simplify[\\n  Sum[inverseMetricMatrix[[i, \
+j]]*ricciMatrix[[i, j]], {i, 1, coordinateCount}, {j, 1, \
+coordinateCount}]\\n];\\nPrint[\\\"\\\\nRicci \
+Scalar:\\\"];\\nPrint[ricciScalar];\\n\\neinsteinMatrix = \
+Simplify[ricciMatrix - 1/2 \
+metricMatrix*ricciScalar];\\nprintMatrix[\\\"\\\\nEinstein Tensor:\\\", \
+einsteinMatrix];\\n```\\n\\n---\\n\\n## 6. Using ``BowenPing/STensor`` for a \
+metric object\\n\\nIf you want to use the paclet-based tensor workflow, \
+replace the placeholder metric with your actual metric components:\\n\\n```wl\
+\\nmetric = PacletSymbol[\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`CreateTensor\\\"][\\n  \\\"g\\\",\\n  \
+coordinateNames,\\n  metricMatrix,\\n  \
+PacletSymbol[\\\"BowenPing/STensor\\\", \\\"BowenPing`STensor`IsMetric\\\"] \
+-> True\\n];\\n\\nriemannTensor = PacletSymbol[\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`RiemannTensor\\\"][metric];\\nricciTensor = \
+PacletSymbol[\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`RicciTensor\\\"][metric];\\nricciScalar = PacletSymbol[\
+\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`RicciScalar\\\"][metric][];\\neinsteinTensor = \
+PacletSymbol[\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`EinsteinTensor\\\"][metric];\\n\\nriemannTensor[\\\"\
+Components\\\"]\\nricciTensor[\\\"Components\\\"]\\nricciScalar\\\
+neinsteinTensor[\\\"Components\\\"]\\n```\\n\\n---\\n\\n## 7. Notes\\n\\n- \
+The coordinate list is indexed as ``{x1, x2, x3, x4}`` via \
+``Array[Subscript[x, #] &, 4]``.\\n- Extra parameters can be added by \
+extending ``parameterNames``.\\n- Replace the symbolic entries ``g11``, \
+``g12``, etc. with the metric you want.\\n- For a specific spacetime, you can \
+keep this template and only modify ``metricMatrix`` and the parameter \
+list.\\n\\n---\\n\\n## 8. Optional next step\\n\\nIf you'd like, I can also \
+make a second version of this notebook that is already preformatted for a \
+Kerr-like metric, with placeholders for ``M``, ``a``, and ``C``/Carter \
+constant.\\nmetadata: <|title -> Generic Metric Workflow \
+Template|>\\n/exec\\nRESULT\\nNotebookObject[\\\"09749297-d050-1242-b164-\
+f95bf09c0892\\\", \
+\\\"763bea0b-1b64-954c-89f9-d7c69ebba780\\\"]\\nENDRESULT(dxuc8drq1)\"\>",
+                ImageSize->Dynamic[
+                  (If[# > 600, #, 600]& )[
+                  0.9 AbsoluteCurrentValue[{WindowSize, 1}]]]],
+               AppearanceElements->None,
+               ImageSize->{
+                 Scaled[1], 
+                 UpTo[400]},
+               ScrollPosition->{0., 0.},
+               Scrollbars->Automatic]], "Text", "RawToolCall",
+              FontSize->11,
+              Background->None,ExpressionUUID->
+              "af90d6e3-6145-074d-8ca8-715489655d50"],
+             Background->LightDarkSwitched[
+               GrayLevel[1], 
+               GrayLevel[0.09805]],
+             BaseStyle->"Text",
+             FrameMargins->5,
+             FrameStyle->None,
+             ImageSize->{
+               Scaled[1], Automatic},
+             StripOnInput->False],
+            Background->LightDarkSwitched[
+              GrayLevel[1], 
+              GrayLevel[0.09805]],
+            FrameMargins->10,
+            FrameStyle->None,
+            StripOnInput->False]}, {2,"\<\"Interpreted\"\>"->
+           FrameBox[
+            TagBox[GridBox[{
+               {
+                ItemBox[
+                 PaneBox[
+                  StyleBox["\<\"INPUT\"\>",
+                   StripOnInput->False,
+                   FontSize->11],
+                  FrameMargins->{{5, 5}, {1, 1}}],
+                 Background->LightDarkSwitched[
+                   GrayLevel[0.95], 
+                   GrayLevel[0.15295]],
+                 ItemSize->Fit,
+                 StripOnInput->False]},
+               {
+                FrameBox[
+                 TagBox[GridBox[{
+                    {"\<\"content\"\>", 
+                    InterpretationBox[
+                    
+                    DynamicModuleBox[{
+                    Wolfram`Chatbook`ResourceFunctions`ClickToCopy`cell$$}, 
+                    TagBox[
+                    TagBox[
+                    PaneSelectorBox[{False->
+                    
+                    FrameBox["\<\"# Generic Metric Workflow \
+Template\\n\\nThis notebook is a reusable template for symbolic tensor \
+computations with a generic metric. It uses indexed coordinates rather than \
+named ones, and leaves space for extra parameters such as a Carter constant, \
+mass, spin, or cosmological constant.\\n\\n---\\n\\n## 1. \
+Setup\\n\\n```wl\\nClearAll[\\n  coordinateCount, coordinateNames, \
+parameterNames, parameters, metricMatrix,\\n  inverseMetricMatrix, \
+christoffel, riemann, ricciMatrix, ricciScalar,\\n  einsteinMatrix, \
+printMatrix\\n];\\n\\n(* ==== CONFIGURATION SECTION ==== *)\\ncoordinateCount \
+= 4;\\ncoordinateNames = Array[Subscript[x, #] &, coordinateCount];\\n\\n(* \
+Add as many parameters as needed here *)\\nparameterNames = {Subscript[m, 1], \
+Subscript[m, 2], Subscript[a], Subscript[q], Subscript[\[CapitalLambda]], \
+Subscript[Q], Subscript[C, 1]};\\nparameters = \
+AssociationThread[parameterNames, parameterNames];\\n\\n(* Generic symmetric \
+metric matrix:\\n   Replace these entries with your desired metric \
+components.\\n   You can include any of the parameters above, or add more. *)\
+\\nmetricMatrix = {\\n  {g11[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\\n  {g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g22[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\\n  {g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g33[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\\n  {g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g44[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]}\\n};\\n\\nprintMatrix[label_, mat_] := (Print[label]; \
+Print[MatrixForm[mat]]);\\n```\\n\\n---\\n\\n## 2. Metric and inverse \
+metric\\n\\n```wl\\nPrint[\\\"===== Generic Metric Workflow \
+=====\\\\n\\\"];\\nPrint[\\\"Coordinates: \\\", \
+coordinateNames];\\nPrint[\\\"Parameters: \\\", \
+parameterNames];\\nprintMatrix[\\\"Metric Tensor:\\\", \
+metricMatrix];\\n\\ninverseMetricMatrix = \
+Simplify[Inverse[metricMatrix]];\\nprintMatrix[\\\"Inverse Metric \
+Tensor:\\\", inverseMetricMatrix];\\n```\\n\\n---\\n\\n## 3. Christoffel \
+symbols\\n\\n```wl\\n(* Christoffel symbols: \[CapitalGamma]^\[Lambda]_{\[Mu]\
+\[Nu]} *)\\nchristoffel[lambda_, mu_, nu_] := Simplify[\\n  1/2 Sum[\\n    \
+inverseMetricMatrix[[lambda, sigma]]*\\n      (D[metricMatrix[[sigma, nu]], \
+coordinateNames[[mu]]] +\\n       D[metricMatrix[[mu, sigma]], \
+coordinateNames[[nu]]] -\\n       D[metricMatrix[[mu, nu]], \
+coordinateNames[[sigma]]]),\\n    {sigma, 1, coordinateCount}\\n  \
+]\\n];\\n\\nPrint[\\\"\\\\nChristoffel Symbols (non-zero \
+components):\\\"];\\nDo[\\n  Module[{value = christoffel[i, j, k]},\\n    \
+If[!TrueQ[Simplify[value == 0]],\\n      Print[Subscript[Superscript[\\\"\
+\[CapitalGamma]\\\", i], Row[{j, k}]], \\\" = \\\", value]\\n    ]\\n  ],\\n  \
+{i, 1, coordinateCount}, {j, 1, coordinateCount}, {k, 1, \
+coordinateCount}\\n];\\n```\\n\\n---\\n\\n## 4. Riemann \
+tensor\\n\\n```wl\\n(* Riemann tensor: R^\[Rho]_{\[Sigma]\[Mu]\[Nu]} \
+*)\\nriemann[rho_, sigma_, mu_, nu_] := Simplify[\\n  D[christoffel[rho, nu, \
+sigma], coordinateNames[[mu]]] -\\n  D[christoffel[rho, mu, sigma], \
+coordinateNames[[nu]]] +\\n  Sum[christoffel[rho, mu, \
+lambda]*christoffel[lambda, nu, sigma], {lambda, 1, coordinateCount}] -\\n  \
+Sum[christoffel[rho, nu, lambda]*christoffel[lambda, mu, sigma], {lambda, 1, \
+coordinateCount}]\\n];\\n\\nPrint[\\\"\\\\nRiemann Tensor Components \
+(selected non-zero components):\\\"];\\nDo[\\n  Module[{value = riemann[i, j, \
+k, l]},\\n    If[!TrueQ[Simplify[value == 0]],\\n      \
+Print[Subsuperscript[\\\"R\\\", Row[{j, k, l}], i], \\\" = \\\", value]\\n    \
+]\\n  ],\\n  {i, 1, coordinateCount}, {j, 1, coordinateCount}, {k, 1, \
+coordinateCount}, {l, 1, coordinateCount}\\n];\\n```\\n\\n---\\n\\n## 5. \
+Ricci tensor, Ricci scalar, and Einstein tensor\\n\\n```wl\\n(* Ricci tensor: \
+R_{\[Mu]\[Nu]} = R^\[Lambda]_{\[Mu]\[Lambda]\[Nu]} *)\\nricciMatrix = \
+Table[\\n  Simplify[Sum[riemann[lambda, mu, lambda, nu], {lambda, 1, \
+coordinateCount}]],\\n  {mu, 1, coordinateCount}, {nu, 1, \
+coordinateCount}\\n];\\nprintMatrix[\\\"\\\\nRicci Tensor:\\\", ricciMatrix];\
+\\n\\nricciScalar = Simplify[\\n  Sum[inverseMetricMatrix[[i, \
+j]]*ricciMatrix[[i, j]], {i, 1, coordinateCount}, {j, 1, \
+coordinateCount}]\\n];\\nPrint[\\\"\\\\nRicci \
+Scalar:\\\"];\\nPrint[ricciScalar];\\n\\neinsteinMatrix = \
+Simplify[ricciMatrix - 1/2 \
+metricMatrix*ricciScalar];\\nprintMatrix[\\\"\\\\nEinstein Tensor:\\\", \
+einsteinMatrix];\\n```\\n\\n---\\n\\n## 6. Using ``BowenPing/STensor`` for a \
+metric object\\n\\nIf you want to use the paclet-based tensor workflow, \
+replace the placeholder metric with your actual metric components:\\n\\n```wl\
+\\nmetric = PacletSymbol[\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`CreateTensor\\\"][\\n  \\\"g\\\",\\n  \
+coordinateNames,\\n  metricMatrix,\\n  \
+PacletSymbol[\\\"BowenPing/STensor\\\", \\\"BowenPing`STensor`IsMetric\\\"] \
+-> True\\n];\\n\\nriemannTensor = PacletSymbol[\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`RiemannTensor\\\"][metric];\\nricciTensor = \
+PacletSymbol[\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`RicciTensor\\\"][metric];\\nricciScalar = PacletSymbol[\
+\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`RicciScalar\\\"][metric][];\\neinsteinTensor = \
+PacletSymbol[\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`EinsteinTensor\\\"][metric];\\n\\nriemannTensor[\\\"\
+Components\\\"]\\nricciTensor[\\\"Components\\\"]\\nricciScalar\\\
+neinsteinTensor[\\\"Components\\\"]\\n```\\n\\n---\\n\\n## 7. Notes\\n\\n- \
+The coordinate list is indexed as ``{x1, x2, x3, x4}`` via \
+``Array[Subscript[x, #] &, 4]``.\\n- Extra parameters can be added by \
+extending ``parameterNames``.\\n- Replace the symbolic entries ``g11``, \
+``g12``, etc. with the metric you want.\\n- For a specific spacetime, you can \
+keep this template and only modify ``metricMatrix`` and the parameter \
+list.\\n\\n---\\n\\n## 8. Optional next step\\n\\nIf you'd like, I can also \
+make a second version of this notebook that is already preformatted for a \
+Kerr-like metric, with placeholders for ``M``, ``a``, and ``C``/Carter \
+constant.\\nmetadata: <|title -> Generic Metric Workflow Template|>\"\>",
+                    Background->None,
+                    FrameMargins->1,
+                    FrameStyle->Dynamic[
+                    CurrentValue[Background]],
+                    StripOnInput->False], True->
+                    FrameBox[
+                    
+                    StyleBox["\<\"# Generic Metric Workflow \
+Template\\n\\nThis notebook is a reusable template for symbolic tensor \
+computations with a generic metric. It uses indexed coordinates rather than \
+named ones, and leaves space for extra parameters such as a Carter constant, \
+mass, spin, or cosmological constant.\\n\\n---\\n\\n## 1. \
+Setup\\n\\n```wl\\nClearAll[\\n  coordinateCount, coordinateNames, \
+parameterNames, parameters, metricMatrix,\\n  inverseMetricMatrix, \
+christoffel, riemann, ricciMatrix, ricciScalar,\\n  einsteinMatrix, \
+printMatrix\\n];\\n\\n(* ==== CONFIGURATION SECTION ==== *)\\ncoordinateCount \
+= 4;\\ncoordinateNames = Array[Subscript[x, #] &, coordinateCount];\\n\\n(* \
+Add as many parameters as needed here *)\\nparameterNames = {Subscript[m, 1], \
+Subscript[m, 2], Subscript[a], Subscript[q], Subscript[\[CapitalLambda]], \
+Subscript[Q], Subscript[C, 1]};\\nparameters = \
+AssociationThread[parameterNames, parameterNames];\\n\\n(* Generic symmetric \
+metric matrix:\\n   Replace these entries with your desired metric \
+components.\\n   You can include any of the parameters above, or add more. *)\
+\\nmetricMatrix = {\\n  {g11[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\\n  {g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g22[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\\n  {g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g33[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\\n  {g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g44[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]}\\n};\\n\\nprintMatrix[label_, mat_] := (Print[label]; \
+Print[MatrixForm[mat]]);\\n```\\n\\n---\\n\\n## 2. Metric and inverse \
+metric\\n\\n```wl\\nPrint[\\\"===== Generic Metric Workflow \
+=====\\\\n\\\"];\\nPrint[\\\"Coordinates: \\\", \
+coordinateNames];\\nPrint[\\\"Parameters: \\\", \
+parameterNames];\\nprintMatrix[\\\"Metric Tensor:\\\", \
+metricMatrix];\\n\\ninverseMetricMatrix = \
+Simplify[Inverse[metricMatrix]];\\nprintMatrix[\\\"Inverse Metric \
+Tensor:\\\", inverseMetricMatrix];\\n```\\n\\n---\\n\\n## 3. Christoffel \
+symbols\\n\\n```wl\\n(* Christoffel symbols: \[CapitalGamma]^\[Lambda]_{\[Mu]\
+\[Nu]} *)\\nchristoffel[lambda_, mu_, nu_] := Simplify[\\n  1/2 Sum[\\n    \
+inverseMetricMatrix[[lambda, sigma]]*\\n      (D[metricMatrix[[sigma, nu]], \
+coordinateNames[[mu]]] +\\n       D[metricMatrix[[mu, sigma]], \
+coordinateNames[[nu]]] -\\n       D[metricMatrix[[mu, nu]], \
+coordinateNames[[sigma]]]),\\n    {sigma, 1, coordinateCount}\\n  \
+]\\n];\\n\\nPrint[\\\"\\\\nChristoffel Symbols (non-zero \
+components):\\\"];\\nDo[\\n  Module[{value = christoffel[i, j, k]},\\n    \
+If[!TrueQ[Simplify[value == 0]],\\n      Print[Subscript[Superscript[\\\"\
+\[CapitalGamma]\\\", i], Row[{j, k}]], \\\" = \\\", value]\\n    ]\\n  ],\\n  \
+{i, 1, coordinateCount}, {j, 1, coordinateCount}, {k, 1, \
+coordinateCount}\\n];\\n```\\n\\n---\\n\\n## 4. Riemann \
+tensor\\n\\n```wl\\n(* Riemann tensor: R^\[Rho]_{\[Sigma]\[Mu]\[Nu]} \
+*)\\nriemann[rho_, sigma_, mu_, nu_] := Simplify[\\n  D[christoffel[rho, nu, \
+sigma], coordinateNames[[mu]]] -\\n  D[christoffel[rho, mu, sigma], \
+coordinateNames[[nu]]] +\\n  Sum[christoffel[rho, mu, \
+lambda]*christoffel[lambda, nu, sigma], {lambda, 1, coordinateCount}] -\\n  \
+Sum[christoffel[rho, nu, lambda]*christoffel[lambda, mu, sigma], {lambda, 1, \
+coordinateCount}]\\n];\\n\\nPrint[\\\"\\\\nRiemann Tensor Components \
+(selected non-zero components):\\\"];\\nDo[\\n  Module[{value = riemann[i, j, \
+k, l]},\\n    If[!TrueQ[Simplify[value == 0]],\\n      \
+Print[Subsuperscript[\\\"R\\\", Row[{j, k, l}], i], \\\" = \\\", value]\\n    \
+]\\n  ],\\n  {i, 1, coordinateCount}, {j, 1, coordinateCount}, {k, 1, \
+coordinateCount}, {l, 1, coordinateCount}\\n];\\n```\\n\\n---\\n\\n## 5. \
+Ricci tensor, Ricci scalar, and Einstein tensor\\n\\n```wl\\n(* Ricci tensor: \
+R_{\[Mu]\[Nu]} = R^\[Lambda]_{\[Mu]\[Lambda]\[Nu]} *)\\nricciMatrix = \
+Table[\\n  Simplify[Sum[riemann[lambda, mu, lambda, nu], {lambda, 1, \
+coordinateCount}]],\\n  {mu, 1, coordinateCount}, {nu, 1, \
+coordinateCount}\\n];\\nprintMatrix[\\\"\\\\nRicci Tensor:\\\", ricciMatrix];\
+\\n\\nricciScalar = Simplify[\\n  Sum[inverseMetricMatrix[[i, \
+j]]*ricciMatrix[[i, j]], {i, 1, coordinateCount}, {j, 1, \
+coordinateCount}]\\n];\\nPrint[\\\"\\\\nRicci \
+Scalar:\\\"];\\nPrint[ricciScalar];\\n\\neinsteinMatrix = \
+Simplify[ricciMatrix - 1/2 \
+metricMatrix*ricciScalar];\\nprintMatrix[\\\"\\\\nEinstein Tensor:\\\", \
+einsteinMatrix];\\n```\\n\\n---\\n\\n## 6. Using ``BowenPing/STensor`` for a \
+metric object\\n\\nIf you want to use the paclet-based tensor workflow, \
+replace the placeholder metric with your actual metric components:\\n\\n```wl\
+\\nmetric = PacletSymbol[\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`CreateTensor\\\"][\\n  \\\"g\\\",\\n  \
+coordinateNames,\\n  metricMatrix,\\n  \
+PacletSymbol[\\\"BowenPing/STensor\\\", \\\"BowenPing`STensor`IsMetric\\\"] \
+-> True\\n];\\n\\nriemannTensor = PacletSymbol[\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`RiemannTensor\\\"][metric];\\nricciTensor = \
+PacletSymbol[\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`RicciTensor\\\"][metric];\\nricciScalar = PacletSymbol[\
+\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`RicciScalar\\\"][metric][];\\neinsteinTensor = \
+PacletSymbol[\\\"BowenPing/STensor\\\", \
+\\\"BowenPing`STensor`EinsteinTensor\\\"][metric];\\n\\nriemannTensor[\\\"\
+Components\\\"]\\nricciTensor[\\\"Components\\\"]\\nricciScalar\\\
+neinsteinTensor[\\\"Components\\\"]\\n```\\n\\n---\\n\\n## 7. Notes\\n\\n- \
+The coordinate list is indexed as ``{x1, x2, x3, x4}`` via \
+``Array[Subscript[x, #] &, 4]``.\\n- Extra parameters can be added by \
+extending ``parameterNames``.\\n- Replace the symbolic entries ``g11``, \
+``g12``, etc. with the metric you want.\\n- For a specific spacetime, you can \
+keep this template and only modify ``metricMatrix`` and the parameter \
+list.\\n\\n---\\n\\n## 8. Optional next step\\n\\nIf you'd like, I can also \
+make a second version of this notebook that is already preformatted for a \
+Kerr-like metric, with placeholders for ``M``, ``a``, and ``C``/Carter \
+constant.\\nmetadata: <|title -> Generic Metric Workflow Template|>\"\>",
+                    StripOnInput->False,
+                    FontColor->GrayLevel[0]],
+                    Background->RGBColor[0.87, 0.94, 1],
+                    FrameMargins->1,
+                    FrameStyle->Dynamic[
+                    CurrentValue[Background]],
+                    StripOnInput->False]}, Dynamic[
+                    CurrentValue["MouseOver"]],
+                    FrameMargins->0,
+                    ImageSize->Automatic],
+                    MouseAppearanceTag["LinkHand"]],
+                    
+                    EventHandlerTag[{
+                    "MouseEntered" :> (
+                    Wolfram`Chatbook`ResourceFunctions`ClickToCopy`cell$$ = 
+                    FrontEndExecute[
+                    FrontEnd`AttachCell[
+                    EvaluationBox[], 
+                    Cell[
+                    BoxData[
+                    GraphicsBox[{
+                    FaceForm[
+                    RGBColor[
+                    0.9607843137254902, 0.9607843137254902, 
+                    0.9607843137254902]], 
+                    EdgeForm[
+                    RGBColor[
+                    0.8980392156862745, 0.8980392156862745, 
+                    0.8980392156862745]], 
+                    RectangleBox[{-18, 0}, {18, 8}, RoundingRadius -> 0.5], 
+                    InsetBox[
+                    BoxData[
+                    FormBox[
+                    StyleBox[
+                    TagBox[
+                    GridBox[{{
+                    GraphicsBox[{
+                    RGBColor[
+                    0.5372549019607843, 0.5372549019607843, 
+                    0.5372549019607843], 
+                    Thickness[
+                    NCache[
+                    Rational[2, 45], 0.044444444444444446`]], 
+                    
+                    FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}}, {{0, 2, 0}, {0, 1, 
+                    0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}}, {{0, 2, 
+                    0}, {0, 1, 0}, {0, 1, 0}}}, {{{10.5, 18.75}, {10.5, 
+                    18.}, {9., 18.}, {9., 15.75}, {13.5, 15.75}, {13.5, 
+                    18.}, {12., 18.}, {12., 18.75}}, {{6., 18.}, {6., 4.5}, {
+                    16.5, 4.5}, {16.5, 18.}, {14.25, 18.}, {14.25, 17.25}, {
+                    15.75, 17.25}, {15.75, 5.25}, {6.75, 5.25}, {6.75, 
+                    17.25}, {8.25, 17.25}, {8.25, 18.}}, {{9.75, 17.25}, {
+                    12.75, 17.25}, {12.75, 16.5}, {9.75, 16.5}}}], 
+                    
+                    FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}}, {{0, 2,
+                     0}, {0, 1, 0}, {0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 
+                    0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}}}, {{{8.25, 
+                    14.25}, {14.25, 14.25}, {14.25, 13.5}, {8.25, 13.5}}, {{
+                    8.25, 12.}, {14.25, 12.}, {14.25, 11.25}, {8.25, 
+                    11.25}}, {{8.25, 9.75}, {14.25, 9.75}, {14.25, 9.}, {8.25,
+                     9.}}, {{8.25, 7.5}, {14.25, 7.5}, {14.25, 6.75}, {8.25, 
+                    6.75}}}]}, ImageSize -> 11], "\"Copy to clipboard.\""}}, 
+                    GridBoxAlignment -> {
+                    "Columns" -> {{Left}}, "Rows" -> {{Center}}}, AutoDelete -> 
+                    False, GridBoxItemSize -> {
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+                    GridBoxSpacings -> {"Columns" -> {{0.4}}}], "Grid"], 
+                    "Text", FontColor -> 
+                    RGBColor[0.5372549019607843, 0.5372549019607843, 
+                    0.5372549019607843], FontSize -> 12, FontWeight -> 
+                    "Plain", StripOnInput -> False], TraditionalForm]], {0, 
+                    4}], 
+                    EdgeForm[
+                    RGBColor[
+                    0.9607843137254902, 0.9607843137254902, 
+                    0.9607843137254902]], 
+                    PolygonBox[{{-2, 0}, {2, 0}, {0, -2}}], 
+                    RGBColor[
+                    0.8980392156862745, 0.8980392156862745, 
+                    0.8980392156862745], 
+                    LineBox[{{-3, 0}, {-2, 0}, {0, -2}, {2, 0}, {3, 0}}]}, 
+                    ImageSize -> {Automatic, 40}, Background -> None]], 
+                    Background -> None], {
+                    Offset[{0, 1}, 5], {Center, Top}}, {Center, Bottom}, 
+                    "ClosingActions" -> {
+                    "ParentChanged", "EvaluatorQuit", "OutsideMouseClick"}]]),
+                     "MouseExited" :> 
+                    NotebookDelete[
+                    Wolfram`Chatbook`ResourceFunctions`ClickToCopy`cell$$], 
+                    "MouseClicked" :> (
+                    NotebookDelete[
+                    Wolfram`Chatbook`ResourceFunctions`ClickToCopy`cell$$]; 
+                    CopyToClipboard[
+                    "# Generic Metric Workflow Template\n\nThis notebook is a \
+reusable template for symbolic tensor computations with a generic metric. It \
+uses indexed coordinates rather than named ones, and leaves space for extra \
+parameters such as a Carter constant, mass, spin, or cosmological constant.\n\
+\n---\n\n## 1. Setup\n\n```wl\nClearAll[\n  coordinateCount, coordinateNames, \
+parameterNames, parameters, metricMatrix,\n  inverseMetricMatrix, \
+christoffel, riemann, ricciMatrix, ricciScalar,\n  einsteinMatrix, \
+printMatrix\n];\n\n(* ==== CONFIGURATION SECTION ==== *)\ncoordinateCount = \
+4;\ncoordinateNames = Array[Subscript[x, #] &, coordinateCount];\n\n(* Add as \
+many parameters as needed here *)\nparameterNames = {Subscript[m, 1], \
+Subscript[m, 2], Subscript[a], Subscript[q], Subscript[\[CapitalLambda]], \
+Subscript[Q], Subscript[C, 1]};\nparameters = \
+AssociationThread[parameterNames, parameterNames];\n\n(* Generic symmetric \
+metric matrix:\n   Replace these entries with your desired metric components.\
+\n   You can include any of the parameters above, or add more. *)\n\
+metricMatrix = {\n  {g11[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g22[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g33[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g44[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]}\n};\n\nprintMatrix[label_, mat_] := (Print[label]; \
+Print[MatrixForm[mat]]);\n```\n\n---\n\n## 2. Metric and inverse metric\n\n\
+```wl\nPrint[\"===== Generic Metric Workflow =====\\n\"];\n\
+Print[\"Coordinates: \", coordinateNames];\nPrint[\"Parameters: \", \
+parameterNames];\nprintMatrix[\"Metric Tensor:\", metricMatrix];\n\n\
+inverseMetricMatrix = Simplify[Inverse[metricMatrix]];\nprintMatrix[\"Inverse \
+Metric Tensor:\", inverseMetricMatrix];\n```\n\n---\n\n## 3. Christoffel \
+symbols\n\n```wl\n(* Christoffel symbols: \[CapitalGamma]^\[Lambda]_{\[Mu]\
+\[Nu]} *)\nchristoffel[lambda_, mu_, nu_] := Simplify[\n  1/2 Sum[\n    \
+inverseMetricMatrix[[lambda, sigma]]*\n      (D[metricMatrix[[sigma, nu]], \
+coordinateNames[[mu]]] +\n       D[metricMatrix[[mu, sigma]], \
+coordinateNames[[nu]]] -\n       D[metricMatrix[[mu, nu]], \
+coordinateNames[[sigma]]]),\n    {sigma, 1, coordinateCount}\n  ]\n];\n\n\
+Print[\"\\nChristoffel Symbols (non-zero components):\"];\nDo[\n  \
+Module[{value = christoffel[i, j, k]},\n    If[!TrueQ[Simplify[value == 0]],\n\
+      Print[Subscript[Superscript[\"\[CapitalGamma]\", i], Row[{j, k}]], \" = \
+\", value]\n    ]\n  ],\n  {i, 1, coordinateCount}, {j, 1, coordinateCount}, \
+{k, 1, coordinateCount}\n];\n```\n\n---\n\n## 4. Riemann tensor\n\n```wl\n(* \
+Riemann tensor: R^\[Rho]_{\[Sigma]\[Mu]\[Nu]} *)\nriemann[rho_, sigma_, mu_, \
+nu_] := Simplify[\n  D[christoffel[rho, nu, sigma], coordinateNames[[mu]]] -\n\
+  D[christoffel[rho, mu, sigma], coordinateNames[[nu]]] +\n  \
+Sum[christoffel[rho, mu, lambda]*christoffel[lambda, nu, sigma], {lambda, 1, \
+coordinateCount}] -\n  Sum[christoffel[rho, nu, lambda]*christoffel[lambda, \
+mu, sigma], {lambda, 1, coordinateCount}]\n];\n\nPrint[\"\\nRiemann Tensor \
+Components (selected non-zero components):\"];\nDo[\n  Module[{value = \
+riemann[i, j, k, l]},\n    If[!TrueQ[Simplify[value == 0]],\n      \
+Print[Subsuperscript[\"R\", Row[{j, k, l}], i], \" = \", value]\n    ]\n  ],\n\
+  {i, 1, coordinateCount}, {j, 1, coordinateCount}, {k, 1, coordinateCount}, \
+{l, 1, coordinateCount}\n];\n```\n\n---\n\n## 5. Ricci tensor, Ricci scalar, \
+and Einstein tensor\n\n```wl\n(* Ricci tensor: R_{\[Mu]\[Nu]} = R^\[Lambda]_{\
+\[Mu]\[Lambda]\[Nu]} *)\nricciMatrix = Table[\n  Simplify[Sum[riemann[lambda, \
+mu, lambda, nu], {lambda, 1, coordinateCount}]],\n  {mu, 1, coordinateCount}, \
+{nu, 1, coordinateCount}\n];\nprintMatrix[\"\\nRicci Tensor:\", ricciMatrix];\
+\n\nricciScalar = Simplify[\n  Sum[inverseMetricMatrix[[i, \
+j]]*ricciMatrix[[i, j]], {i, 1, coordinateCount}, {j, 1, coordinateCount}]\n\
+];\nPrint[\"\\nRicci Scalar:\"];\nPrint[ricciScalar];\n\neinsteinMatrix = \
+Simplify[ricciMatrix - 1/2 metricMatrix*ricciScalar];\n\
+printMatrix[\"\\nEinstein Tensor:\", einsteinMatrix];\n```\n\n---\n\n## 6. \
+Using ``BowenPing/STensor`` for a metric object\n\nIf you want to use the \
+paclet-based tensor workflow, replace the placeholder metric with your actual \
+metric components:\n\n```wl\nmetric = PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`CreateTensor\"][\n  \"g\",\n  coordinateNames,\n  \
+metricMatrix,\n  PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`IsMetric\"] -> True\n];\n\nriemannTensor = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RiemannTensor\"][metric];\nricciTensor = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RicciTensor\"][metric];\nricciScalar = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RicciScalar\"][metric][];\neinsteinTensor = PacletSymbol[\
+\"BowenPing/STensor\", \"BowenPing`STensor`EinsteinTensor\"][metric];\n\n\
+riemannTensor[\"Components\"]\nricciTensor[\"Components\"]\nricciScalar\n\
+einsteinTensor[\"Components\"]\n```\n\n---\n\n## 7. Notes\n\n- The coordinate \
+list is indexed as ``{x1, x2, x3, x4}`` via ``Array[Subscript[x, #] &, 4]``.\n\
+- Extra parameters can be added by extending ``parameterNames``.\n- Replace \
+the symbolic entries ``g11``, ``g12``, etc. with the metric you want.\n- For \
+a specific spacetime, you can keep this template and only modify \
+``metricMatrix`` and the parameter list.\n\n---\n\n## 8. Optional next step\n\
+\nIf you'd like, I can also make a second version of this notebook that is \
+already preformatted for a Kerr-like metric, with placeholders for ``M``, \
+``a``, and ``C``/Carter constant.\nmetadata: <|title -> Generic Metric \
+Workflow Template|>"]; Wolfram`Chatbook`ResourceFunctions`ClickToCopy`cell$$ = 
+                    FrontEndExecute[
+                    FrontEnd`AttachCell[
+                    EvaluationBox[], 
+                    Cell[
+                    BoxData[
+                    GraphicsBox[{
+                    FaceForm[
+                    RGBColor[
+                    0.9607843137254902, 0.9607843137254902, 
+                    0.9607843137254902]], 
+                    EdgeForm[
+                    RGBColor[
+                    0.8980392156862745, 0.8980392156862745, 
+                    0.8980392156862745]], 
+                    RectangleBox[{-18, 0}, {18, 8}, RoundingRadius -> 0.5], 
+                    InsetBox[
+                    BoxData[
+                    FormBox[
+                    StyleBox[
+                    TagBox[
+                    GridBox[{{
+                    StyleBox["\"\[Checkmark]\"", 
+                    RGBColor[0, 
+                    Rational[2, 3], 0], FontWeight -> Bold, StripOnInput -> 
+                    False], "\"Copied!\""}}, 
+                    GridBoxAlignment -> {"Columns" -> {{Left}}, 
+                    "Rows" -> {{Center}}}, AutoDelete -> False, 
+                    GridBoxItemSize -> {"Columns" -> {{Automatic}}, 
+                    "Rows" -> {{Automatic}}}, 
+                    GridBoxSpacings -> {"Columns" -> {{0.4}}}], "Grid"], 
+                    "Text", FontColor -> RGBColor[
+                    0.5372549019607843, 0.5372549019607843, 
+                    0.5372549019607843], FontSize -> 12, FontWeight -> 
+                    "Plain", StripOnInput -> False], TraditionalForm]], {0, 
+                    4}], 
+                    EdgeForm[
+                    RGBColor[
+                    0.9607843137254902, 0.9607843137254902, 
+                    0.9607843137254902]], 
+                    PolygonBox[{{-2, 0}, {2, 0}, {0, -2}}], 
+                    RGBColor[
+                    0.8980392156862745, 0.8980392156862745, 
+                    0.8980392156862745], 
+                    LineBox[{{-3, 0}, {-2, 0}, {0, -2}, {2, 0}, {3, 0}}]}, 
+                    ImageSize -> {Automatic, 40}, Background -> None]], 
+                    Background -> None], {
+                    Offset[{0, 1}, 5], {Center, Top}}, {Center, Bottom}, 
+                    "ClosingActions" -> {
+                    "ParentChanged", "EvaluatorQuit", "OutsideMouseClick"}]]),
+                     Method -> "Preemptive", PassEventsDown -> Automatic, 
+                    PassEventsUp -> True}]],
+                    DynamicModuleValues:>{}],
+                    
+                    "# Generic Metric Workflow Template\n\nThis notebook is a \
+reusable template for symbolic tensor computations with a generic metric. It \
+uses indexed coordinates rather than named ones, and leaves space for extra \
+parameters such as a Carter constant, mass, spin, or cosmological constant.\n\
+\n---\n\n## 1. Setup\n\n```wl\nClearAll[\n  coordinateCount, coordinateNames, \
+parameterNames, parameters, metricMatrix,\n  inverseMetricMatrix, \
+christoffel, riemann, ricciMatrix, ricciScalar,\n  einsteinMatrix, \
+printMatrix\n];\n\n(* ==== CONFIGURATION SECTION ==== *)\ncoordinateCount = \
+4;\ncoordinateNames = Array[Subscript[x, #] &, coordinateCount];\n\n(* Add as \
+many parameters as needed here *)\nparameterNames = {Subscript[m, 1], \
+Subscript[m, 2], Subscript[a], Subscript[q], Subscript[\[CapitalLambda]], \
+Subscript[Q], Subscript[C, 1]};\nparameters = \
+AssociationThread[parameterNames, parameterNames];\n\n(* Generic symmetric \
+metric matrix:\n   Replace these entries with your desired metric components.\
+\n   You can include any of the parameters above, or add more. *)\n\
+metricMatrix = {\n  {g11[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g22[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g33[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g44[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]}\n};\n\nprintMatrix[label_, mat_] := (Print[label]; \
+Print[MatrixForm[mat]]);\n```\n\n---\n\n## 2. Metric and inverse metric\n\n\
+```wl\nPrint[\"===== Generic Metric Workflow =====\\n\"];\n\
+Print[\"Coordinates: \", coordinateNames];\nPrint[\"Parameters: \", \
+parameterNames];\nprintMatrix[\"Metric Tensor:\", metricMatrix];\n\n\
+inverseMetricMatrix = Simplify[Inverse[metricMatrix]];\nprintMatrix[\"Inverse \
+Metric Tensor:\", inverseMetricMatrix];\n```\n\n---\n\n## 3. Christoffel \
+symbols\n\n```wl\n(* Christoffel symbols: \[CapitalGamma]^\[Lambda]_{\[Mu]\
+\[Nu]} *)\nchristoffel[lambda_, mu_, nu_] := Simplify[\n  1/2 Sum[\n    \
+inverseMetricMatrix[[lambda, sigma]]*\n      (D[metricMatrix[[sigma, nu]], \
+coordinateNames[[mu]]] +\n       D[metricMatrix[[mu, sigma]], \
+coordinateNames[[nu]]] -\n       D[metricMatrix[[mu, nu]], \
+coordinateNames[[sigma]]]),\n    {sigma, 1, coordinateCount}\n  ]\n];\n\n\
+Print[\"\\nChristoffel Symbols (non-zero components):\"];\nDo[\n  \
+Module[{value = christoffel[i, j, k]},\n    If[!TrueQ[Simplify[value == 0]],\n\
+      Print[Subscript[Superscript[\"\[CapitalGamma]\", i], Row[{j, k}]], \" = \
+\", value]\n    ]\n  ],\n  {i, 1, coordinateCount}, {j, 1, coordinateCount}, \
+{k, 1, coordinateCount}\n];\n```\n\n---\n\n## 4. Riemann tensor\n\n```wl\n(* \
+Riemann tensor: R^\[Rho]_{\[Sigma]\[Mu]\[Nu]} *)\nriemann[rho_, sigma_, mu_, \
+nu_] := Simplify[\n  D[christoffel[rho, nu, sigma], coordinateNames[[mu]]] -\n\
+  D[christoffel[rho, mu, sigma], coordinateNames[[nu]]] +\n  \
+Sum[christoffel[rho, mu, lambda]*christoffel[lambda, nu, sigma], {lambda, 1, \
+coordinateCount}] -\n  Sum[christoffel[rho, nu, lambda]*christoffel[lambda, \
+mu, sigma], {lambda, 1, coordinateCount}]\n];\n\nPrint[\"\\nRiemann Tensor \
+Components (selected non-zero components):\"];\nDo[\n  Module[{value = \
+riemann[i, j, k, l]},\n    If[!TrueQ[Simplify[value == 0]],\n      \
+Print[Subsuperscript[\"R\", Row[{j, k, l}], i], \" = \", value]\n    ]\n  ],\n\
+  {i, 1, coordinateCount}, {j, 1, coordinateCount}, {k, 1, coordinateCount}, \
+{l, 1, coordinateCount}\n];\n```\n\n---\n\n## 5. Ricci tensor, Ricci scalar, \
+and Einstein tensor\n\n```wl\n(* Ricci tensor: R_{\[Mu]\[Nu]} = R^\[Lambda]_{\
+\[Mu]\[Lambda]\[Nu]} *)\nricciMatrix = Table[\n  Simplify[Sum[riemann[lambda, \
+mu, lambda, nu], {lambda, 1, coordinateCount}]],\n  {mu, 1, coordinateCount}, \
+{nu, 1, coordinateCount}\n];\nprintMatrix[\"\\nRicci Tensor:\", ricciMatrix];\
+\n\nricciScalar = Simplify[\n  Sum[inverseMetricMatrix[[i, \
+j]]*ricciMatrix[[i, j]], {i, 1, coordinateCount}, {j, 1, coordinateCount}]\n\
+];\nPrint[\"\\nRicci Scalar:\"];\nPrint[ricciScalar];\n\neinsteinMatrix = \
+Simplify[ricciMatrix - 1/2 metricMatrix*ricciScalar];\n\
+printMatrix[\"\\nEinstein Tensor:\", einsteinMatrix];\n```\n\n---\n\n## 6. \
+Using ``BowenPing/STensor`` for a metric object\n\nIf you want to use the \
+paclet-based tensor workflow, replace the placeholder metric with your actual \
+metric components:\n\n```wl\nmetric = PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`CreateTensor\"][\n  \"g\",\n  coordinateNames,\n  \
+metricMatrix,\n  PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`IsMetric\"] -> True\n];\n\nriemannTensor = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RiemannTensor\"][metric];\nricciTensor = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RicciTensor\"][metric];\nricciScalar = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RicciScalar\"][metric][];\neinsteinTensor = PacletSymbol[\
+\"BowenPing/STensor\", \"BowenPing`STensor`EinsteinTensor\"][metric];\n\n\
+riemannTensor[\"Components\"]\nricciTensor[\"Components\"]\nricciScalar\n\
+einsteinTensor[\"Components\"]\n```\n\n---\n\n## 7. Notes\n\n- The coordinate \
+list is indexed as ``{x1, x2, x3, x4}`` via ``Array[Subscript[x, #] &, 4]``.\n\
+- Extra parameters can be added by extending ``parameterNames``.\n- Replace \
+the symbolic entries ``g11``, ``g12``, etc. with the metric you want.\n- For \
+a specific spacetime, you can keep this template and only modify \
+``metricMatrix`` and the parameter list.\n\n---\n\n## 8. Optional next step\n\
+\nIf you'd like, I can also make a second version of this notebook that is \
+already preformatted for a Kerr-like metric, with placeholders for ``M``, \
+``a``, and ``C``/Carter constant.\nmetadata: <|title -> Generic Metric \
+Workflow Template|>",
+                    SelectWithContents->True]}
+                   },
+                   AutoDelete->False,
+                   BaseStyle->{"Text", LineBreakWithin -> Automatic},
+                   FrameStyle->LightDarkSwitched[
+                    GrayLevel[0.9], 
+                    GrayLevel[0.3585624]],
+                   GridBoxAlignment->{"Columns" -> {{Left}}},
+                   
+                   GridBoxDividers->{
+                    "Columns" -> {{True}}, "Rows" -> {{True}}},
+                   
+                   GridBoxItemSize->{
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+                   GridBoxSpacings->{"Columns" -> {{1}}}],
+                  "Grid"],
+                 Background->LightDarkSwitched[
+                   GrayLevel[1], 
+                   GrayLevel[0.09805]],
+                 FrameMargins->5,
+                 FrameStyle->None,
+                 ImageSize->{
+                   Scaled[1], Automatic},
+                 StripOnInput->False]},
+               {
+                ItemBox[
+                 PaneBox[
+                  StyleBox["\<\"OUTPUT\"\>",
+                   StripOnInput->False,
+                   FontSize->11],
+                  FrameMargins->{{5, 5}, {1, 1}}],
+                 Background->LightDarkSwitched[
+                   GrayLevel[0.95], 
+                   GrayLevel[0.15295]],
+                 ItemSize->Fit,
+                 StripOnInput->False]},
+               {
+                FrameBox[
+                 InterpretationBox[Cell[BoxData[
+                   PaneBox[
+                    PaneBox[
+                    
+                    TemplateBox[<|
+                    "obj" -> NotebookObject[
+                    "09749297-d050-1242-b164-f95bf09c0892", 
+                    "763bea0b-1b64-954c-89f9-d7c69ebba780"], "label" -> 
+                    "\"Untitled-4\""|>,
+                    "NotebookObjectUUIDsUnsaved"],
+                    ImageSize->Dynamic[
+                    (If[# > 600, #, 600]& )[
+                    0.9 AbsoluteCurrentValue[{WindowSize, 1}]]]],
+                    AppearanceElements->None,
+                    ImageSize->{
+                    Scaled[1], 
+                    UpTo[400]},
+                    Scrollbars->Automatic]], "Text",
+                   LineBreakWithin->Automatic,
+                   Background->None,
+                   FrameBoxOptions->{BaselinePosition->Automatic},
+                   PaneBoxOptions->{BaselinePosition->Automatic},
+                   ExpressionUUID->"cbb4ac2e-4dc5-1c48-bf59-5d6651238c38"],
+                  TextCell[
+                   Pane[
+                    Pane[
+                    NotebookObject[
+                    "09749297-d050-1242-b164-f95bf09c0892", 
+                    "763bea0b-1b64-954c-89f9-d7c69ebba780"], ImageSize -> 
+                    Dynamic[
+                    (If[# > 600, #, 600]& )[
+                    0.9 AbsoluteCurrentValue[{WindowSize, 1}]]]], ImageSize -> {
+                    Scaled[1], 
+                    UpTo[400]}, Scrollbars -> Automatic, AppearanceElements -> 
+                    None], "Text", Background -> None, 
+                   FrameBoxOptions -> {BaselinePosition -> Automatic}, 
+                   LineBreakWithin -> Automatic, 
+                   PaneBoxOptions -> {BaselinePosition -> Automatic}]],
+                 Background->LightDarkSwitched[
+                   GrayLevel[1], 
+                   GrayLevel[0.09805]],
+                 FrameMargins->5,
+                 FrameStyle->None,
+                 ImageSize->{
+                   Scaled[1], Automatic},
+                 StripOnInput->False]}
+              },
+              DefaultBaseStyle->"Column",
+              GridBoxAlignment->{"Columns" -> {{Left}}},
+              
+              GridBoxItemSize->{
+               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+             "Column"],
+            Background->LightDarkSwitched[
+              GrayLevel[1], 
+              GrayLevel[0.09805]],
+            BaseStyle->{Editable -> False},
+            FrameMargins->10,
+            FrameStyle->None,
+            StripOnInput->False]}}, 2,
+           ImageSize->Automatic,
+           LabelStyle->{FontSize -> 12}]}
+        },
+        AutoDelete->False,
+        BaseStyle->{ShowStringCharacters -> False},
+        BaselinePosition->{1, 1},
+        GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+        GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+        GridBoxSpacings->{"Columns" -> {{0.25}}}],
+       "Grid"],
+      Background->RGBColor[0.709527, 0.831759396, 0.897, 0.08],
+      BaseStyle->{
+       "Text", "IconizedDefaultName", FontSize -> 13, LineBreakWithin -> 
+        False},
+      FrameMargins->{{4, 6}, {2, 2}},
+      FrameStyle->Directive[
+        AbsoluteThickness[1.5], 
+        RGBColor[0.709527, 0.831759396, 0.897, 0.5]],
+      ImageMargins->{{0, 0}, {8, 8}},
+      RoundingRadius->6,
+      StripOnInput->False]}, Dynamic[
+      TrueQ[Typeset`var$$]],
+     BaselinePosition->Baseline,
+     DefaultBaseStyle->"OpenerView",
+     ImageMargins->0,
+     ImageSize->Automatic],
+    Deployed->False,
+    StripOnInput->False],
+   DynamicModuleValues:>{}]], "InlineToolCall",
+  TaggingRules-><|
+   "ID" -> "dxuc8drq1", "Name" -> "CreateNotebook", "DisplayName" -> 
+    "Create Notebook", "FormattingFunction" -> 
+    Wolfram`Chatbook`Common`toolAutoFormatter, "ToolCall" -> 
+    "/create_nb\ncontent: # Generic Metric Workflow Template\n\nThis notebook \
+is a reusable template for symbolic tensor computations with a generic \
+metric. It uses indexed coordinates rather than named ones, and leaves space \
+for extra parameters such as a Carter constant, mass, spin, or cosmological \
+constant.\n\n---\n\n## 1. Setup\n\n```wl\nClearAll[\n  coordinateCount, \
+coordinateNames, parameterNames, parameters, metricMatrix,\n  \
+inverseMetricMatrix, christoffel, riemann, ricciMatrix, ricciScalar,\n  \
+einsteinMatrix, printMatrix\n];\n\n(* ==== CONFIGURATION SECTION ==== *)\n\
+coordinateCount = 4;\ncoordinateNames = Array[Subscript[x, #] &, \
+coordinateCount];\n\n(* Add as many parameters as needed here *)\n\
+parameterNames = {Subscript[m, 1], Subscript[m, 2], Subscript[a], \
+Subscript[q], Subscript[\[CapitalLambda]], Subscript[Q], Subscript[C, 1]};\n\
+parameters = AssociationThread[parameterNames, parameterNames];\n\n(* Generic \
+symmetric metric matrix:\n   Replace these entries with your desired metric \
+components.\n   You can include any of the parameters above, or add more. *)\n\
+metricMatrix = {\n  {g11[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g22[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g33[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g44[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]}\n};\n\nprintMatrix[label_, mat_] := (Print[label]; \
+Print[MatrixForm[mat]]);\n```\n\n---\n\n## 2. Metric and inverse metric\n\n\
+```wl\nPrint[\"===== Generic Metric Workflow =====\\n\"];\n\
+Print[\"Coordinates: \", coordinateNames];\nPrint[\"Parameters: \", \
+parameterNames];\nprintMatrix[\"Metric Tensor:\", metricMatrix];\n\n\
+inverseMetricMatrix = Simplify[Inverse[metricMatrix]];\nprintMatrix[\"Inverse \
+Metric Tensor:\", inverseMetricMatrix];\n```\n\n---\n\n## 3. Christoffel \
+symbols\n\n```wl\n(* Christoffel symbols: \[CapitalGamma]^\[Lambda]_{\[Mu]\
+\[Nu]} *)\nchristoffel[lambda_, mu_, nu_] := Simplify[\n  1/2 Sum[\n    \
+inverseMetricMatrix[[lambda, sigma]]*\n      (D[metricMatrix[[sigma, nu]], \
+coordinateNames[[mu]]] +\n       D[metricMatrix[[mu, sigma]], \
+coordinateNames[[nu]]] -\n       D[metricMatrix[[mu, nu]], \
+coordinateNames[[sigma]]]),\n    {sigma, 1, coordinateCount}\n  ]\n];\n\n\
+Print[\"\\nChristoffel Symbols (non-zero components):\"];\nDo[\n  \
+Module[{value = christoffel[i, j, k]},\n    If[!TrueQ[Simplify[value == 0]],\n\
+      Print[Subscript[Superscript[\"\[CapitalGamma]\", i], Row[{j, k}]], \" = \
+\", value]\n    ]\n  ],\n  {i, 1, coordinateCount}, {j, 1, coordinateCount}, \
+{k, 1, coordinateCount}\n];\n```\n\n---\n\n## 4. Riemann tensor\n\n```wl\n(* \
+Riemann tensor: R^\[Rho]_{\[Sigma]\[Mu]\[Nu]} *)\nriemann[rho_, sigma_, mu_, \
+nu_] := Simplify[\n  D[christoffel[rho, nu, sigma], coordinateNames[[mu]]] -\n\
+  D[christoffel[rho, mu, sigma], coordinateNames[[nu]]] +\n  \
+Sum[christoffel[rho, mu, lambda]*christoffel[lambda, nu, sigma], {lambda, 1, \
+coordinateCount}] -\n  Sum[christoffel[rho, nu, lambda]*christoffel[lambda, \
+mu, sigma], {lambda, 1, coordinateCount}]\n];\n\nPrint[\"\\nRiemann Tensor \
+Components (selected non-zero components):\"];\nDo[\n  Module[{value = \
+riemann[i, j, k, l]},\n    If[!TrueQ[Simplify[value == 0]],\n      \
+Print[Subsuperscript[\"R\", Row[{j, k, l}], i], \" = \", value]\n    ]\n  ],\n\
+  {i, 1, coordinateCount}, {j, 1, coordinateCount}, {k, 1, coordinateCount}, \
+{l, 1, coordinateCount}\n];\n```\n\n---\n\n## 5. Ricci tensor, Ricci scalar, \
+and Einstein tensor\n\n```wl\n(* Ricci tensor: R_{\[Mu]\[Nu]} = R^\[Lambda]_{\
+\[Mu]\[Lambda]\[Nu]} *)\nricciMatrix = Table[\n  Simplify[Sum[riemann[lambda, \
+mu, lambda, nu], {lambda, 1, coordinateCount}]],\n  {mu, 1, coordinateCount}, \
+{nu, 1, coordinateCount}\n];\nprintMatrix[\"\\nRicci Tensor:\", ricciMatrix];\
+\n\nricciScalar = Simplify[\n  Sum[inverseMetricMatrix[[i, \
+j]]*ricciMatrix[[i, j]], {i, 1, coordinateCount}, {j, 1, coordinateCount}]\n\
+];\nPrint[\"\\nRicci Scalar:\"];\nPrint[ricciScalar];\n\neinsteinMatrix = \
+Simplify[ricciMatrix - 1/2 metricMatrix*ricciScalar];\n\
+printMatrix[\"\\nEinstein Tensor:\", einsteinMatrix];\n```\n\n---\n\n## 6. \
+Using ``BowenPing/STensor`` for a metric object\n\nIf you want to use the \
+paclet-based tensor workflow, replace the placeholder metric with your actual \
+metric components:\n\n```wl\nmetric = PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`CreateTensor\"][\n  \"g\",\n  coordinateNames,\n  \
+metricMatrix,\n  PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`IsMetric\"] -> True\n];\n\nriemannTensor = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RiemannTensor\"][metric];\nricciTensor = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RicciTensor\"][metric];\nricciScalar = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RicciScalar\"][metric][];\neinsteinTensor = PacletSymbol[\
+\"BowenPing/STensor\", \"BowenPing`STensor`EinsteinTensor\"][metric];\n\n\
+riemannTensor[\"Components\"]\nricciTensor[\"Components\"]\nricciScalar\n\
+einsteinTensor[\"Components\"]\n```\n\n---\n\n## 7. Notes\n\n- The coordinate \
+list is indexed as ``{x1, x2, x3, x4}`` via ``Array[Subscript[x, #] &, 4]``.\n\
+- Extra parameters can be added by extending ``parameterNames``.\n- Replace \
+the symbolic entries ``g11``, ``g12``, etc. with the metric you want.\n- For \
+a specific spacetime, you can keep this template and only modify \
+``metricMatrix`` and the parameter list.\n\n---\n\n## 8. Optional next step\n\
+\nIf you'd like, I can also make a second version of this notebook that is \
+already preformatted for a Kerr-like metric, with placeholders for ``M``, \
+``a``, and ``C``/Carter constant.\nmetadata: <|title -> Generic Metric \
+Workflow Template|>\n/exec\nRESULT\n\
+NotebookObject[\"09749297-d050-1242-b164-f95bf09c0892\", \
+\"763bea0b-1b64-954c-89f9-d7c69ebba780\"]\nENDRESULT(dxuc8drq1)", 
+    "Parameters" -> <|
+     "content" -> 
+      "# Generic Metric Workflow Template\n\nThis notebook is a reusable \
+template for symbolic tensor computations with a generic metric. It uses \
+indexed coordinates rather than named ones, and leaves space for extra \
+parameters such as a Carter constant, mass, spin, or cosmological constant.\n\
+\n---\n\n## 1. Setup\n\n```wl\nClearAll[\n  coordinateCount, coordinateNames, \
+parameterNames, parameters, metricMatrix,\n  inverseMetricMatrix, \
+christoffel, riemann, ricciMatrix, ricciScalar,\n  einsteinMatrix, \
+printMatrix\n];\n\n(* ==== CONFIGURATION SECTION ==== *)\ncoordinateCount = \
+4;\ncoordinateNames = Array[Subscript[x, #] &, coordinateCount];\n\n(* Add as \
+many parameters as needed here *)\nparameterNames = {Subscript[m, 1], \
+Subscript[m, 2], Subscript[a], Subscript[q], Subscript[\[CapitalLambda]], \
+Subscript[Q], Subscript[C, 1]};\nparameters = \
+AssociationThread[parameterNames, parameterNames];\n\n(* Generic symmetric \
+metric matrix:\n   Replace these entries with your desired metric components.\
+\n   You can include any of the parameters above, or add more. *)\n\
+metricMatrix = {\n  {g11[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g22[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g33[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g44[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]}\n};\n\nprintMatrix[label_, mat_] := (Print[label]; \
+Print[MatrixForm[mat]]);\n```\n\n---\n\n## 2. Metric and inverse metric\n\n\
+```wl\nPrint[\"===== Generic Metric Workflow =====\\n\"];\n\
+Print[\"Coordinates: \", coordinateNames];\nPrint[\"Parameters: \", \
+parameterNames];\nprintMatrix[\"Metric Tensor:\", metricMatrix];\n\n\
+inverseMetricMatrix = Simplify[Inverse[metricMatrix]];\nprintMatrix[\"Inverse \
+Metric Tensor:\", inverseMetricMatrix];\n```\n\n---\n\n## 3. Christoffel \
+symbols\n\n```wl\n(* Christoffel symbols: \[CapitalGamma]^\[Lambda]_{\[Mu]\
+\[Nu]} *)\nchristoffel[lambda_, mu_, nu_] := Simplify[\n  1/2 Sum[\n    \
+inverseMetricMatrix[[lambda, sigma]]*\n      (D[metricMatrix[[sigma, nu]], \
+coordinateNames[[mu]]] +\n       D[metricMatrix[[mu, sigma]], \
+coordinateNames[[nu]]] -\n       D[metricMatrix[[mu, nu]], \
+coordinateNames[[sigma]]]),\n    {sigma, 1, coordinateCount}\n  ]\n];\n\n\
+Print[\"\\nChristoffel Symbols (non-zero components):\"];\nDo[\n  \
+Module[{value = christoffel[i, j, k]},\n    If[!TrueQ[Simplify[value == 0]],\n\
+      Print[Subscript[Superscript[\"\[CapitalGamma]\", i], Row[{j, k}]], \" = \
+\", value]\n    ]\n  ],\n  {i, 1, coordinateCount}, {j, 1, coordinateCount}, \
+{k, 1, coordinateCount}\n];\n```\n\n---\n\n## 4. Riemann tensor\n\n```wl\n(* \
+Riemann tensor: R^\[Rho]_{\[Sigma]\[Mu]\[Nu]} *)\nriemann[rho_, sigma_, mu_, \
+nu_] := Simplify[\n  D[christoffel[rho, nu, sigma], coordinateNames[[mu]]] -\n\
+  D[christoffel[rho, mu, sigma], coordinateNames[[nu]]] +\n  \
+Sum[christoffel[rho, mu, lambda]*christoffel[lambda, nu, sigma], {lambda, 1, \
+coordinateCount}] -\n  Sum[christoffel[rho, nu, lambda]*christoffel[lambda, \
+mu, sigma], {lambda, 1, coordinateCount}]\n];\n\nPrint[\"\\nRiemann Tensor \
+Components (selected non-zero components):\"];\nDo[\n  Module[{value = \
+riemann[i, j, k, l]},\n    If[!TrueQ[Simplify[value == 0]],\n      \
+Print[Subsuperscript[\"R\", Row[{j, k, l}], i], \" = \", value]\n    ]\n  ],\n\
+  {i, 1, coordinateCount}, {j, 1, coordinateCount}, {k, 1, coordinateCount}, \
+{l, 1, coordinateCount}\n];\n```\n\n---\n\n## 5. Ricci tensor, Ricci scalar, \
+and Einstein tensor\n\n```wl\n(* Ricci tensor: R_{\[Mu]\[Nu]} = R^\[Lambda]_{\
+\[Mu]\[Lambda]\[Nu]} *)\nricciMatrix = Table[\n  Simplify[Sum[riemann[lambda, \
+mu, lambda, nu], {lambda, 1, coordinateCount}]],\n  {mu, 1, coordinateCount}, \
+{nu, 1, coordinateCount}\n];\nprintMatrix[\"\\nRicci Tensor:\", ricciMatrix];\
+\n\nricciScalar = Simplify[\n  Sum[inverseMetricMatrix[[i, \
+j]]*ricciMatrix[[i, j]], {i, 1, coordinateCount}, {j, 1, coordinateCount}]\n\
+];\nPrint[\"\\nRicci Scalar:\"];\nPrint[ricciScalar];\n\neinsteinMatrix = \
+Simplify[ricciMatrix - 1/2 metricMatrix*ricciScalar];\n\
+printMatrix[\"\\nEinstein Tensor:\", einsteinMatrix];\n```\n\n---\n\n## 6. \
+Using ``BowenPing/STensor`` for a metric object\n\nIf you want to use the \
+paclet-based tensor workflow, replace the placeholder metric with your actual \
+metric components:\n\n```wl\nmetric = PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`CreateTensor\"][\n  \"g\",\n  coordinateNames,\n  \
+metricMatrix,\n  PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`IsMetric\"] -> True\n];\n\nriemannTensor = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RiemannTensor\"][metric];\nricciTensor = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RicciTensor\"][metric];\nricciScalar = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RicciScalar\"][metric][];\neinsteinTensor = PacletSymbol[\
+\"BowenPing/STensor\", \"BowenPing`STensor`EinsteinTensor\"][metric];\n\n\
+riemannTensor[\"Components\"]\nricciTensor[\"Components\"]\nricciScalar\n\
+einsteinTensor[\"Components\"]\n```\n\n---\n\n## 7. Notes\n\n- The coordinate \
+list is indexed as ``{x1, x2, x3, x4}`` via ``Array[Subscript[x, #] &, 4]``.\n\
+- Extra parameters can be added by extending ``parameterNames``.\n- Replace \
+the symbolic entries ``g11``, ``g12``, etc. with the metric you want.\n- For \
+a specific spacetime, you can keep this template and only modify \
+``metricMatrix`` and the parameter list.\n\n---\n\n## 8. Optional next step\n\
+\nIf you'd like, I can also make a second version of this notebook that is \
+already preformatted for a Kerr-like metric, with placeholders for ``M``, \
+``a``, and ``C``/Carter constant.\nmetadata: <|title -> Generic Metric \
+Workflow Template|>"|>, "Open" -> False|>,
+  Background->None,ExpressionUUID->"44bf39a5-2f75-d542-b337-d1a345181b28"],
+ "\nDone \[LongDash] I created a new notebook template for a ",
+ StyleBox["generic metric workflow",
+  FontWeight->Bold],
+ " with: \n",
+ Cell[TextData[{
+  StyleBox["\[Bullet]",
+   FontColor->LightDarkSwitched[
+     GrayLevel[0.5], 
+     GrayLevel[0.7533742]]],
+  " ",
+  StyleBox["indexed coordinates",
+   FontWeight->Bold],
+  " like ",
+  Cell[BoxData[
+   TemplateBox[{
+     Cell["x_1, x_2, x_3, x_4", Background -> None]},
+    "ChatCodeInlineTemplate"]], "ChatCodeActive",ExpressionUUID->
+   "dc6daca3-17fc-b242-9c5a-177dc11df79b"]
+ }], "InlineItem",ExpressionUUID->"cd46dc24-1bd7-b748-8d3b-1a45b596aa40"],
+ "\n",
+ Cell[TextData[{
+  StyleBox["\[Bullet]",
+   FontColor->LightDarkSwitched[
+     GrayLevel[0.5], 
+     GrayLevel[0.7533742]]],
+  " ",
+  "a ",
+  StyleBox["symbolic placeholder metric",
+   FontWeight->Bold]
+ }], "InlineItem",ExpressionUUID->"205eccd8-9bfd-124d-8b5d-c052ce06fe6a"],
+ "\n",
+ Cell[TextData[{
+  StyleBox["\[Bullet]",
+   FontColor->LightDarkSwitched[
+     GrayLevel[0.5], 
+     GrayLevel[0.7533742]]],
+  " ",
+  "room for ",
+  StyleBox["extra parameters",
+   FontWeight->Bold],
+  " such as ",
+  Cell[BoxData[
+   TemplateBox[{
+     Cell["M", Background -> None]},
+    "ChatCodeInlineTemplate"]], "ChatCodeActive",ExpressionUUID->
+   "596011e5-6158-9840-9296-d068df98b3dd"],
+  ", ",
+  StyleBox["a", "TI"],
+  ", ",
+  Cell[BoxData[
+   TemplateBox[{
+     Cell["Q", Background -> None]},
+    "ChatCodeInlineTemplate"]], "ChatCodeActive",ExpressionUUID->
+   "c167d956-5432-7147-be86-817606dd8579"],
+  ", or a Carter constant"
+ }], "InlineItem",ExpressionUUID->"abf00091-43b8-ba4d-a918-602efc049015"],
+ "\n",
+ Cell[TextData[{
+  StyleBox["\[Bullet]",
+   FontColor->LightDarkSwitched[
+     GrayLevel[0.5], 
+     GrayLevel[0.7533742]]],
+  " ",
+  "the standard workflow for:"
+ }], "InlineItem",ExpressionUUID->"f9057d4c-8e24-9344-b9ca-e304eba8e165"],
+ "\n",
+ Cell[TextData[{
+  "  ",
+  StyleBox["\[Bullet]",
+   FontColor->LightDarkSwitched[
+     GrayLevel[0.5], 
+     GrayLevel[0.7533742]]],
+  " ",
+  "metric"
+ }], "InlineSubitem",ExpressionUUID->"e72b39f2-1de0-6e44-92a5-cc3f0e835da0"],
+ "\n",
+ Cell[TextData[{
+  "  ",
+  StyleBox["\[Bullet]",
+   FontColor->LightDarkSwitched[
+     GrayLevel[0.5], 
+     GrayLevel[0.7533742]]],
+  " ",
+  "inverse metric"
+ }], "InlineSubitem",ExpressionUUID->"8f6f9818-07a7-bf48-ace1-25bf6953f2a6"],
+ "\n",
+ Cell[TextData[{
+  "  ",
+  StyleBox["\[Bullet]",
+   FontColor->LightDarkSwitched[
+     GrayLevel[0.5], 
+     GrayLevel[0.7533742]]],
+  " ",
+  "Christoffel symbols"
+ }], "InlineSubitem",ExpressionUUID->"6bab00f9-19c4-364c-9018-07763458c87a"],
+ "\n",
+ Cell[TextData[{
+  "  ",
+  StyleBox["\[Bullet]",
+   FontColor->LightDarkSwitched[
+     GrayLevel[0.5], 
+     GrayLevel[0.7533742]]],
+  " ",
+  "Riemann tensor"
+ }], "InlineSubitem",ExpressionUUID->"99ddf6db-a657-0a4e-a9db-e9ce955eb562"],
+ "\n",
+ Cell[TextData[{
+  "  ",
+  StyleBox["\[Bullet]",
+   FontColor->LightDarkSwitched[
+     GrayLevel[0.5], 
+     GrayLevel[0.7533742]]],
+  " ",
+  "Ricci tensor"
+ }], "InlineSubitem",ExpressionUUID->"09820288-528f-c04a-915d-b6a6e5e30762"],
+ "\n",
+ Cell[TextData[{
+  "  ",
+  StyleBox["\[Bullet]",
+   FontColor->LightDarkSwitched[
+     GrayLevel[0.5], 
+     GrayLevel[0.7533742]]],
+  " ",
+  "Ricci scalar"
+ }], "InlineSubitem",ExpressionUUID->"b218c182-cfe3-c040-a478-a602c76ea3c9"],
+ "\n",
+ Cell[TextData[{
+  "  ",
+  StyleBox["\[Bullet]",
+   FontColor->LightDarkSwitched[
+     GrayLevel[0.5], 
+     GrayLevel[0.7533742]]],
+  " ",
+  "Einstein tensor"
+ }], "InlineSubitem",ExpressionUUID->"5eb6a127-24e5-6448-827b-214d3782ead3"],
+ "\nIf you want, I can also make a ",
+ StyleBox["Kerr-ready version",
+  FontWeight->Bold],
+ " of the same notebook with placeholders already set up for ",
+ Cell[BoxData[
+  TemplateBox[{
+    Cell["M", Background -> None]},
+   "ChatCodeInlineTemplate"]], "ChatCodeActive",ExpressionUUID->
+  "26d950c8-4df5-0544-9aa7-f7c7b8ea3f73"],
+ ", ",
+ StyleBox["a", "TI"],
+ ", and ",
+ Cell[BoxData[
+  TemplateBox[{
+   "C", "paclet:ref/C", "https://reference.wolfram.com/language/ref/C.html"},
+   "TextRefLink"]],ExpressionUUID->"01ab6cc9-d1d3-234f-943c-02afa2a3f198"],
+ "."
+}], "ChatOutput",
+ TaggingRules-><|
+  "CellToStringData" -> 
+   "/create_nb\ncontent: # Generic Metric Workflow Template\n\nThis notebook \
+is a reusable template for symbolic tensor computations with a generic \
+metric. It uses indexed coordinates rather than named ones, and leaves space \
+for extra parameters such as a Carter constant, mass, spin, or cosmological \
+constant.\n\n---\n\n## 1. Setup\n\n```wl\nClearAll[\n  coordinateCount, \
+coordinateNames, parameterNames, parameters, metricMatrix,\n  \
+inverseMetricMatrix, christoffel, riemann, ricciMatrix, ricciScalar,\n  \
+einsteinMatrix, printMatrix\n];\n\n(* ==== CONFIGURATION SECTION ==== *)\n\
+coordinateCount = 4;\ncoordinateNames = Array[Subscript[x, #] &, \
+coordinateCount];\n\n(* Add as many parameters as needed here *)\n\
+parameterNames = {Subscript[m, 1], Subscript[m, 2], Subscript[a], \
+Subscript[q], Subscript[\[CapitalLambda]], Subscript[Q], Subscript[C, 1]};\n\
+parameters = AssociationThread[parameterNames, parameterNames];\n\n(* Generic \
+symmetric metric matrix:\n   Replace these entries with your desired metric \
+components.\n   You can include any of the parameters above, or add more. *)\n\
+metricMatrix = {\n  {g11[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g12[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g22[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g13[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g23[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g33[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]},\n  {g14[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g24[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g34[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]], g44[Sequence @@ coordinateNames, Sequence @@ \
+Values[parameters]]}\n};\n\nprintMatrix[label_, mat_] := (Print[label]; \
+Print[MatrixForm[mat]]);\n```\n\n---\n\n## 2. Metric and inverse metric\n\n\
+```wl\nPrint[\"===== Generic Metric Workflow =====\\n\"];\n\
+Print[\"Coordinates: \", coordinateNames];\nPrint[\"Parameters: \", \
+parameterNames];\nprintMatrix[\"Metric Tensor:\", metricMatrix];\n\n\
+inverseMetricMatrix = Simplify[Inverse[metricMatrix]];\nprintMatrix[\"Inverse \
+Metric Tensor:\", inverseMetricMatrix];\n```\n\n---\n\n## 3. Christoffel \
+symbols\n\n```wl\n(* Christoffel symbols: \[CapitalGamma]^\[Lambda]_{\[Mu]\
+\[Nu]} *)\nchristoffel[lambda_, mu_, nu_] := Simplify[\n  1/2 Sum[\n    \
+inverseMetricMatrix[[lambda, sigma]]*\n      (D[metricMatrix[[sigma, nu]], \
+coordinateNames[[mu]]] +\n       D[metricMatrix[[mu, sigma]], \
+coordinateNames[[nu]]] -\n       D[metricMatrix[[mu, nu]], \
+coordinateNames[[sigma]]]),\n    {sigma, 1, coordinateCount}\n  ]\n];\n\n\
+Print[\"\\nChristoffel Symbols (non-zero components):\"];\nDo[\n  \
+Module[{value = christoffel[i, j, k]},\n    If[!TrueQ[Simplify[value == 0]],\n\
+      Print[Subscript[Superscript[\"\[CapitalGamma]\", i], Row[{j, k}]], \" = \
+\", value]\n    ]\n  ],\n  {i, 1, coordinateCount}, {j, 1, coordinateCount}, \
+{k, 1, coordinateCount}\n];\n```\n\n---\n\n## 4. Riemann tensor\n\n```wl\n(* \
+Riemann tensor: R^\[Rho]_{\[Sigma]\[Mu]\[Nu]} *)\nriemann[rho_, sigma_, mu_, \
+nu_] := Simplify[\n  D[christoffel[rho, nu, sigma], coordinateNames[[mu]]] -\n\
+  D[christoffel[rho, mu, sigma], coordinateNames[[nu]]] +\n  \
+Sum[christoffel[rho, mu, lambda]*christoffel[lambda, nu, sigma], {lambda, 1, \
+coordinateCount}] -\n  Sum[christoffel[rho, nu, lambda]*christoffel[lambda, \
+mu, sigma], {lambda, 1, coordinateCount}]\n];\n\nPrint[\"\\nRiemann Tensor \
+Components (selected non-zero components):\"];\nDo[\n  Module[{value = \
+riemann[i, j, k, l]},\n    If[!TrueQ[Simplify[value == 0]],\n      \
+Print[Subsuperscript[\"R\", Row[{j, k, l}], i], \" = \", value]\n    ]\n  ],\n\
+  {i, 1, coordinateCount}, {j, 1, coordinateCount}, {k, 1, coordinateCount}, \
+{l, 1, coordinateCount}\n];\n```\n\n---\n\n## 5. Ricci tensor, Ricci scalar, \
+and Einstein tensor\n\n```wl\n(* Ricci tensor: R_{\[Mu]\[Nu]} = R^\[Lambda]_{\
+\[Mu]\[Lambda]\[Nu]} *)\nricciMatrix = Table[\n  Simplify[Sum[riemann[lambda, \
+mu, lambda, nu], {lambda, 1, coordinateCount}]],\n  {mu, 1, coordinateCount}, \
+{nu, 1, coordinateCount}\n];\nprintMatrix[\"\\nRicci Tensor:\", ricciMatrix];\
+\n\nricciScalar = Simplify[\n  Sum[inverseMetricMatrix[[i, \
+j]]*ricciMatrix[[i, j]], {i, 1, coordinateCount}, {j, 1, coordinateCount}]\n\
+];\nPrint[\"\\nRicci Scalar:\"];\nPrint[ricciScalar];\n\neinsteinMatrix = \
+Simplify[ricciMatrix - 1/2 metricMatrix*ricciScalar];\n\
+printMatrix[\"\\nEinstein Tensor:\", einsteinMatrix];\n```\n\n---\n\n## 6. \
+Using ``BowenPing/STensor`` for a metric object\n\nIf you want to use the \
+paclet-based tensor workflow, replace the placeholder metric with your actual \
+metric components:\n\n```wl\nmetric = PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`CreateTensor\"][\n  \"g\",\n  coordinateNames,\n  \
+metricMatrix,\n  PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`IsMetric\"] -> True\n];\n\nriemannTensor = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RiemannTensor\"][metric];\nricciTensor = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RicciTensor\"][metric];\nricciScalar = \
+PacletSymbol[\"BowenPing/STensor\", \
+\"BowenPing`STensor`RicciScalar\"][metric][];\neinsteinTensor = PacletSymbol[\
+\"BowenPing/STensor\", \"BowenPing`STensor`EinsteinTensor\"][metric];\n\n\
+riemannTensor[\"Components\"]\nricciTensor[\"Components\"]\nricciScalar\n\
+einsteinTensor[\"Components\"]\n```\n\n---\n\n## 7. Notes\n\n- The coordinate \
+list is indexed as ``{x1, x2, x3, x4}`` via ``Array[Subscript[x, #] &, 4]``.\n\
+- Extra parameters can be added by extending ``parameterNames``.\n- Replace \
+the symbolic entries ``g11``, ``g12``, etc. with the metric you want.\n- For \
+a specific spacetime, you can keep this template and only modify \
+``metricMatrix`` and the parameter list.\n\n---\n\n## 8. Optional next step\n\
+\nIf you'd like, I can also make a second version of this notebook that is \
+already preformatted for a Kerr-like metric, with placeholders for ``M``, \
+``a``, and ``C``/Carter constant.\nmetadata: <|title -> Generic Metric \
+Workflow Template|>\n/exec\nRESULT\n\
+NotebookObject[\"09749297-d050-1242-b164-f95bf09c0892\", \
+\"763bea0b-1b64-954c-89f9-d7c69ebba780\"]\nENDRESULT(dxuc8drq1)\n\nDone \
+\[LongDash] I created a new notebook template for a **generic metric \
+workflow** with:\n\n- **indexed coordinates** like ``x_1, x_2, x_3, x_4``\n- \
+a **symbolic placeholder metric**\n- room for **extra parameters** such as \
+``M``, ``a``, ``Q``, or a Carter constant\n- the standard workflow for:\n  - \
+metric\n  - inverse metric\n  - Christoffel symbols\n  - Riemann tensor\n  - \
+Ricci tensor\n  - Ricci scalar\n  - Einstein tensor\n\nIf you want, I can \
+also make a **Kerr-ready version** of the same notebook with placeholders \
+already set up for ``M``, ``a``, and ``C``.", "ChatData" -> 
+   "OEM6eJztfV1zG9eVoD2WZbPjOLZjz3hSu7M3kCoGGAAkQVIftKUxRVIyK6LEEFQ0XhgSGugLoM\
+1GN9zdEAnTrEoqVbNbqZqHmezU1Gwe4nmZp6193MrUJE+7z/If2Kc87Zv3J+\
+w553707UaDHxKdmalalU2yb9+Pc8893+fe26v/sVL/7sZBxxs53LllR3w7DAbDOOr+\
+UXThrhvFkbVth9yP8e/6mxtRxx5yZ61vh3Yn5mFUqb+z6nnBfp17vBO7gb8W+DE/\
+iKOXb9texCv176wOh9x31tzYxteRfvEKvLhnD3j9lXXetUdeXKlbq1EEw9h+h+tqr6+\
+O4j6M73aoff3i3btbP3Kp8igObgfhwI6jC7vhiCMoUFS3n3AA4gkAlxnRSqbXfSlndjP3gpi3g2Avq\
+r/9MPC6oT24a/u9kd3j9XjsQQ9/fGs8tKNoh0dD6Jiv9Xlnz/\
+V7eoS3ATGxxMB2yIcClTMIFoDpdir1t7DGeug+4b4eTbV+E999BJAE4fgu93tx/9P/85JssukPR/\
+DDQTQEYf3C//313/y3Sv0Nc6IPHmyuRxfuBT5iXb6A4p2RxyNV/\
+ieiPK6Po5gPdgKP7wYPIqioYPjWOo86oTskXF/5iHtDtu/GfbYfujHMlNm+\
+w3rc56FNjxJNTOGJdQIHenl33Y06wSiEko2DOLR3g8Bbsz0vSuHiW1Br6NljpILui9GrO/b+reCAR/\
+C3tT727YHbgWcgxO/\
+d3tgGlNkxb90OAbsbvgNLAP13OMwUsINorMchLkX9323DdALfxl4VihVdAdm8KXuepJ4/\
+2fDttsexvzthMBrWeYxzTOjnLVEhj0vq//72yCf63+\
+HDIHJxCTeBDHqhoNr3MvS08cT2RriSiBmsiOwERAHwiUGAyus8fOJ2cO0EfK/\
+CtHeDPe6rxXx742DIQ3cA9Gt7t7kdj0JA3gsCIiAOmB4gaOx3+\
+oC0YJRM5I3bIf9sxP3OeJv7thePw//69/jvn/4c3n0ES+zxUM0nWrVg5hkmBkg0EJlX9dgOY/\
+VyBpG52g6SklexZDuIdMErVACAy+\
+e3BGbvCBoLQnOozKvUUN9FTO7gtKJ4h3c4IFM3fEe8E0wrmydvX0Va8qi6QPTbWRT8iI+\
+j7kW50hduBc64PoM/1/ojf6/+\
+lv4T4MP14k7dAtjiUbQG3FC3du1oTzzXZzaA8WMkzUr94keu48Bq6lX5aNwOXQdh3eJxP9DwvL7pk3\
+iWoiHFQ9/Z9PtAAyQzd3mkiRnKgWFtjwQSB86T5W8AYWniI/\
+H7liTN1U2DS767ZR9gM8FUUhi98CG0xxdCwAladH/6vYsvVOp/CuX3RzEIqYlmKMNm4LWon4L+\
+DSpO1iZae7lS//YWD3t8CxAJjKKp/4+\
+3XN8djAa66q6Q9C9W6i9vAZq91T8CYpI8k2iJCzTH13rDuLJcXaoMoBNQBFugbtxB4NgaLxeOwYWSI\
+g8Bz1wsTf11IFkOxAhkdtf19wC++\
+8AG0G57cw2I1OMkkXfu1mf7cTyMVubm7KFbDaCO7VY7wWDuycJcB9ZmrqNrgy59EztRwpJkYQpdF++\
+Hbs/1629IMOeU7IMpbdsd6IZmkfP6JQC3/lcvfhyMGOg7ZrM+\
+SPbuyJsU4LaaOAMxyR1dYXWTaZxULewoGvIOUJj7OWeuP9FRmbVHMRtDvY7t03BCkdj+\
+mMXB0O1UAbOSYYBWEnHzCipCoKHdAMFXZFCQ/bfUnFoTdSr118wWqFFUr/\
+D3hboXxEgtFlaqj9oDN62Z3xDaAN8KQo6+PzFmtgrwpijSCu4/TGmjKsCkiYySPog7L080y6mVI6r+\
+LCMS5eS3UQWhMQY88b38Kqj76xeFHQCTz1RC7JG4g99vAS9lXq9ehHmQSVJHIuhK40y3qr+\
+qVgFg1kv7eGKS2VFb0hScKFfqP+Qeiu71oDMitYf96mogOgRMZIsGIUBz8S4MA6rcgOeV+\
+0MBa6IocYLEPj8RJlP95Vp1sVpTUuHtnZxRwV7IQinNgxRVvaIMBT0aEv0T1+EhsGSXg/\
+EJHLAKEvRdsBw8u8Mf+C4aUYmJrdWSWnyycpVxouR6nftOSpSaULwO1ZGC1qFJO7F4vl3vB/\
+skV4GJ03C/ga8A0h5o5mgXDXrZ5k/rQ8+NzZG0pFaK7B0Q/\
+xxsLL8naFeLTFDXIDCkAQbsumu329yR3Cb7f3PXBukfr3nByLnf/\
+hQWMj2TXbB3QAFFYFW6fvrdO6Rhbo0caE8SHiDlIfL8t+\
+kNTFKovIuoDpYC4A3FlhsHNophsVhk7NdfBjMPe31T1dFGU2rQt9XrHR6HY4ULbdLj21TnqcZWouyB\
+F12sBWYxFkoiXQV9+JpSSt6wb69eIBtdcAmYCHqkV28HnpMq+Q4oVyi4NQY5EozAg/\
+rw1neAzr61w100OIch10h/d5p5ujoDBEsOHnc2DnhnFPNtO+\
+5ntLissMNtR7x9aRWl1ZuynETZZDPpGT7Y2ZSYUYB/G/\
+wC4qSPcIWVmfauBArQkqaBtQ8AkVhVWk0pjZlT9tY2UGamiz+\
+DLh7y9m0ed8CcWn3RMHTAOSQ7xn3hhRcRfVCtzu2Q6l1Qk1x1YD1k9WhG2mTcgWVRKE2XQuebIHjJ3\
+rmoCOBOEPSQAN6AITYH6HV+w+OYXJzWB2+\
+ar4gfUiik19rl3x0POUqw17BUS0FlWO0Gw23kwXd3QZ7t1Tth4HmwAA/\
+Bqd9GeadrvoGO6CYuyUjoi7QgVbL5lVp1ubqwdA0I6Cdu5MJY0uGLlFOfZ8bVZ2Aw1yfdj44mmYxgO\
+hLI3Zdlw9fXQHDF2m2sv5MS+Wo5TFJJc+d0RgJErNuxjZSldVH3ghgWLdcLafy/Ite4/r+X/\
+1XZbJb1QRu834qIbNy8xIT285i5bpalYHaVZ+v3ZE9sBIvMYvBIRz18lABpUHCBmMJ/\
+le323YjBf567hxgIeW/\
+k2SHzZQXGDzp8GDM3Zn070p2hYQ1jg1ZhHbSu2H7f7fRhVC6Gx9nBHzAnFoEEYgO5IFgArwBtRUBCC\
+YfnyUvESyg8S9aF+Sf99cERYW3OfdYR4RVYA+hqiBTH0FUS9TXUHbG4VQYi34X5eOMy9h4mY9GCK+\
+IH5TI2eqa+jL7bvBuEOD5i2REhFQGAArDKwAiFJ5dmuB+ECEIIc4nlyGwwimJmO0DQXDXsBihwsM/\
+eCMwV4FkerVjWLPsYIQ2VmQHr6nkwOBvaIXi+QItsYId7TrDvU7CoS+\
+YvwU0wCIjKLAo0oeFS6DbRGLjtAIEQLQVi9HBVtuFHI4ASG3OKRuJyS1MJR/\
+c5d2A0t0tVnADRDkBGfaNPA0iBGy5UdFk120dmgvoSnUB6YPQQodvAoKEb7Rl4k2C4saLxNgi6yLOj\
+/gr7ZBYwhrKOw+ql50JkAKsYYQsv6OyxoEvxM0DOKAQGAeypPoFhOKd+\
+gR72IsKsK6IChFNPiYJ9GIrZQ7B8OiiGV6xWq6VeWtg5FkiQdFAPy1EepMArs8AHuushuYtlww6p7v\
+vs3sZPNnY0BIVNv1GtVpsrNwoMkFkAi46e4dGz2xwYUC49DUQEg4vS1p22x5oyALbVuw9XP64bSPCR\
++FRjwIYTjKiVRgfy7ZPABeobtF0g13gsKnZEpILEYrTCWq2tsQxewF/\
+KL2kcNAVKUGkCXUA7fjBEuxeFGQCFKLpr7/K/ILRrsADigYLHQ6kUuT0fRrl8+eBRjf2QjR/VLl+\
+GfjE+AIQk2A1BnZDfjqllEBlizDQXCsZYYQ1CabM4JI9lZRS6pRQNr1gzs6yxi3jVlcDTmKOSEr3UA\
+99/gvESvq8rEqvPqffqtWhFvhWrExi6QQxCKgSZOyc8L3pZUvSlHJzcSHE0HrRB9zIpxspEjVxg1Ua\
+eSGMFSAD0wX0kSScQsky3RGJC6qjCwBMiOwLGyRPQuSK5TEtMFBp0oQBp1HG7NA0pxfdRuWjRD71Hh\
+HGKogt1QnINa2k4nriJpuPCJCC6L+jQfkFqKj18GzmSwv3cUTIAkEaBNYbR/\
+ypbEy3Airap1G4HklcNBSjUsEjvkFIS3icIe4dCBKguBUsI7Z80jRhmMHiEM8dOQcSOoLacVEYFxiT\
+OcQHqyJL43B65XlxxUaSjUcO6kt/A/IjHVbZKDAtktEcoGvmYphBY6kqdF4pwLnewXxXx1+\
+EENgQpAHIdhb1PkKhXLAnC0/xDjlSMygmwC/\
+gCFMAD8JkiSrCQut2UTkIPNtbE2HVDcN07INIj1gG0fc5heJDWOOgEYbtUjmiP/\
+PdgATzoykEVohEC03KBCtAEsKxLkz2Qwc3uaLWLWvdHnA+\
+FCIzITxSSHqZJJrBFBGigGNe5B52iFw7oASTaDkI8xIibMwJNBk3WhXJE87Hns54XtKHhEyAmJM5Ij\
+ODG70VUy+cYqrPDMUpob98eR6S4ocMhrL9P/r5gL18sD+\
+p70ihJj0Ve7VUZOoXhGohk8JsjjtLiHmlH7A4FH2oZe+\
+jGAAyIGNLrQE4JMWb7w3YtG4wpv7HHDkDyfvW3zZY56dZq5iWOKcIvbAAoDSdNYS2ebLIPyYmERpvd\
+hORdNDcw/UczReM0AufMHJeWS/CcM+ogawJNiWplYYBCX/ti5MdKSz/\
+mymeApoEnDC6iSZl3M8zqJ1wJLomKLdt3hyOMVpUMJXLCEFUxsbE02nsBtQtAFZLRjVUYMqRh8oAIB\
+ma5tXH7/s4GA5mHLWit41HoVz+\
+YM50EJHFys4RfQLLY7iAxkamJb6SBjpMko0CIKgyNj2IuMRZVrd2A4JAwGRrDUJPSGjZhUhYNWK8Yb\
+h/Aklp22FvAHzVrjh/\
+wjmWtgrgPhe1HvVJxWQhdIb9ILHMRBKFyjRhF6kQsIUccUAUBOPC4wC4QSdgjlRaRaAOTALBJcSrOi\
+NHLUv4JcwitFiQjbgNuVFM5VSG/\
+bMCRFwhDGzUMuNMEshgeF3li0iuimGjRghbAqAoGSwgbxMoKdBmgFLOotkKSdekSyG0bfBbUXnJRhc\
++snTZWnOtQyWO/XVIvbRAf+\
+4m2NV0BnIdQSopcFUmnrPRdhXBahlzfiBprRwJtwmRExBBmX9CiNkevWqtqTawZNXCFRlNPUs7rrtA\
+i9k3gLCsVJmAqTgCYABvmcUSPJYty4ijnQu4BA0LPJxiCEfDykMfKBI04LCJMmYkOU5CDngRdV2GrQ\
+DQxSvfEIyAVit3BrJ0kuY/\
+TIlMGCPM99PrCsWR7oDYX5LGFUQ4mwxwwlX3eftzFp5JFhaYLCl27GLAiKy0SpoHNHuzcTQE5Cj2JW\
+nhjzUhfTJTE4yEXIlMgnQQ+GDsACCsWKHaDIwn/\
+goJjaFZHhRKAKbD4BUVgEFC7ZKEyzMMEdBgJayrdCobr8ZiNhpU4qDhIsUL42FKbShGEJhbYSKjhYu\
+wJ5g/YGbhgloEjPeyPI7cDTNzjqHvhscz6ImcLdmWIxiVUDPxgMBZ25gAkVdXa3Nq+\
+v7O7em93RUlhdGENAUKmhhYUchZloZnBFghCCv3EcjER8jb6S2S8ANqQD6RaTSTWvnJJlQVBwRAUzQ\
+Gyzh5Ht5xiS+jpuAOeS264cuLvIqyLhKyk4yqJryPQXAXWGNqkwrLTkSau3Ta9+\
+eIncalqzYD0HUYwGsCMIom67wf7DMsr7XEFf4M68kZE18VbMElu++C/\
+DsXqJTSScJoOzCHBQA35nGPOkRJPCSxYdcComskemA/\
+cEwKKXjsBFxZTWkihH2IohcT42mNgQAENobuJc+\
+MKFHJpSPuTzjX9fW1rZEIKLrI5GDQK4IFYCwxOVJG6bCMeo/qIlE/\
+gCL9LS1BkZmWn2LmDaUsH2BelBzIHghdQSkfgJLE1otEQiTXKtV+\
+iESq5yLBgxNTJXEAL2rAZvABQCkY5mIBV3MCVx+zC+yGqan39V3/\
+dKBCdFpqtsjQ20HwD4gh6wYg67cShV7kh28FclbyPquxefueIORH0UkaHzlCQL4HBmyDck9HLgd0JA\
+4wsgMqFGmJ2QMcjz1ERD4Fq6HbKbADKoB2T1O1j8k903PrxCPVCPIaptdYBcSJthk8bqhwEdkbTASF\
+VphC7QYOk8W+PyPCh6ALo+\
+92UvYUWYxs4uCu1sNiLpqsL0nH4QORagKqRc83InzAAiadSPWifV6hpq1KpWCjXwxW27QHjgEgrHpS\
+ErqksI9DLlt5AGK8wYGsLKzbQ9D9oltnhQRkqltnyUZmtHvDoLsZRWOUmOywcFMqsIDosHCljR8TiV\
+xhGs/zmDfb9Bum4ZhHYB3QkYnJlbk7Sb+XQdY5KKQA+Ah/wvYimMESAgU0uX/\
+4ERjk8OLp8OQX4ivX9BsJ6fN8GBj4CJHZtMCjBD0M6vPfxmujwVgD6xv/\
+zCUzc4cG63FrZIHYQFctsa7UAuKGie2CifYzB4TUgmkKzmUWEorPGwpWl6tICoGwLWbDQTI22iWpJ1\
+GADfG8ChrNNDVNVMwLhtAk8IuUbaP4h0sRiny1cHZSJaLqgPdk+\
+iIhN4aJMTpJmIYeWoLE5MTfRUWH6nJbnq/NXkzlBu8JHIO2ys0Om3efaSxKt5DzRDwZ+\
+DvWcHlKoCJQnyAFk803gFtz6iSGCTfBtu+ANur0++NbB/pTZCLhVsGo/\
+mQARA3LnprIAhHtFqiJxjBKNr8T32oOdnY17u1qMVy2piWDomCdmBNnZyKDSA0RDQEa3dKJCCT7wFJ\
+XxrgesWhSsIycy8E1IMAAvbIrVl6Znvv6JG4YR8hKJmigYJDp6irmspyClq0z1iAk7sDo36B/\
+6pWLbhxkvugmUus99zBHP1Xe5H4HiusnWEmvwIcilLTRNO1AObAU2Nfy58ZkQ/\
+JGl9nuJAGlEm70mupzTcdPcnqv9eOBdqi3Ulq4tXqsBtXIMJtKYyQZcjz2hbS5ggmOX4Oi1Wi2gm02\
+/sdBcuWH12A05vzrFMpDnM2Cg2NOFLVnYEj6brNFsFHpQ7fDpb8rsq78F0bnu2j20qrZsgOegcbjDH\
+rFamdEvFLVPf9PEP49AqjzT6JuRwAHwLshmTA0337d2z2suuzgXYPP5I3NOq2Fojxv1UVu4R6LapUv\
+NhqjR/AFUphn1QBqgPlgAffCBcHlC0G1PuHOTEivWmoxZ9BRhJKkEc4FqsEBYB6a12yjYhead0HYa8\
+GcbpTEWiHFq08a5g2IkGURRnznGIo6xBmbxwG/\
+s9tGEaiCVeg1o1iggoMCWYA3giPPNphxxsXnDyiCipvHAipW1IKIlVks9ve4Ps+8Wmo+K8/\
+CrpKqU8uro9jmtceF0a3bjBps/\
+BtaJN5nRjx28WAPUxWedYS0LY0kASUumpI4h1ow4qkndQlrJzWE6EinyvkKqqIi3eMTYqJJfRdsfk3\
+Uo6udIo1KOBBTjWka6yCy/tGBZjY2/2N7Y2dwC1bF6tznR0kpxp+\
+gHbaox6FyKmEQylEbzE9sU6K2eSQhkHo51yg5j1dRL9bi+\
+wTJograzh6L7PvoJGCtTCTo1oNRTIjZHIXEKvV9i6xzsaY8i7K2WOU6rRR6CjGi75KL0QdH2ySEW/\
+hBoTMzAGAsBil3Hycuk7SLo9x748xF0GGD4KZqYKmlWaXBHKv0uUCTAr+\
+aC5wW2E03DnQkTmtZoJwpTXHmng8DBQGOr9clldWLFjvutFg2G+URFatQMdS+\
+5qzKbISfPnXJqqIih54iQyWyL/FMucmcUUiItEhKREk7Yq+6N/NbuCE8yqEpR/\
+uxpcWhWGLegjIgtwQD7M5VrIlcCXVP0s22UeZ6egKAFjCphQoweIo1HuRTqcQj4IWDQA2q1xGAAig7\
+N0q4ZCm/7Y7UIiaeEnjcK6C/Y5L+8srxq0LiS/cdyynL+\
+UeMCklUhPbIKMxvrCOhQ6TbhTFJjsQKioPH7n/5jk5rbupGoORXwdI+\
+igy9E3oTKVQcinMBZQYxXkM1vg42tRk2At1NULkKzIteOwlCPnkdBGE8YxlIuEQ7EnkuMQrRaaWiJL\
+c5uNu64GLP1xfMpLUMUvql2whhcXr62dHXh+\
+tXFjDg8rSGU6hIsoVlhT842pVAUeJC1mJwBLIWsV51FcanlJfG23KOKyM20QznAu64vshSdgDJ2PsY\
+BaB832i6YNaSokMC23e44+w4Di+X3//k/2fB/e7/\
+DKvjQxoL9jhRMqWk0Zm003GbLbLYTOpExF5vit8K+YZ6LGStX7XfaF7uccNVH6GQ6/\
+EBshyL3QOCBEr7goT3hwvGRMbdY5OR5ZDRI3lH1SG7GwGwcyJxG4+lvy+zp78Aa+\
+DmDHz9rgt2CE376u69+/tXPnv6W5oWYpe3GbEOHWXTmRBr+\
+sBa1dRYNCXqCD2SJtPVZ74Zp6JLJrq3bCYP9EZrrj5Sx/\
+ggNW2V0V26Swa2syONNXdvrUKAuh3IEaGTlplesl+\
+p7qnm7GaeSgRhnl6Oh2lBrOWHtngtn9JpokUPVtt0pJFZxPqBnlwkbFDZ1fV1wD3ca6HU/\
+vZBIdyRdxvkrC4uLi1evWtYqeNpEMHaHVygI0afw7hPbF5smVHu5ZFWmKU75l9BcEh/\
+RG4XQxkdC9ao6nSAIQXFiQ5knBbamKD1YSmzNDsGmAd6vZrxTdr7e6UGZjY+e0eGE6jTLzzl0N+\
+EJ9qQniCMIP7CMzu05ercneJTrgZmLmnAi7wAe6eQAGnMfPhtQaUoiFjjB/\
+Uy8R4YRHUFTDOQiuLvAmtyZYM07aZdzbk6IIzwdpVjMLLthFX//sy+/kKYR2T2M/oe/5hn9n/\
+wFNUtZdnx4ewd4SyA74T0Vlb7J6h3QQJrblA0SVeVeiQ6ePyHmmzzYm9SeM/u/dO1abWHh+\
+pWlmmXJAJGIzERKlnUCuUsauE9vCJTJ0gFNPdnlMrHaxDWSHW+kJtbISvgK+\
+KDyv6NmQl9WqtEhVZsX/2E0ZJ5aGE+yIHnCgiN4tNhhfQT6W/HI11/+\
+HRLWAkYS8l7Upr1YxBcWy323VGjCUMghZcUniuYFFhqFu2BhbHgcbW8zYAI9/PzrL/+\
+m8KiG3nelKJ7/\
+rvAIICzR1kyjqDZZtDhZtIRFgsRWk41zyXaOzM4VcxeHISBpGyor0saKfRecfkcc5NEuvtr51+\
+kHEe4xMBOIpQmWEmionYkaYC1BjqMwK7PPjwztdl60YXY/uXxLBty567c0uX74GBdoRfDPg+\
+TPcfLn5wW1PvdFplYZasUGjZ7aCQsFJfI0aScad+\
+YSCxWNvQadQ0o1oRLRJrRh5RzKzYS2alZhyaK24U89vFrRiNN+\
+lskBwT6WVJBa4OUEUYtnXGCCVf6SWF3+t8n8mZkAWq4YaGkUhJpTpHNFkM5fArt+/Q+//\
+vofvixogqAliVzcdAD+fzCK0rbj1WdHdh65m5i/+g2zloGbaync5PDWtefhLRzh+\
+jHYvw6do9mUXsy/xMWE1RC/voTKuWp6rR/iPplul3t1KQpTyjrtG0FB7bk19+\
+SQl5avXrmydHVpHs0bqahJlBhVk2Cs3BByO3S5g+5D5S54Ef/zv8chr+\
+wEbR7GUeBXHtreHm6eun1352FJKe+\
+i2C7aDwYBGtFAjWUwqYM4xBNWJIBGvovBIm9coe0CGJeS8kYcpYL3mCeH5ackuYAJ2nZG4RO6BQT3J\
+YCuwR2NrRYswy8KGO/wnaRqBDoF3EibEkhU56dQp4SeFqYgHTt0hK+\
+JyocNAzzfkGiyaLphkt2m3SiY5I8GOyKjYFglk8vUusyvtbtXl7uLS8vO9aXaNefa8sJSe6nWvX59a\
+bm2vHylleIpEEk5XEVzQiL8ZQGc3LniAkhpwsUs/PxroOlSlu1k+Wy6pagCgiphx2J+zdIs+tRA6L/\
+CJ2JZeiV7Jh74lfj1m8I046ZjUNuNHM5oCFRr6ZjqRJpAVk6z80DzHwbP3yiicYQ8zCmjykB/\
+oyAmvpOyyfN8lysLU5wXFdlN/RRBXJbzE95gy0+wIvz4BD0e8Xv+mN/o/jCj5Rn/yYFO+\
+Y9Vq9VTdavqKThTo2FuTSzfs8B/\
+WohlxeK6Djs2FnLgnwDppJHnj6mhK4pZJa4pXqggzuphOJK2umrHgDZZy0xLx1YnA47VOyBEldDFsz\
+a8gxsjcJsnHpA1xfPSBFWDdvPFye26rE+7WU0T/PCQGAljFPOSu8RTpbgwV/8sJOX+i0KzlHqZ/+\
+6X9G6TtnYZagEZWthRzcZ8U9QF7GNdAFD5WBs6fd6ozW67s2ugMspMGjYN8UQXbUHnzdP0su2CVXOa\
+ro4yy2ZHUdBxbbV3GsMeeu+sCiJLFR0kp4NOuYYTpn9qwTax+zWj90Ji17MPvpg0u/6HkH3/iCaX+\
+EvEmw6Li8xkhqZYhqYUrHOmlAWpXazN0dqWpDP8i4KQr3NaxLNExCf8IwT5VKh+jeD8y0D1xc0/\
+5KJK84y2PHk93gbPsZOc/ULvEHdvR+lg2ZWJ1d/\
+heHjImUoEV86LCADBCtn4J6FaoxQwCsodfqZKFiWKAcPnt+\
+znAIda6B101kWuByQknSXGRX125ryaWZ7aqWw0w+BI/ML/b6SdxkhLo065ueYKnMFMu/\
+Jvykw7o5mTtkrQzMkRn1MsGKwtjaVEYs7Jdc0QT+n5Tc4zTU+\
+YnI9qU8HJ7fcUNlouTFPNtoyqeLbtAJ2OWweH2sanbTo5S+\
+eIfsDoijHSMTezibkz7RvQA4h84NLi1Su1heuLVywr02smR08t1SuMFIgC2RfbxV289U5/3w4/\
+jzp913P0flTcC5DcPfCN7kGNyywss6k7USsk1UBXbM2FJdQa5uMjlIkhCrAwnfo+x12qiWhhcx+\
+yQ2vmvLJx2e2axWdMdMOSptPcbYSfLbA5Vnv2LgWRiC6bPdFrKQ2yNXOUBHwOU6k9NpHim0z1Tab8z\
+lKCzFxm/wKDHj3rHgHpLB0nJFSVgT2ks9pEjWcQFbK93DZwbX5+cblmWav+\
+WDG2Mnzl0TyXNp2KMcXJMdot59BZSNzmPywzt8qrZhFlNOWdOBP7BL5hWXFeOwI+\
+nLYjINkLcJ4ipIdYkDz0bL2KNZIM3u4UTtpfII4663S+XDW8XiW9kJPb13vZlP49PFvozc2p/\
+QiTFljt1En+\
+hRRjLaRUciDPCNkdvGSDHhy8BjuSunlgYwDdm9yEcH6IxW6SiSZpVEpCVuozuxyP5djhWNxul1zxdg\
+GPBhnHXP7X/CW2hTtmRKJXH6M3AwLodFjFWbaysuvGoGVX2GzJminO0uVrwKpyt8HDINzresH+\
+SkZTy7wJtrFm1jxuh6ue1zCi+WXJ82Jl1BNelVlWPL+VqmCY36BPxf4p/\
+AOUgfylaoaJgigzLjWbermHV1B2+thaVaEE6Zb0nijVehu3HpHzW2ZdD4+u+\
+jtqxGGI1z5Sb8A7M4gThrKWrd2/d3vzzoOd1d3N+/\
+dYfWONftMrRIMxd2A3aVfAGsQ2nuJ2j6CvBAdQo5BCaIGGMlGGnVgz4BMJEwRMDtCoYcl0wuj1vDRK\
+VAX2iBUrC6WJSvBfKI7VZErVCzp+QQCLwzagXwkoAyHinqjHZWTfx03cWVncxrfy/\
+qj3mXhKuLEBFZvNUgqPt1brm2tsd+Ne/\
+f5OPcGfaFogvcYKaYIpZMmRCfVXwBUy4ZOJIbVjsJCmQrGeOdRn7HdqSJ5spBpOjKNU5cR4Ob1rMsq\
+JDaywp7989PSfHx8+/e3T3x0JQjICNZ49aDs2InwEP/\
+yRQLqGFVeRDC1WHw3oieUB0JD9lPE6sYHdbLJZVhS1GVtPzbTRoCo4Fu5HM4i60RhAER5QmdZyMNID\
+ZFr61LJybMucAWVnTdGsVJbtDyWIYHwvHWERVBA4ljRkRkGYSv4W/\
+cCvfM7DwNBMpRWioPWAcLcVOCOPNw7FZSbpiBnIoE9BuDSPFBCb3cb3UQr/\
+uKFXQ7a7gSefynquAqZE16e2JjzF0IULtXeC/cYhjkDbAAuMWIA6lLOnX7LbQ1dOHsyFT5M/\
+9zRKNMWpHbTyOB/befTVzx4ffvXzhNqkpG2E/\
+eCxXL5jyW29YaIFWmE9te65BCOWPafdYFo73yA0JOzcloKkm2ySXdIQHapCwo0CJ7db/\
+4RuB9O7JZwDwsmIkM5wHHGvS0g+LzMUIT/D0UmWOTuJzc/\
+JrNQcdz67oy3EnWExAtLObd912me0iCswDqF5QgnfG8AeUhT/\
+c8IeULWRzw5IQ4p9TBJJqHCSTtJyKhUhSeAUUsmwefBIJ16P1BDgoDDCrnPEwISiKqSMJ0Mw4MiRiB\
+vpico4UmaOuRqFYGiafauyKYDh0Ol5i9HEZMUbAwgNqY4xqfW6Y6yX+\
+rOCecJaifVUwQ5NKm0cmvMykSuDFSlTgWVASeF0Iu5lLl3WJIXW1vqILlNM7vJAj0JZ4UzZPBmLcIr\
+R84lfOLHDjFVyQn0jZK3/\
+TQZgv5hSPnGAbPLsmBnpzrzAtguYdBMhNTYZZBUlOcFX4celagIRmPG5M7WdHDd8VHvmtvO6h8Sqxu\
+7I4zxp+aYYl2dfxmlPueH1zDqyKU+5RwNF/iKcQyekwibWMXnKDaJnMYq+eSWHJE7ZOP0ENBFiRP+\
+ZGicjF9eijl5H2eMpFtM6kzF6EmUcZ0UuKCtyQRwmIRuyUtyaK9Zmt2ZDXBYA+\
+kTiO9UQNXEK4BsYombMQg9R3JotVmAIkBPA1YD8xXMZomYgKjOHc+l/\
+scwWVf8IPXR9Lv0uCX0qUCM7FolRRZ/\
+PM8yigR4NfvgIYwrn0u2igfVz7NZESqWIN0oIZBh4ea6Blgy0LJ0f/\
+EsGWnS3mC4VIJ9L10vninGz28UciCmcmhzHvLpA11zhTdTsuLuuFj+\
+zu6MSNjba1mjb2OGhsYugkuTZsASLkhK50eBIvNLNaOs7FVXMXfBQ7cgE9yRBPtVaP1Ghn1p1/\
+wETSScrrrSVftIk50/u8Diz+\
+V8jhog28F50FuyxGNPV4iY9fQGsmaemDHfHvJqWbqjq23QdADTbV2b8p3idltiw35PRdnkgPnO4K1K\
+3TbXlzrEDeQMG3Z2Nl3mU1UlyvNtC1w2DgC5ptB2HANE798HwoOv9aBg8RhuK84N4aIguO9jjYSiBK\
+SX5hRnjy4U6yfD3y8mdvJbk4hUmv94ymUBgmL3w6Pq/3RQS6eRvyOVXG2JZi/\
+CjTxbIiIpxZjVSOcAsBjdjPDEXCXwBukxsmqeIxV0oAV2QTJeKcBsvlKGjzTQ4x4/\
+MmqhTt0na4gRygjoMh0d0z7KLN4Tii2gQeEGPzjmoWuq6wUuX2AJeWhqPhkrw6PyJxQx46QNbZmQMY\
++EwjAYp+5zNuVi5weBjMy15KRboJptkMbxhC/3b06VIMlMDvbH0vpWZHhRmk6Mw3qUm+\
+0E5ixo58KojPxDjj83VSr7aQswBw6fxhumVZIyBMG5TBbVUgZ16+\
+iz19PRXqccfp57WsOuj9y0Dthv4CSW18UdeozV1VelZzlXxViSTyYrsdToVhKL85B/\
+yeIR3lsfJVbh0zR7e7hVyJ0nJKxlcxdbqXnh1Maxx64yJXPwqRFnecCOuHEYMT6SvGDvsLSw06uIjd\
+5x9+OEkOZsvf0J71hNcRBhN6i3UnruHxefuYem5ejgqC1w890xqz9/Dc+\
+Oidj64eH44nruHxefv4Xxw8Xy9PP+aPP9MoIel58SFBVLSOpdsMxluStvWqsoWEV+\
+4knucxOYmqYFTyedpFowKv4IwlvXXjNOLmLDLTDmpuK3nSfUmhPuZctjWM2awnyeBncLoYjUvla1we\
+dpE91ny3IwtzMkkN4bjTpPjnrVE6K54ygQ3LYVOcsvGp81xy8Yyz31c4ynDqlR3qUyNjRR3xuo5sjA\
+XjFQgSesT/2zZbkx2nzbXTbCclOmWs33+PDf2gj+pS5lDys5eZ5RyXuzl4ytLvUvVTFrcINwT8+\
+VnSpefIVueor5Kfsv8fHmK9H5onZwxnz1LxjyLTQHcSdnz3CGmZc8nhkhTd+YaOOOWoGJEX4vl6A+\
+fidjVIkpCB7CfmdZNIt8pGPQNnWLK3f0DUTmi9HTkv1xN5b/LqVSw8IUzKdcUf5w2c56XvUbKeebk+\
+QSZCARim3x8+PlvrKwmRBJLAnsrEwlza0pqXPLBMdnx2eOy46dec+\
+IHgx0yqfO8zLl16sT3XDrtPZvuJ4OnTPwuN9edorUrVfaAvjPUak1s4Gi1ZAxM3UVIl2Kq71rpr6Wq\
+g8ti93kFPwLmqHiQiqiV8Yor5fQy+qsfePjJEtl34v3qDw5mnF+9rVdfOnEu+\
+3XEdp1UWEcYw1CUjdWc184cQbLGPphnnUx2M40AGLoPk0Mfz963eW4k3bNmtXM4PiJ7bkDfPH1J4jN\
+2P3GSRsOeRnpm35GBsrw3At4MiJmKKc66WqVd3WB0qw+L6aMQdBeAm0RA6TLUwwOQLAc1+H8R/\
+l86Au7DD4i2WlOjbUtNvEa0wjaycVB5L5ntOOKYFz+I5Zfx8P5i07ERHRgBqSSiq+\
+JSrVZvYaGF35WBP2ot+VmZ5EMtkh2VRMD+bpPUUB/\
+1FBFbvIuyrD8Bs4fftRSfplbhZPpWG307Ql1RbbKfvMkmFeUiPBpB22tVeTktiA8fr27GT0QpcfWeQ\
+9/NKbNNAsD2Iv2pQ3lI+\
+In41LwIppnxb3Hvd6RvwR6GPP19a5v9iIdhRXzwxzwEbgg6cca41doSqLTxF86o1VprteYy8eoqCjn\
+bsWN7hX3wRYzb/1F4nBS4/+Km/E7Izkb9wd1dS50qkHcvF+avX126Xrt+\
+teLML89XFmpLtUp74cpSpXt9ud2dv96Zv3a9hjx19cpim9vz7cpCG95eX17qVK5d716vOFc7V67zdt\
+u+em0eyH3j3roYqOgcjDrXnPAzyltiUuX3P/\
+0viGiStU72O4CpDILNZmfTGQKtNGZnCYsryEGzsznpAqggvoXUOniMzPMYuecxss/\
+jJWDFCnWuCXpS68zOQh1KxSAks7PZhAL0r1IK6YVrtX6Mvwj8zNJBj+\
+KTvfI6JZ1T6uL9uAw0uoxr4J+\
+ZUAcW5bntWJ5xiERRYuoZBcJOpIIJM9FQ3XmcMDtLhCzIXPIDIEGGl+m6bL2KkwSu+COib+odR+/\
+VSv21u3e39OfY6m/Jj7usbupE1v8DfIqVAw=="|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellTags->
+  "861cd75e-e4c9-4946-85bf-f59a1c789756",ExpressionUUID->"93b8f376-f7e0-cd45-\
+bd5a-090d8eef5f16"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "Section",
+ CellChangeTimes->{{3.991110613101164*^9, 
+  3.9911106142213593`*^9}},ExpressionUUID->"256076a0-61da-5d46-9b14-\
+199087013254"],
+
+Cell["", "Text",
+ CellChangeTimes->{
+  3.991110610208086*^9},ExpressionUUID->"b39e1c25-0789-8040-a045-\
+bd0bc096a897"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{960, 532},
+WindowMargins->{{-5.5, Automatic}, {Automatic, -5.5}},
+FrontEndVersion->"15.0 for Microsoft Windows (64-bit) (May 19, 2026)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"e8147661-d164-6945-b927-d0ad05de90a1"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "861cd75e-e4c9-4946-85bf-f59a1c789756"->{
+  Cell[70546, 1706, 409, 7, 69, "ChatInput",ExpressionUUID->"a7a13925-d26d-9843-a5a6-7a78495590f0",
+   CellTags->"861cd75e-e4c9-4946-85bf-f59a1c789756"],
+  Cell[70958, 1715, 103042, 1841, 331, "ChatOutput",ExpressionUUID->"93b8f376-f7e0-cd45-bd5a-090d8eef5f16",
+   CellTags->"861cd75e-e4c9-4946-85bf-f59a1c789756"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"861cd75e-e4c9-4946-85bf-f59a1c789756", 174712, 3584}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[576, 22, 167, 3, 96, "Title",ExpressionUUID->"7997bdc4-4013-6242-87ae-f057a8407874"],
+Cell[CellGroupData[{
+Cell[768, 29, 34498, 757, 1487, "Code",ExpressionUUID->"2e57838e-e7a7-0845-806c-e39286cd4151"],
+Cell[CellGroupData[{
+Cell[35291, 790, 470, 10, 39, "Print",ExpressionUUID->"4607750f-65fb-ff43-8f66-69e05af2251c"],
+Cell[35764, 802, 246, 5, 22, "Print",ExpressionUUID->"12775f0b-5f40-924d-87b9-9445443aaaf3"],
+Cell[36013, 809, 1119, 35, 94, "Print",ExpressionUUID->"949d7381-fde5-b145-ae3b-4d8baed2c45c"],
+Cell[37135, 846, 254, 5, 22, "Print",ExpressionUUID->"10eb7813-268c-f746-ad2c-0ed04009dba1"],
+Cell[37392, 853, 1090, 34, 102, "Print",ExpressionUUID->"35e558a1-b1eb-5647-824c-4a7da8e38e46"],
+Cell[38485, 889, 273, 5, 39, "Print",ExpressionUUID->"188d9446-fa3f-ff45-ac52-e1a0dc83cc85"],
+Cell[38761, 896, 769, 23, 36, "Print",ExpressionUUID->"8752eb80-5061-424e-ad6c-ab7153fcb0c8"],
+Cell[39533, 921, 769, 23, 36, "Print",ExpressionUUID->"69f23dc6-a047-834f-b3da-b5c757a69f91"],
+Cell[40305, 946, 821, 26, 36, "Print",ExpressionUUID->"9d813ab2-9784-bf4d-aed0-3358e6cc310c"],
+Cell[41129, 974, 745, 22, 36, "Print",ExpressionUUID->"d0d6f6e9-6e83-d242-9f7e-0d47cfd6ef53"],
+Cell[41877, 998, 646, 19, 22, "Print",ExpressionUUID->"f3603fe0-de1e-1742-ace9-cab1518bdc48"],
+Cell[42526, 1019, 794, 24, 22, "Print",ExpressionUUID->"329f231c-7e23-9a40-bf75-3c46a4b72594"],
+Cell[43323, 1045, 605, 18, 35, "Print",ExpressionUUID->"20216544-87eb-7349-a45d-74cf51cb5e16"],
+Cell[43931, 1065, 609, 18, 35, "Print",ExpressionUUID->"b8d20f97-7c07-104d-8d71-417cc8dfa6f3"],
+Cell[44543, 1085, 731, 21, 22, "Print",ExpressionUUID->"3875ed4b-bfc5-ac44-b4bd-cd1e8be71664"],
+Cell[45277, 1108, 609, 18, 35, "Print",ExpressionUUID->"76b81617-f233-0248-abc3-fc2ed7b51d05"],
+Cell[45889, 1128, 630, 19, 22, "Print",ExpressionUUID->"a8768422-8918-4746-a68d-1c1ce1bd2b87"],
+Cell[46522, 1149, 607, 18, 35, "Print",ExpressionUUID->"c5ec60f5-df43-a94b-af09-5327a3934b7c"],
+Cell[47132, 1169, 628, 19, 22, "Print",ExpressionUUID->"c50e7728-c941-474b-aa70-3d0acc55de37"]
+}, Open  ]],
+Cell[47775, 1191, 18784, 384, 198, "Output",ExpressionUUID->"b687cb3d-d225-f44a-96a2-00087dbcb457"],
+Cell[66562, 1577, 1166, 38, 34, "Output",ExpressionUUID->"fe082d1a-57a9-e84a-a337-31f5c8b082a3"],
+Cell[CellGroupData[{
+Cell[67753, 1619, 257, 5, 39, "Print",ExpressionUUID->"735fc305-962e-bf4b-814a-6d5a310ecf7b"],
+Cell[68013, 1626, 232, 5, 22, "Print",ExpressionUUID->"7011d283-6d0b-2f48-a9f4-5c51241f906f"],
+Cell[68248, 1633, 753, 22, 65, "Print",ExpressionUUID->"69b08706-dd49-034c-9c14-0b4aca8b6023"],
+Cell[69004, 1657, 246, 5, 39, "Print",ExpressionUUID->"ba039659-b574-574f-ab5a-5095b35c3147"],
+Cell[69253, 1664, 225, 5, 22, "Print",ExpressionUUID->"debe632c-8ad2-d844-b3da-55b0522c0d35"],
+Cell[69481, 1671, 262, 5, 39, "Print",ExpressionUUID->"f4dabdc5-d91c-eb4b-9136-27c184e18a40"],
+Cell[69746, 1678, 751, 22, 65, "Print",ExpressionUUID->"64ed62bb-e31a-a345-bb3f-6b979d14d0c5"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[70546, 1706, 409, 7, 69, "ChatInput",ExpressionUUID->"a7a13925-d26d-9843-a5a6-7a78495590f0",
+ CellTags->"861cd75e-e4c9-4946-85bf-f59a1c789756"],
+Cell[70958, 1715, 103042, 1841, 331, "ChatOutput",ExpressionUUID->"93b8f376-f7e0-cd45-bd5a-090d8eef5f16",
+ CellTags->"861cd75e-e4c9-4946-85bf-f59a1c789756"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[174037, 3561, 147, 3, 66, "Section",ExpressionUUID->"256076a0-61da-5d46-9b14-199087013254"],
+Cell[174187, 3566, 118, 3, 33, "Text",ExpressionUUID->"b39e1c25-0789-8040-a045-bd0bc096a897"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
