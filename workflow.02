@@ -1,0 +1,1316 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 15.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[     56641,       1306]
+NotebookOptionsPosition[     54877,       1265]
+NotebookOutlinePosition[     55304,       1282]
+CellTagsIndexPosition[     55261,       1279]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Metric Workflow Template", "Title",
+ CellChangeTimes->{{3.9911117017563705`*^9, 
+  3.991111702571392*^9}},ExpressionUUID->"364dbac2-5cd5-c340-be1a-\
+4d8e0563b10b"],
+
+Cell[CellGroupData[{
+
+Cell["1. Setup", "Section",ExpressionUUID->"aa3a2b39-6f8e-0d4a-a99c-1124753d4f4e"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"ClearAll", "[", 
+    RowBox[{
+    "coordinateCount", ",", "coordinateNames", ",", "parameterNames", ",", 
+     "parameters", ",", "metricMatrix", ",", "inverseMetricMatrix", ",", 
+     "christoffel", ",", "riemann", ",", "ricciMatrix", ",", "ricciScalar", ",",
+      "einsteinMatrix", ",", "printMatrix", ",", "g11", ",", "g12", ",", 
+     "g13", ",", "g14", ",", "g22", ",", "g23", ",", "g24", ",", "g33", ",", 
+     "g34", ",", "g44"}], "]"}], ";"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{"===", 
+    RowBox[{"=", " ", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"CONFIGURATION", " ", "SECTION"}], " ", "==="}], "="}]}]}], 
+   " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"coordinateCount", "=", "4"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"coordinateNames", "=", 
+    RowBox[{"Array", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Subscript", "[", 
+        RowBox[{"x", ",", "#"}], "]"}], " ", "&"}], ",", "coordinateCount"}], 
+     "]"}]}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Add", " ", "as", " ", "many", " ", "parameters", " ", "as", " ", "needed",
+     " ", "here"}], " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"parameterNames", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"Subscript", "[", 
+      RowBox[{"m", ",", "1"}], "]"}], ",", 
+     RowBox[{"Subscript", "[", 
+      RowBox[{"m", ",", "2"}], "]"}], ",", 
+     RowBox[{"Subscript", "[", "a", "]"}], ",", 
+     RowBox[{"Subscript", "[", "q", "]"}], ",", 
+     RowBox[{"Subscript", "[", "\[CapitalLambda]", "]"}], ",", 
+     RowBox[{"Subscript", "[", "Q", "]"}], ",", 
+     RowBox[{"Subscript", "[", 
+      RowBox[{"C", ",", "1"}], "]"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"parameters", "=", 
+    RowBox[{"AssociationThread", "[", 
+     RowBox[{"parameterNames", ",", "parameterNames"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "1.", " ", "Define", " ", "the", " ", "metric", " ", "component", " ", 
+    "functions", " ", "first"}], "*)"}], 
+  RowBox[{
+   RowBox[{
+    RowBox[{"g11", "[", 
+     RowBox[{
+      RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+      RowBox[{"Sequence", "@@", 
+       RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ":=", "1"}], 
+   ";"}]}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"g22", "[", 
+    RowBox[{
+     RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+     RowBox[{"Sequence", "@@", 
+      RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"Subscript", "[", 
+     RowBox[{"x", ",", "1"}], "]"}], "^", "2"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"g33", "[", 
+     RowBox[{
+      RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+      RowBox[{"Sequence", "@@", 
+       RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Subscript", "[", 
+       RowBox[{"x", ",", "1"}], "]"}], "^", "2"}], "*", 
+     RowBox[{
+      RowBox[{"Sin", "[", 
+       RowBox[{"Subscript", "[", 
+        RowBox[{"x", ",", "2"}], "]"}], "]"}], "^", "2"}]}]}], ";"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+   "3", "D", " ", "Flat", " ", "space", " ", "embedded", " ", "in", " ", "4", 
+    RowBox[{"D", ":", 
+     RowBox[{
+     "set", " ", "the", " ", "4", "th", " ", "coordinate", " ", "components", 
+      " ", "to", " ", "0"}]}]}], "*)"}]}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"g44", "[", 
+     RowBox[{
+      RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+      RowBox[{"Sequence", "@@", 
+       RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ":=", "0"}], 
+   ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Define", " ", "all", " ", "off"}], "-", 
+    RowBox[{
+    "diagonal", " ", "components", " ", "to", " ", "be", " ", "zero"}]}], 
+   "*)"}]}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"g12", "[", 
+    RowBox[{
+     RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+     RowBox[{"Sequence", "@@", 
+      RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ":=", "0"}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"g13", "[", 
+    RowBox[{
+     RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+     RowBox[{"Sequence", "@@", 
+      RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ":=", "0"}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"g14", "[", 
+    RowBox[{
+     RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+     RowBox[{"Sequence", "@@", 
+      RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ":=", "0"}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"g23", "[", 
+    RowBox[{
+     RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+     RowBox[{"Sequence", "@@", 
+      RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ":=", "0"}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"g24", "[", 
+    RowBox[{
+     RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+     RowBox[{"Sequence", "@@", 
+      RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ":=", "0"}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"g34", "[", 
+     RowBox[{
+      RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+      RowBox[{"Sequence", "@@", 
+       RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ":=", "0"}], 
+   ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+   "2.", " ", "Construct", " ", "the", " ", "symmetric", " ", "metric", " ", 
+    "matrix", " ", "using", " ", "the", " ", "defined", " ", "functions"}], 
+   "*)"}]}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"metricMatrix", "=", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"g11", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ",", 
+        RowBox[{"g12", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ",", 
+        RowBox[{"g13", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ",", 
+        RowBox[{"g14", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"g12", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ",", 
+        RowBox[{"g22", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ",", 
+        RowBox[{"g23", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ",", 
+        RowBox[{"g24", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"g13", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ",", 
+        RowBox[{"g23", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ",", 
+        RowBox[{"g33", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ",", 
+        RowBox[{"g34", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"g14", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ",", 
+        RowBox[{"g24", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ",", 
+        RowBox[{"g34", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}], ",", 
+        RowBox[{"g44", "[", 
+         RowBox[{
+          RowBox[{"Sequence", "@@", "coordinateNames"}], ",", 
+          RowBox[{"Sequence", "@@", 
+           RowBox[{"Values", "[", "parameters", "]"}]}]}], "]"}]}], "}"}]}], 
+     "}"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"printMatrix", "[", 
+    RowBox[{"label_", ",", "mat_"}], "]"}], ":=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Print", "[", "label", "]"}], ";", " ", 
+     RowBox[{"Print", "[", 
+      RowBox[{"MatrixForm", "[", "mat", "]"}], "]"}]}], ")"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.9911255012789288`*^9, 3.991125501694929*^9}, {
+  3.9911255440921593`*^9, 3.9911256735669727`*^9}, {3.9911258923871975`*^9, 
+  3.99112593092198*^9}},
+ CellLabel->"In[8]:=",ExpressionUUID->"c2947bed-e634-b046-a19e-534b88441d34"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["2. Metric and inverse metric", "Section",ExpressionUUID->"5c71a888-a010-5c44-b584-a8946df42bd1"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+  "Print", "[", "\"\<===== Generic Metric Workflow =====\\n\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"\"\<Coordinates: \>\"", ",", "coordinateNames"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"\"\<Parameters: \>\"", ",", "parameterNames"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"printMatrix", "[", 
+    RowBox[{"\"\<Metric Tensor:\>\"", ",", "metricMatrix"}], "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"inverseMetricMatrix", "=", 
+   RowBox[{"Simplify", "[", 
+    RowBox[{"Inverse", "[", "metricMatrix", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"printMatrix", "[", 
+   RowBox[{"\"\<Inverse Metric Tensor:\>\"", ",", "inverseMetricMatrix"}], 
+   "]"}], ";"}]}], "Input",ExpressionUUID->"8a462b09-f5e8-4445-99ea-\
+03948d7d35f9"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["3. Christoffel symbols", "Section",ExpressionUUID->"5dce0b3e-c24b-8d45-9374-1864cd54dfcd"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"Christoffel", " ", 
+    RowBox[{"symbols", ":", " ", 
+     RowBox[{
+      RowBox[{"\[CapitalGamma]", "^", "\[Lambda]_"}], 
+      RowBox[{"{", "\[Mu]\[Nu]", "}"}]}]}]}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"christoffel", "[", 
+      RowBox[{"lambda_", ",", "mu_", ",", "nu_"}], "]"}], ":=", 
+     RowBox[{"Simplify", "[", "\[IndentingNewLine]", "  ", 
+      RowBox[{
+       RowBox[{"1", "/", "2"}], " ", 
+       RowBox[{"Sum", "[", "\[IndentingNewLine]", "    ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"inverseMetricMatrix", "[", 
+           RowBox[{"[", 
+            RowBox[{"lambda", ",", "sigma"}], "]"}], "]"}], "*", 
+          "\[IndentingNewLine]", "      ", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"D", "[", 
+             RowBox[{
+              RowBox[{"metricMatrix", "[", 
+               RowBox[{"[", 
+                RowBox[{"sigma", ",", "nu"}], "]"}], "]"}], ",", 
+              RowBox[{"coordinateNames", "[", 
+               RowBox[{"[", "mu", "]"}], "]"}]}], "]"}], "+", 
+            "\[IndentingNewLine]", "       ", 
+            RowBox[{"D", "[", 
+             RowBox[{
+              RowBox[{"metricMatrix", "[", 
+               RowBox[{"[", 
+                RowBox[{"mu", ",", "sigma"}], "]"}], "]"}], ",", 
+              RowBox[{"coordinateNames", "[", 
+               RowBox[{"[", "nu", "]"}], "]"}]}], "]"}], "-", 
+            "\[IndentingNewLine]", "       ", 
+            RowBox[{"D", "[", 
+             RowBox[{
+              RowBox[{"metricMatrix", "[", 
+               RowBox[{"[", 
+                RowBox[{"mu", ",", "nu"}], "]"}], "]"}], ",", 
+              RowBox[{"coordinateNames", "[", 
+               RowBox[{"[", "sigma", "]"}], "]"}]}], "]"}]}], ")"}]}], ",", 
+         "\[IndentingNewLine]", "    ", 
+         RowBox[{"{", 
+          RowBox[{"sigma", ",", "1", ",", "coordinateCount"}], "}"}]}], 
+        "\[IndentingNewLine]", "  ", "]"}]}], "\[IndentingNewLine]", "]"}]}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+    "Print", "[", "\"\<\\nChristoffel Symbols (non-zero components):\>\"", 
+     "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Do", "[", "\[IndentingNewLine]", "  ", 
+     RowBox[{
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"value", "=", 
+          RowBox[{"christoffel", "[", 
+           RowBox[{"i", ",", "j", ",", "k"}], "]"}]}], "}"}], ",", 
+        "\[IndentingNewLine]", "    ", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"!", 
+           RowBox[{"TrueQ", "[", 
+            RowBox[{"Simplify", "[", 
+             RowBox[{"value", "==", "0"}], "]"}], "]"}]}], ",", 
+          "\[IndentingNewLine]", "      ", 
+          RowBox[{"Print", "[", 
+           RowBox[{
+            RowBox[{"Subscript", "[", 
+             RowBox[{
+              RowBox[{"Superscript", "[", 
+               RowBox[{"\"\<\[CapitalGamma]\>\"", ",", "i"}], "]"}], ",", 
+              RowBox[{"Row", "[", 
+               RowBox[{"{", 
+                RowBox[{"j", ",", "k"}], "}"}], "]"}]}], "]"}], 
+            ",", "\"\< = \>\"", ",", "value"}], "]"}]}], 
+         "\[IndentingNewLine]", "    ", "]"}]}], "\[IndentingNewLine]", "  ", 
+       "]"}], ",", "\[IndentingNewLine]", "  ", 
+      RowBox[{"{", 
+       RowBox[{"i", ",", "1", ",", "coordinateCount"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"j", ",", "1", ",", "coordinateCount"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"k", ",", "1", ",", "coordinateCount"}], "}"}]}], 
+     "\[IndentingNewLine]", "]"}], ";"}]}]}]], "Input",ExpressionUUID->\
+"e510cdb1-040e-7b48-ac15-fd37ec87e998"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["4. Riemann tensor", "Section",ExpressionUUID->"eac47bd3-330c-164b-9461-779e69d65c67"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"Riemann", " ", 
+    RowBox[{"tensor", ":", " ", 
+     RowBox[{
+      RowBox[{"R", "^", "\[Rho]_"}], 
+      RowBox[{"{", "\[Sigma]\[Mu]\[Nu]", "}"}]}]}]}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"riemann", "[", 
+      RowBox[{"rho_", ",", "sigma_", ",", "mu_", ",", "nu_"}], "]"}], ":=", 
+     RowBox[{"Simplify", "[", "\[IndentingNewLine]", "  ", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"christoffel", "[", 
+          RowBox[{"rho", ",", "nu", ",", "sigma"}], "]"}], ",", 
+         RowBox[{"coordinateNames", "[", 
+          RowBox[{"[", "mu", "]"}], "]"}]}], "]"}], "-", 
+       "\[IndentingNewLine]", "  ", 
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"christoffel", "[", 
+          RowBox[{"rho", ",", "mu", ",", "sigma"}], "]"}], ",", 
+         RowBox[{"coordinateNames", "[", 
+          RowBox[{"[", "nu", "]"}], "]"}]}], "]"}], "+", 
+       "\[IndentingNewLine]", "  ", 
+       RowBox[{"Sum", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"christoffel", "[", 
+           RowBox[{"rho", ",", "mu", ",", "lambda"}], "]"}], "*", 
+          RowBox[{"christoffel", "[", 
+           RowBox[{"lambda", ",", "nu", ",", "sigma"}], "]"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"lambda", ",", "1", ",", "coordinateCount"}], "}"}]}], 
+        "]"}], "-", "\[IndentingNewLine]", "  ", 
+       RowBox[{"Sum", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"christoffel", "[", 
+           RowBox[{"rho", ",", "nu", ",", "lambda"}], "]"}], "*", 
+          RowBox[{"christoffel", "[", 
+           RowBox[{"lambda", ",", "mu", ",", "sigma"}], "]"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"lambda", ",", "1", ",", "coordinateCount"}], "}"}]}], 
+        "]"}]}], "\[IndentingNewLine]", "]"}]}], ";"}], "\[IndentingNewLine]",
+    "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+    "Print", "[", "\"\<\\nRiemann Tensor Components (selected non-zero \
+components):\>\"", "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Do", "[", "\[IndentingNewLine]", "  ", 
+     RowBox[{
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"value", "=", 
+          RowBox[{"riemann", "[", 
+           RowBox[{"i", ",", "j", ",", "k", ",", "l"}], "]"}]}], "}"}], ",", 
+        "\[IndentingNewLine]", "    ", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"!", 
+           RowBox[{"TrueQ", "[", 
+            RowBox[{"Simplify", "[", 
+             RowBox[{"value", "==", "0"}], "]"}], "]"}]}], ",", 
+          "\[IndentingNewLine]", "      ", 
+          RowBox[{"Print", "[", 
+           RowBox[{
+            RowBox[{"Subsuperscript", "[", 
+             RowBox[{"\"\<R\>\"", ",", 
+              RowBox[{"Row", "[", 
+               RowBox[{"{", 
+                RowBox[{"j", ",", "k", ",", "l"}], "}"}], "]"}], ",", "i"}], 
+             "]"}], ",", "\"\< = \>\"", ",", "value"}], "]"}]}], 
+         "\[IndentingNewLine]", "    ", "]"}]}], "\[IndentingNewLine]", "  ", 
+       "]"}], ",", "\[IndentingNewLine]", "  ", 
+      RowBox[{"{", 
+       RowBox[{"i", ",", "1", ",", "coordinateCount"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"j", ",", "1", ",", "coordinateCount"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"k", ",", "1", ",", "coordinateCount"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"l", ",", "1", ",", "coordinateCount"}], "}"}]}], 
+     "\[IndentingNewLine]", "]"}], ";"}]}]}]], "Input",ExpressionUUID->\
+"ea1400a7-fbfe-3941-8049-4beb7fda0f63"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["5. Ricci tensor, Ricci scalar, and Einstein tensor", "Section",ExpressionUUID->"ab5ce1e0-2d9b-d24c-a1c4-0939f7d3babe"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"Ricci", " ", 
+     RowBox[{"tensor", ":", " ", 
+      RowBox[{"R_", 
+       RowBox[{"{", "\[Mu]\[Nu]", "}"}]}]}]}], " ", "=", " ", 
+    RowBox[{
+     RowBox[{"R", "^", "\[Lambda]_"}], 
+     RowBox[{"{", "\[Mu]\[Lambda]\[Nu]", "}"}]}]}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"ricciMatrix", "=", 
+     RowBox[{"Table", "[", "\[IndentingNewLine]", "  ", 
+      RowBox[{
+       RowBox[{"Simplify", "[", 
+        RowBox[{"Sum", "[", 
+         RowBox[{
+          RowBox[{"riemann", "[", 
+           RowBox[{"lambda", ",", "mu", ",", "lambda", ",", "nu"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"lambda", ",", "1", ",", "coordinateCount"}], "}"}]}], 
+         "]"}], "]"}], ",", "\[IndentingNewLine]", "  ", 
+       RowBox[{"{", 
+        RowBox[{"mu", ",", "1", ",", "coordinateCount"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"nu", ",", "1", ",", "coordinateCount"}], "}"}]}], 
+      "\[IndentingNewLine]", "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"printMatrix", "[", 
+     RowBox[{"\"\<\\nRicci Tensor:\>\"", ",", "ricciMatrix"}], "]"}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ricciScalar", "=", 
+     RowBox[{"Simplify", "[", "\[IndentingNewLine]", "  ", 
+      RowBox[{"Sum", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"inverseMetricMatrix", "[", 
+          RowBox[{"[", 
+           RowBox[{"i", ",", "j"}], "]"}], "]"}], "*", 
+         RowBox[{"ricciMatrix", "[", 
+          RowBox[{"[", 
+           RowBox[{"i", ",", "j"}], "]"}], "]"}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", "coordinateCount"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"j", ",", "1", ",", "coordinateCount"}], "}"}]}], "]"}], 
+      "\[IndentingNewLine]", "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", "\"\<\\nRicci Scalar:\>\"", "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", "ricciScalar", "]"}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"einsteinMatrix", "=", 
+     RowBox[{"Simplify", "[", 
+      RowBox[{"ricciMatrix", "-", 
+       RowBox[{
+        RowBox[{"1", "/", "2"}], " ", "metricMatrix", "*", "ricciScalar"}]}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"printMatrix", "[", 
+     RowBox[{"\"\<\\nEinstein Tensor:\>\"", ",", "einsteinMatrix"}], "]"}], 
+    ";"}]}]}]], "Input",ExpressionUUID->"a73ae7d8-6910-e947-914f-\
+aeba3b085b18"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "6. Using ",
+ Cell[BoxData[Cell["BowenPing/STensor",
+   Background->None,ExpressionUUID->"b1c246dc-bc27-3443-b74d-a526955fc62f"]], 
+  "InlineCode",ExpressionUUID->"6401b082-a05e-9846-87ac-94eadb4ec0fc"],
+ " for a metric object"
+}], "Section",ExpressionUUID->"6b259ad6-0aca-5d43-9b32-6336f01dadf9"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"metric", "=", 
+    RowBox[{
+     InterpretationBox[
+      FrameBox[
+       TagBox[
+        TooltipBox[
+         PaneBox[GridBox[{
+            {
+             GraphicsBox[
+              {Thickness[0.0025], 
+               {FaceForm[{RGBColor[
+                0.9607843137254902, 0.5058823529411764, 0.19607843137254902`],
+                 Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {
+                  0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 
+                  1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                  0}, {0, 1, 0}}, {{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 
+                  3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {
+                  0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}}}, {{{205., 
+                  22.863691329956055`}, {205., 212.31669425964355`}, {
+                  246.01799774169922`, 235.99870109558105`}, {
+                  369.0710144042969, 307.0436840057373}, {369.0710144042969, 
+                  117.59068870544434`}, {205., 22.863691329956055`}}, {{
+                  30.928985595703125`, 307.0436840057373}, {
+                  153.98200225830078`, 235.99870109558105`}, {195., 
+                  212.31669425964355`}, {195., 22.863691329956055`}, {
+                  30.928985595703125`, 117.59068870544434`}, {
+                  30.928985595703125`, 307.0436840057373}}, {{200., 
+                  410.42970085144043`}, {364.0710144042969, 
+                  315.7036876678467}, {241.01799774169922`, 
+                  244.65868949890137`}, {200., 220.97669792175293`}, {
+                  158.98200225830078`, 244.65868949890137`}, {
+                  35.928985595703125`, 315.7036876678467}, {200., 
+                  410.42970085144043`}}, CompressedData["
+1:eJxTTMoPSmViYGCQAWIQDQQPlDrLHYA0XxdDiQNYJCATwveoAtG/6uTA/HWX
+w8B8tsaHGch8BoYNGcjqGS7lmqOYd/qhKYj2c/hUDJF/awKiz129jsL3c9qN
+wo/gXBuDzK/YbRWDbF6F4MVoZPtmvJoejeyehpD9yiA6e88JMD+h/JYS2J6k
+J2C+gleGEkQ9QyYyf9NcaWR+w1Rn80xk/bDwgZkPCz+Y/QGPF5Yju++B0sZy
+ZPfD+DD/wfgw/8P4sPCBmQcLP5T4AgBuZHHc
+                  "]}]}, 
+               {FaceForm[{RGBColor[
+                0.5529411764705883, 0.6745098039215687, 0.8117647058823529], 
+                Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}}}, {{{44.92900085449219, 282.59088134765625`}, {
+                 181.00001525878906`, 204.0298843383789}, {
+                 181.00001525878906`, 46.90887451171875}, {44.92900085449219, 
+                 125.46986389160156`}, {44.92900085449219, 
+                 282.59088134765625`}}}]}, 
+               {FaceForm[{RGBColor[
+                0.6627450980392157, 0.803921568627451, 0.5686274509803921], 
+                Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}}}, {{{355.0710144042969, 282.59088134765625`}, {
+                 355.0710144042969, 125.46986389160156`}, {219., 
+                 46.90887451171875}, {219., 204.0298843383789}, {
+                 355.0710144042969, 282.59088134765625`}}}]}, 
+               {FaceForm[{RGBColor[
+                0.6901960784313725, 0.5882352941176471, 0.8117647058823529], 
+                Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}}}, {{{200., 394.0606994628906}, {336.0710144042969, 
+                 315.4997024536133}, {200., 236.93968200683594`}, {
+                 63.928985595703125`, 315.4997024536133}, {200., 
+                 394.0606994628906}}}]}},
+              BaselinePosition->Scaled[0.15],
+              ImageSize->10], 
+             StyleBox[
+              RowBox[{"CreateTensor", " "}],
+              ShowAutoStyles->False,
+              ShowStringCharacters->False,
+              FontSize->0.9 Inherited,
+              FontColor->GrayLevel[0.1]]}
+           },
+           GridBoxSpacings->{"Columns" -> {{0.25}}}],
+          Alignment->{Left, Baseline},
+          BaseStyle->{LineSpacing -> {0, 0}, LineBreakWithin -> False},
+          BaselinePosition->Baseline,
+          FrameMargins->{{3, 0}, {0, 0}}],
+         RowBox[{"PacletSymbol", "[", 
+           
+           RowBox[{"\"BowenPing/STensor\"", ",", 
+             "\"BowenPing`STensor`CreateTensor\""}], "]"}],
+         TooltipStyle->{ShowAutoStyles -> True, ShowStringCharacters -> True}],
+        Annotation[#, 
+         Style[
+          Defer[
+           PacletSymbol[
+           "BowenPing/STensor", "BowenPing`STensor`CreateTensor"]], 
+          ShowStringCharacters -> True], "Tooltip"]& ],
+       Background->RGBColor[0.968, 0.976, 0.984],
+       BaselinePosition->Baseline,
+       DefaultBaseStyle->{},
+       FrameMargins->{{0, 0}, {1, 1}},
+       FrameStyle->RGBColor[0.831, 0.847, 0.85],
+       RoundingRadius->4],
+      PacletSymbol["BowenPing/STensor", "BowenPing`STensor`CreateTensor"],
+      TaggingRules -> {
+       "Paclet" -> "BowenPing/STensor", "Symbol" -> 
+        "BowenPing`STensor`CreateTensor"},
+      BoxID -> "PacletSymbolBox",
+      SelectWithContents->True,
+      Selectable->False], "[", "\[IndentingNewLine]", "  ", 
+     RowBox[{"\"\<g\>\"", ",", "\[IndentingNewLine]", "  ", "coordinateNames",
+       ",", "\[IndentingNewLine]", "  ", "metricMatrix", ",", 
+      "\[IndentingNewLine]", "  ", 
+      RowBox[{
+       InterpretationBox[
+        FrameBox[
+         TagBox[
+          TooltipBox[
+           PaneBox[GridBox[{
+              {
+               GraphicsBox[
+                {Thickness[0.0025], 
+                 {FaceForm[{RGBColor[
+                  0.9607843137254902, 0.5058823529411764, 
+                   0.19607843137254902`], Opacity[1.]}], 
+                  FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                    0}, {0, 1, 0}, {0, 1, 0}}, {{0, 2, 0}, {1, 3, 3}, {0, 1, 
+                    0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 
+                    3}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 
+                    3}}}, {{{205., 22.863691329956055`}, {205., 
+                    212.31669425964355`}, {246.01799774169922`, 
+                    235.99870109558105`}, {369.0710144042969, 
+                    307.0436840057373}, {369.0710144042969, 
+                    117.59068870544434`}, {205., 22.863691329956055`}}, {{
+                    30.928985595703125`, 307.0436840057373}, {
+                    153.98200225830078`, 235.99870109558105`}, {195., 
+                    212.31669425964355`}, {195., 22.863691329956055`}, {
+                    30.928985595703125`, 117.59068870544434`}, {
+                    30.928985595703125`, 307.0436840057373}}, {{200., 
+                    410.42970085144043`}, {364.0710144042969, 
+                    315.7036876678467}, {241.01799774169922`, 
+                    244.65868949890137`}, {200., 220.97669792175293`}, {
+                    158.98200225830078`, 244.65868949890137`}, {
+                    35.928985595703125`, 315.7036876678467}, {200., 
+                    410.42970085144043`}}, CompressedData["
+1:eJxTTMoPSmViYGCQAWIQDQQPlDrLHYA0XxdDiQNYJCATwveoAtG/6uTA/HWX
+w8B8tsaHGch8BoYNGcjqGS7lmqOYd/qhKYj2c/hUDJF/awKiz129jsL3c9qN
+wo/gXBuDzK/YbRWDbF6F4MVoZPtmvJoejeyehpD9yiA6e88JMD+h/JYS2J6k
+J2C+gleGEkQ9QyYyf9NcaWR+w1Rn80xk/bDwgZkPCz+Y/QGPF5Yju++B0sZy
+ZPfD+DD/wfgw/8P4sPCBmQcLP5T4AgBuZHHc
+                    "]}]}, 
+                 {FaceForm[{RGBColor[
+                  0.5529411764705883, 0.6745098039215687, 0.8117647058823529],
+                   Opacity[1.]}], 
+                  FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                   0}}}, {{{44.92900085449219, 282.59088134765625`}, {
+                   181.00001525878906`, 204.0298843383789}, {
+                   181.00001525878906`, 46.90887451171875}, {
+                   44.92900085449219, 125.46986389160156`}, {
+                   44.92900085449219, 282.59088134765625`}}}]}, 
+                 {FaceForm[{RGBColor[
+                  0.6627450980392157, 0.803921568627451, 0.5686274509803921], 
+                  Opacity[1.]}], 
+                  FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                   0}}}, {{{355.0710144042969, 282.59088134765625`}, {
+                   355.0710144042969, 125.46986389160156`}, {219., 
+                   46.90887451171875}, {219., 204.0298843383789}, {
+                   355.0710144042969, 282.59088134765625`}}}]}, 
+                 {FaceForm[{RGBColor[
+                  0.6901960784313725, 0.5882352941176471, 0.8117647058823529],
+                   Opacity[1.]}], 
+                  FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                   0}}}, {{{200., 394.0606994628906}, {336.0710144042969, 
+                   315.4997024536133}, {200., 236.93968200683594`}, {
+                   63.928985595703125`, 315.4997024536133}, {200., 
+                   394.0606994628906}}}]}},
+                BaselinePosition->Scaled[0.15],
+                ImageSize->10], 
+               StyleBox[
+                RowBox[{"IsMetric", " "}],
+                ShowAutoStyles->False,
+                ShowStringCharacters->False,
+                FontSize->0.9 Inherited,
+                FontColor->GrayLevel[0.1]]}
+             },
+             GridBoxSpacings->{"Columns" -> {{0.25}}}],
+            Alignment->{Left, Baseline},
+            BaseStyle->{LineSpacing -> {0, 0}, LineBreakWithin -> False},
+            BaselinePosition->Baseline,
+            FrameMargins->{{3, 0}, {0, 0}}],
+           RowBox[{"PacletSymbol", "[", 
+             
+             RowBox[{"\"BowenPing/STensor\"", ",", 
+               "\"BowenPing`STensor`IsMetric\""}], "]"}],
+           
+           TooltipStyle->{
+            ShowAutoStyles -> True, ShowStringCharacters -> True}],
+          Annotation[#, 
+           Style[
+            Defer[
+             PacletSymbol["BowenPing/STensor", "BowenPing`STensor`IsMetric"]],
+             ShowStringCharacters -> True], "Tooltip"]& ],
+         Background->RGBColor[0.968, 0.976, 0.984],
+         BaselinePosition->Baseline,
+         DefaultBaseStyle->{},
+         FrameMargins->{{0, 0}, {1, 1}},
+         FrameStyle->RGBColor[0.831, 0.847, 0.85],
+         RoundingRadius->4],
+        PacletSymbol["BowenPing/STensor", "BowenPing`STensor`IsMetric"],
+        TaggingRules -> {
+         "Paclet" -> "BowenPing/STensor", "Symbol" -> 
+          "BowenPing`STensor`IsMetric"},
+        BoxID -> "PacletSymbolBox",
+        SelectWithContents->True,
+        Selectable->False], "->", "True"}]}], "\[IndentingNewLine]", "]"}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"riemannTensor", "=", 
+   RowBox[{
+    InterpretationBox[
+     FrameBox[
+      TagBox[
+       TooltipBox[
+        PaneBox[GridBox[{
+           {
+            GraphicsBox[
+             {Thickness[0.0025], 
+              {FaceForm[{RGBColor[
+               0.9607843137254902, 0.5058823529411764, 0.19607843137254902`], 
+               Opacity[1.]}], 
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {
+                 0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 
+                 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}, {0, 1, 0}}, {{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 
+                 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {
+                 0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}}}, {{{205., 
+                 22.863691329956055`}, {205., 212.31669425964355`}, {
+                 246.01799774169922`, 235.99870109558105`}, {
+                 369.0710144042969, 307.0436840057373}, {369.0710144042969, 
+                 117.59068870544434`}, {205., 22.863691329956055`}}, {{
+                 30.928985595703125`, 307.0436840057373}, {
+                 153.98200225830078`, 235.99870109558105`}, {195., 
+                 212.31669425964355`}, {195., 22.863691329956055`}, {
+                 30.928985595703125`, 117.59068870544434`}, {
+                 30.928985595703125`, 307.0436840057373}}, {{200., 
+                 410.42970085144043`}, {364.0710144042969, 
+                 315.7036876678467}, {241.01799774169922`, 
+                 244.65868949890137`}, {200., 220.97669792175293`}, {
+                 158.98200225830078`, 244.65868949890137`}, {
+                 35.928985595703125`, 315.7036876678467}, {200., 
+                 410.42970085144043`}}, CompressedData["
+1:eJxTTMoPSmViYGCQAWIQDQQPlDrLHYA0XxdDiQNYJCATwveoAtG/6uTA/HWX
+w8B8tsaHGch8BoYNGcjqGS7lmqOYd/qhKYj2c/hUDJF/awKiz129jsL3c9qN
+wo/gXBuDzK/YbRWDbF6F4MVoZPtmvJoejeyehpD9yiA6e88JMD+h/JYS2J6k
+J2C+gleGEkQ9QyYyf9NcaWR+w1Rn80xk/bDwgZkPCz+Y/QGPF5Yju++B0sZy
+ZPfD+DD/wfgw/8P4sPCBmQcLP5T4AgBuZHHc
+                 "]}]}, 
+              {FaceForm[{RGBColor[
+               0.5529411764705883, 0.6745098039215687, 0.8117647058823529], 
+               Opacity[1.]}], 
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                0}}}, {{{44.92900085449219, 282.59088134765625`}, {
+                181.00001525878906`, 204.0298843383789}, {181.00001525878906`,
+                 46.90887451171875}, {44.92900085449219, 
+                125.46986389160156`}, {44.92900085449219, 
+                282.59088134765625`}}}]}, 
+              {FaceForm[{RGBColor[
+               0.6627450980392157, 0.803921568627451, 0.5686274509803921], 
+               Opacity[1.]}], 
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                0}}}, {{{355.0710144042969, 282.59088134765625`}, {
+                355.0710144042969, 125.46986389160156`}, {219., 
+                46.90887451171875}, {219., 204.0298843383789}, {
+                355.0710144042969, 282.59088134765625`}}}]}, 
+              {FaceForm[{RGBColor[
+               0.6901960784313725, 0.5882352941176471, 0.8117647058823529], 
+               Opacity[1.]}], 
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                0}}}, {{{200., 394.0606994628906}, {336.0710144042969, 
+                315.4997024536133}, {200., 236.93968200683594`}, {
+                63.928985595703125`, 315.4997024536133}, {200., 
+                394.0606994628906}}}]}},
+             BaselinePosition->Scaled[0.15],
+             ImageSize->10], 
+            StyleBox[
+             RowBox[{"RiemannTensor", " "}],
+             ShowAutoStyles->False,
+             ShowStringCharacters->False,
+             FontSize->0.9 Inherited,
+             FontColor->GrayLevel[0.1]]}
+          },
+          GridBoxSpacings->{"Columns" -> {{0.25}}}],
+         Alignment->{Left, Baseline},
+         BaseStyle->{LineSpacing -> {0, 0}, LineBreakWithin -> False},
+         BaselinePosition->Baseline,
+         FrameMargins->{{3, 0}, {0, 0}}],
+        RowBox[{"PacletSymbol", "[", 
+          
+          RowBox[{"\"BowenPing/STensor\"", ",", 
+            "\"BowenPing`STensor`RiemannTensor\""}], "]"}],
+        TooltipStyle->{ShowAutoStyles -> True, ShowStringCharacters -> True}],
+       Annotation[#, 
+        Style[
+         Defer[
+          PacletSymbol[
+          "BowenPing/STensor", "BowenPing`STensor`RiemannTensor"]], 
+         ShowStringCharacters -> True], "Tooltip"]& ],
+      Background->RGBColor[0.968, 0.976, 0.984],
+      BaselinePosition->Baseline,
+      DefaultBaseStyle->{},
+      FrameMargins->{{0, 0}, {1, 1}},
+      FrameStyle->RGBColor[0.831, 0.847, 0.85],
+      RoundingRadius->4],
+     PacletSymbol["BowenPing/STensor", "BowenPing`STensor`RiemannTensor"],
+     TaggingRules -> {
+      "Paclet" -> "BowenPing/STensor", "Symbol" -> 
+       "BowenPing`STensor`RiemannTensor"},
+     BoxID -> "PacletSymbolBox",
+     SelectWithContents->True,
+     Selectable->False], "[", "metric", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ricciTensor", "=", 
+   RowBox[{
+    InterpretationBox[
+     FrameBox[
+      TagBox[
+       TooltipBox[
+        PaneBox[GridBox[{
+           {
+            GraphicsBox[
+             {Thickness[0.0025], 
+              {FaceForm[{RGBColor[
+               0.9607843137254902, 0.5058823529411764, 0.19607843137254902`], 
+               Opacity[1.]}], 
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {
+                 0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 
+                 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}, {0, 1, 0}}, {{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 
+                 3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {
+                 0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}}}, {{{205., 
+                 22.863691329956055`}, {205., 212.31669425964355`}, {
+                 246.01799774169922`, 235.99870109558105`}, {
+                 369.0710144042969, 307.0436840057373}, {369.0710144042969, 
+                 117.59068870544434`}, {205., 22.863691329956055`}}, {{
+                 30.928985595703125`, 307.0436840057373}, {
+                 153.98200225830078`, 235.99870109558105`}, {195., 
+                 212.31669425964355`}, {195., 22.863691329956055`}, {
+                 30.928985595703125`, 117.59068870544434`}, {
+                 30.928985595703125`, 307.0436840057373}}, {{200., 
+                 410.42970085144043`}, {364.0710144042969, 
+                 315.7036876678467}, {241.01799774169922`, 
+                 244.65868949890137`}, {200., 220.97669792175293`}, {
+                 158.98200225830078`, 244.65868949890137`}, {
+                 35.928985595703125`, 315.7036876678467}, {200., 
+                 410.42970085144043`}}, CompressedData["
+1:eJxTTMoPSmViYGCQAWIQDQQPlDrLHYA0XxdDiQNYJCATwveoAtG/6uTA/HWX
+w8B8tsaHGch8BoYNGcjqGS7lmqOYd/qhKYj2c/hUDJF/awKiz129jsL3c9qN
+wo/gXBuDzK/YbRWDbF6F4MVoZPtmvJoejeyehpD9yiA6e88JMD+h/JYS2J6k
+J2C+gleGEkQ9QyYyf9NcaWR+w1Rn80xk/bDwgZkPCz+Y/QGPF5Yju++B0sZy
+ZPfD+DD/wfgw/8P4sPCBmQcLP5T4AgBuZHHc
+                 "]}]}, 
+              {FaceForm[{RGBColor[
+               0.5529411764705883, 0.6745098039215687, 0.8117647058823529], 
+               Opacity[1.]}], 
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                0}}}, {{{44.92900085449219, 282.59088134765625`}, {
+                181.00001525878906`, 204.0298843383789}, {181.00001525878906`,
+                 46.90887451171875}, {44.92900085449219, 
+                125.46986389160156`}, {44.92900085449219, 
+                282.59088134765625`}}}]}, 
+              {FaceForm[{RGBColor[
+               0.6627450980392157, 0.803921568627451, 0.5686274509803921], 
+               Opacity[1.]}], 
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                0}}}, {{{355.0710144042969, 282.59088134765625`}, {
+                355.0710144042969, 125.46986389160156`}, {219., 
+                46.90887451171875}, {219., 204.0298843383789}, {
+                355.0710144042969, 282.59088134765625`}}}]}, 
+              {FaceForm[{RGBColor[
+               0.6901960784313725, 0.5882352941176471, 0.8117647058823529], 
+               Opacity[1.]}], 
+               FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                0}}}, {{{200., 394.0606994628906}, {336.0710144042969, 
+                315.4997024536133}, {200., 236.93968200683594`}, {
+                63.928985595703125`, 315.4997024536133}, {200., 
+                394.0606994628906}}}]}},
+             BaselinePosition->Scaled[0.15],
+             ImageSize->10], 
+            StyleBox[
+             RowBox[{"RicciTensor", " "}],
+             ShowAutoStyles->False,
+             ShowStringCharacters->False,
+             FontSize->0.9 Inherited,
+             FontColor->GrayLevel[0.1]]}
+          },
+          GridBoxSpacings->{"Columns" -> {{0.25}}}],
+         Alignment->{Left, Baseline},
+         BaseStyle->{LineSpacing -> {0, 0}, LineBreakWithin -> False},
+         BaselinePosition->Baseline,
+         FrameMargins->{{3, 0}, {0, 0}}],
+        RowBox[{"PacletSymbol", "[", 
+          
+          RowBox[{"\"BowenPing/STensor\"", ",", 
+            "\"BowenPing`STensor`RicciTensor\""}], "]"}],
+        TooltipStyle->{ShowAutoStyles -> True, ShowStringCharacters -> True}],
+       Annotation[#, 
+        Style[
+         Defer[
+          PacletSymbol["BowenPing/STensor", "BowenPing`STensor`RicciTensor"]],
+          ShowStringCharacters -> True], "Tooltip"]& ],
+      Background->RGBColor[0.968, 0.976, 0.984],
+      BaselinePosition->Baseline,
+      DefaultBaseStyle->{},
+      FrameMargins->{{0, 0}, {1, 1}},
+      FrameStyle->RGBColor[0.831, 0.847, 0.85],
+      RoundingRadius->4],
+     PacletSymbol["BowenPing/STensor", "BowenPing`STensor`RicciTensor"],
+     TaggingRules -> {
+      "Paclet" -> "BowenPing/STensor", "Symbol" -> 
+       "BowenPing`STensor`RicciTensor"},
+     BoxID -> "PacletSymbolBox",
+     SelectWithContents->True,
+     Selectable->False], "[", "metric", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ricciScalar", "=", 
+   RowBox[{
+    RowBox[{
+     InterpretationBox[
+      FrameBox[
+       TagBox[
+        TooltipBox[
+         PaneBox[GridBox[{
+            {
+             GraphicsBox[
+              {Thickness[0.0025], 
+               {FaceForm[{RGBColor[
+                0.9607843137254902, 0.5058823529411764, 0.19607843137254902`],
+                 Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {
+                  0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 
+                  1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                  0}, {0, 1, 0}}, {{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 
+                  3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {
+                  0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}}}, {{{205., 
+                  22.863691329956055`}, {205., 212.31669425964355`}, {
+                  246.01799774169922`, 235.99870109558105`}, {
+                  369.0710144042969, 307.0436840057373}, {369.0710144042969, 
+                  117.59068870544434`}, {205., 22.863691329956055`}}, {{
+                  30.928985595703125`, 307.0436840057373}, {
+                  153.98200225830078`, 235.99870109558105`}, {195., 
+                  212.31669425964355`}, {195., 22.863691329956055`}, {
+                  30.928985595703125`, 117.59068870544434`}, {
+                  30.928985595703125`, 307.0436840057373}}, {{200., 
+                  410.42970085144043`}, {364.0710144042969, 
+                  315.7036876678467}, {241.01799774169922`, 
+                  244.65868949890137`}, {200., 220.97669792175293`}, {
+                  158.98200225830078`, 244.65868949890137`}, {
+                  35.928985595703125`, 315.7036876678467}, {200., 
+                  410.42970085144043`}}, CompressedData["
+1:eJxTTMoPSmViYGCQAWIQDQQPlDrLHYA0XxdDiQNYJCATwveoAtG/6uTA/HWX
+w8B8tsaHGch8BoYNGcjqGS7lmqOYd/qhKYj2c/hUDJF/awKiz129jsL3c9qN
+wo/gXBuDzK/YbRWDbF6F4MVoZPtmvJoejeyehpD9yiA6e88JMD+h/JYS2J6k
+J2C+gleGEkQ9QyYyf9NcaWR+w1Rn80xk/bDwgZkPCz+Y/QGPF5Yju++B0sZy
+ZPfD+DD/wfgw/8P4sPCBmQcLP5T4AgBuZHHc
+                  "]}]}, 
+               {FaceForm[{RGBColor[
+                0.5529411764705883, 0.6745098039215687, 0.8117647058823529], 
+                Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}}}, {{{44.92900085449219, 282.59088134765625`}, {
+                 181.00001525878906`, 204.0298843383789}, {
+                 181.00001525878906`, 46.90887451171875}, {44.92900085449219, 
+                 125.46986389160156`}, {44.92900085449219, 
+                 282.59088134765625`}}}]}, 
+               {FaceForm[{RGBColor[
+                0.6627450980392157, 0.803921568627451, 0.5686274509803921], 
+                Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}}}, {{{355.0710144042969, 282.59088134765625`}, {
+                 355.0710144042969, 125.46986389160156`}, {219., 
+                 46.90887451171875}, {219., 204.0298843383789}, {
+                 355.0710144042969, 282.59088134765625`}}}]}, 
+               {FaceForm[{RGBColor[
+                0.6901960784313725, 0.5882352941176471, 0.8117647058823529], 
+                Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}}}, {{{200., 394.0606994628906}, {336.0710144042969, 
+                 315.4997024536133}, {200., 236.93968200683594`}, {
+                 63.928985595703125`, 315.4997024536133}, {200., 
+                 394.0606994628906}}}]}},
+              BaselinePosition->Scaled[0.15],
+              ImageSize->10], 
+             StyleBox[
+              RowBox[{"RicciScalar", " "}],
+              ShowAutoStyles->False,
+              ShowStringCharacters->False,
+              FontSize->0.9 Inherited,
+              FontColor->GrayLevel[0.1]]}
+           },
+           GridBoxSpacings->{"Columns" -> {{0.25}}}],
+          Alignment->{Left, Baseline},
+          BaseStyle->{LineSpacing -> {0, 0}, LineBreakWithin -> False},
+          BaselinePosition->Baseline,
+          FrameMargins->{{3, 0}, {0, 0}}],
+         RowBox[{"PacletSymbol", "[", 
+           
+           RowBox[{"\"BowenPing/STensor\"", ",", 
+             "\"BowenPing`STensor`RicciScalar\""}], "]"}],
+         TooltipStyle->{ShowAutoStyles -> True, ShowStringCharacters -> True}],
+        Annotation[#, 
+         Style[
+          Defer[
+           PacletSymbol[
+           "BowenPing/STensor", "BowenPing`STensor`RicciScalar"]], 
+          ShowStringCharacters -> True], "Tooltip"]& ],
+       Background->RGBColor[0.968, 0.976, 0.984],
+       BaselinePosition->Baseline,
+       DefaultBaseStyle->{},
+       FrameMargins->{{0, 0}, {1, 1}},
+       FrameStyle->RGBColor[0.831, 0.847, 0.85],
+       RoundingRadius->4],
+      PacletSymbol["BowenPing/STensor", "BowenPing`STensor`RicciScalar"],
+      TaggingRules -> {
+       "Paclet" -> "BowenPing/STensor", "Symbol" -> 
+        "BowenPing`STensor`RicciScalar"},
+      BoxID -> "PacletSymbolBox",
+      SelectWithContents->True,
+      Selectable->False], "[", "metric", "]"}], "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"einsteinTensor", "=", 
+    RowBox[{
+     InterpretationBox[
+      FrameBox[
+       TagBox[
+        TooltipBox[
+         PaneBox[GridBox[{
+            {
+             GraphicsBox[
+              {Thickness[0.0025], 
+               {FaceForm[{RGBColor[
+                0.9607843137254902, 0.5058823529411764, 0.19607843137254902`],
+                 Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {
+                  0, 1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 
+                  1, 0}}, {{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                  0}, {0, 1, 0}}, {{0, 2, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 
+                  3}, {0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}, {1, 3, 3}, {
+                  0, 1, 0}, {1, 3, 3}, {0, 1, 0}, {1, 3, 3}}}, {{{205., 
+                  22.863691329956055`}, {205., 212.31669425964355`}, {
+                  246.01799774169922`, 235.99870109558105`}, {
+                  369.0710144042969, 307.0436840057373}, {369.0710144042969, 
+                  117.59068870544434`}, {205., 22.863691329956055`}}, {{
+                  30.928985595703125`, 307.0436840057373}, {
+                  153.98200225830078`, 235.99870109558105`}, {195., 
+                  212.31669425964355`}, {195., 22.863691329956055`}, {
+                  30.928985595703125`, 117.59068870544434`}, {
+                  30.928985595703125`, 307.0436840057373}}, {{200., 
+                  410.42970085144043`}, {364.0710144042969, 
+                  315.7036876678467}, {241.01799774169922`, 
+                  244.65868949890137`}, {200., 220.97669792175293`}, {
+                  158.98200225830078`, 244.65868949890137`}, {
+                  35.928985595703125`, 315.7036876678467}, {200., 
+                  410.42970085144043`}}, CompressedData["
+1:eJxTTMoPSmViYGCQAWIQDQQPlDrLHYA0XxdDiQNYJCATwveoAtG/6uTA/HWX
+w8B8tsaHGch8BoYNGcjqGS7lmqOYd/qhKYj2c/hUDJF/awKiz129jsL3c9qN
+wo/gXBuDzK/YbRWDbF6F4MVoZPtmvJoejeyehpD9yiA6e88JMD+h/JYS2J6k
+J2C+gleGEkQ9QyYyf9NcaWR+w1Rn80xk/bDwgZkPCz+Y/QGPF5Yju++B0sZy
+ZPfD+DD/wfgw/8P4sPCBmQcLP5T4AgBuZHHc
+                  "]}]}, 
+               {FaceForm[{RGBColor[
+                0.5529411764705883, 0.6745098039215687, 0.8117647058823529], 
+                Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}}}, {{{44.92900085449219, 282.59088134765625`}, {
+                 181.00001525878906`, 204.0298843383789}, {
+                 181.00001525878906`, 46.90887451171875}, {44.92900085449219, 
+                 125.46986389160156`}, {44.92900085449219, 
+                 282.59088134765625`}}}]}, 
+               {FaceForm[{RGBColor[
+                0.6627450980392157, 0.803921568627451, 0.5686274509803921], 
+                Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}}}, {{{355.0710144042969, 282.59088134765625`}, {
+                 355.0710144042969, 125.46986389160156`}, {219., 
+                 46.90887451171875}, {219., 204.0298843383789}, {
+                 355.0710144042969, 282.59088134765625`}}}]}, 
+               {FaceForm[{RGBColor[
+                0.6901960784313725, 0.5882352941176471, 0.8117647058823529], 
+                Opacity[1.]}], 
+                FilledCurveBox[{{{0, 2, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 
+                 0}}}, {{{200., 394.0606994628906}, {336.0710144042969, 
+                 315.4997024536133}, {200., 236.93968200683594`}, {
+                 63.928985595703125`, 315.4997024536133}, {200., 
+                 394.0606994628906}}}]}},
+              BaselinePosition->Scaled[0.15],
+              ImageSize->10], 
+             StyleBox[
+              RowBox[{"EinsteinTensor", " "}],
+              ShowAutoStyles->False,
+              ShowStringCharacters->False,
+              FontSize->0.9 Inherited,
+              FontColor->GrayLevel[0.1]]}
+           },
+           GridBoxSpacings->{"Columns" -> {{0.25}}}],
+          Alignment->{Left, Baseline},
+          BaseStyle->{LineSpacing -> {0, 0}, LineBreakWithin -> False},
+          BaselinePosition->Baseline,
+          FrameMargins->{{3, 0}, {0, 0}}],
+         RowBox[{"PacletSymbol", "[", 
+           
+           RowBox[{"\"BowenPing/STensor\"", ",", 
+             "\"BowenPing`STensor`EinsteinTensor\""}], "]"}],
+         TooltipStyle->{ShowAutoStyles -> True, ShowStringCharacters -> True}],
+        Annotation[#, 
+         Style[
+          Defer[
+           PacletSymbol[
+           "BowenPing/STensor", "BowenPing`STensor`EinsteinTensor"]], 
+          ShowStringCharacters -> True], "Tooltip"]& ],
+       Background->RGBColor[0.968, 0.976, 0.984],
+       BaselinePosition->Baseline,
+       DefaultBaseStyle->{},
+       FrameMargins->{{0, 0}, {1, 1}},
+       FrameStyle->RGBColor[0.831, 0.847, 0.85],
+       RoundingRadius->4],
+      PacletSymbol["BowenPing/STensor", "BowenPing`STensor`EinsteinTensor"],
+      TaggingRules -> {
+       "Paclet" -> "BowenPing/STensor", "Symbol" -> 
+        "BowenPing`STensor`EinsteinTensor"},
+      BoxID -> "PacletSymbolBox",
+      SelectWithContents->True,
+      Selectable->False], "[", "metric", "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"riemannTensor", "[", "\"\<Components\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ricciTensor", "[", "\"\<Components\>\"", 
+  "]"}], "\[IndentingNewLine]", "ricciScalar", "\[IndentingNewLine]", 
+ RowBox[{"einsteinTensor", "[", "\"\<Components\>\"", "]"}]}], "Input",Express\
+ionUUID->"4a4d75e4-6508-6a4a-a8bc-0c405b9f3d67"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{949, 526.5},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+Magnification:>0.5 Inherited,
+FrontEndVersion->"15.0 for Microsoft Windows (64-bit) (May 19, 2026)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"09749297-d050-1242-b164-f95bf09c0892"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[576, 22, 169, 3, 48, "Title",ExpressionUUID->"364dbac2-5cd5-c340-be1a-4d8e0563b10b"],
+Cell[CellGroupData[{
+Cell[770, 29, 82, 0, 33, "Section",ExpressionUUID->"aa3a2b39-6f8e-0d4a-a99c-1124753d4f4e"],
+Cell[855, 31, 10193, 277, 498, "Input",ExpressionUUID->"c2947bed-e634-b046-a19e-534b88441d34"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11085, 313, 102, 0, 33, "Section",ExpressionUUID->"5c71a888-a010-5c44-b584-a8946df42bd1"],
+Cell[11190, 315, 961, 24, 103, "Input",ExpressionUUID->"8a462b09-f5e8-4445-99ea-03948d7d35f9"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12188, 344, 96, 0, 33, "Section",ExpressionUUID->"5dce0b3e-c24b-8d45-9374-1864cd54dfcd"],
+Cell[12287, 346, 3764, 94, 276, "Input",ExpressionUUID->"e510cdb1-040e-7b48-ac15-fd37ec87e998"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[16088, 445, 91, 0, 33, "Section",ExpressionUUID->"eac47bd3-330c-164b-9461-779e69d65c67"],
+Cell[16182, 447, 3622, 91, 247, "Input",ExpressionUUID->"ea1400a7-fbfe-3941-8049-4beb7fda0f63"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19841, 543, 124, 0, 33, "Section",ExpressionUUID->"ab5ce1e0-2d9b-d24c-a1c4-0939f7d3babe"],
+Cell[19968, 545, 2602, 67, 204, "Input",ExpressionUUID->"a73ae7d8-6910-e947-914f-aeba3b085b18"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[22607, 617, 314, 6, 33, "Section",ExpressionUUID->"6b259ad6-0aca-5d43-9b32-6336f01dadf9"],
+Cell[22924, 625, 31925, 636, 185, "Input",ExpressionUUID->"4a4d75e4-6508-6a4a-a8bc-0c405b9f3d67"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
